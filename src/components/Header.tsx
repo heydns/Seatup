@@ -22,7 +22,7 @@ export const Header = ({
       <div className="absolute inset-0 bg-gradient-hero opacity-10"></div>
       <div className="vintage-grain absolute inset-0 bg-transparent"></div>
       <div className="container mx-auto px-4 relative z-10">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 bg-transparent">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="text-2xl font-monument font-bold text-brand">
