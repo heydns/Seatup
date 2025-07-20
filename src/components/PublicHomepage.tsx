@@ -26,10 +26,10 @@ export const PublicHomepage = () => {
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl md:text-7xl font-spartan font-black mb-6 animate-fade-up">
+            <h1 className="text-5xl md:text-7xl font-monument font-bold mb-6 animate-fade-up">
               <span className="text-brand">Vivez le sport,</span>
               <br />
-              <span className="text-foreground">simplement.</span>
+              <span className="text-brand">simplement.</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 font-medium animate-fade-up" style={{ animationDelay: '0.2s' }}>
