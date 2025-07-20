@@ -19,7 +19,7 @@ export const Header = ({
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="text-2xl font-monument font-bold text-brand">
-              seatup
+              seatup.co
             </div>
           </Link>
 
@@ -42,9 +42,9 @@ export const Header = ({
                   </Button>
                 </Link>
               </> : <>
-                <Link to="/auth">
+                <Link to="/contact">
                   <Button variant="sport" size="sm">
-                    Se connecter
+                    Nous contacter
                   </Button>
                 </Link>
               </>}
@@ -76,9 +76,9 @@ export const Header = ({
                   </Link>
                 </> : <>
                   <div className="px-4">
-                    <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
                       <Button variant="sport" size="sm" className="w-full">
-                        Se connecter
+                        Nous contacter
                       </Button>
                     </Link>
                   </div>

@@ -65,9 +65,9 @@ export const PublicHomepage = () => {
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Link to="/auth">
+              <Link to="/contact">
                 <Button variant="sport" size="xl">
-                  Se connecter
+                  Nous contacter
                 </Button>
               </Link>
             </div>
