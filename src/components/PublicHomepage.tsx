@@ -5,9 +5,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 // Import images
 import psgOmImage from "@/assets/psg-om.jpg";
@@ -88,7 +87,23 @@ export const PublicHomepage = () => {
             </p>
           </div>
           
-          <Carousel className="w-full max-w-full">
+          <Carousel 
+            className="w-full max-w-full"
+            opts={{
+              align: "start",
+              loop: true,
+              dragFree: true,
+              skipSnaps: true,
+              duration: 60
+            }}
+            plugins={[
+              Autoplay({
+                delay: 3000,
+                stopOnInteraction: true,
+                stopOnMouseEnter: true
+              })
+            ]}
+          >
             <CarouselContent className="-ml-2 md:-ml-4">
               {[
                 {
@@ -167,8 +182,6 @@ export const PublicHomepage = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex" />
-            <CarouselNext className="hidden md:flex" />
           </Carousel>
           
           <div className="text-center mt-8">
