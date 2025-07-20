@@ -256,7 +256,7 @@ export const PublicHomepage = () => {
       {/* CTA Section */}
       <section className="py-20 relative overflow-hidden z-10 bg-white">
         <div className="container mx-auto px-4 text-center relative z-10">
-          <Trophy className="h-16 w-16 mx-auto mb-6 text-primary" />
+          <Star className="h-16 w-16 mx-auto mb-6 text-primary" />
           <h2 className="text-xl md:text-3xl font-monument mb-6">
             Prêt à vivre vos prochaines émotions sportives ?
           </h2>
