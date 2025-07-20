@@ -85,12 +85,15 @@ export const PublicHomepage = () => {
             <div className="flex items-center space-x-12 md:space-x-16">
               <img src={psgLogo} alt="PSG" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
               <img src={pfcLogo} alt="Paris FC" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
-              <div className="h-10 w-10 bg-red-500 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
-                <span className="text-white font-bold text-sm">RS</span>
-              </div>
-              <div className="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
-                <span className="text-white font-bold text-sm">PA13</span>
-              </div>
+              <img src="/lovable-uploads/08c4f6e7-de7f-490a-92cd-ab192d330279.png" alt="Versailles FC" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/2a2ac2c8-7c11-4e98-b943-009ee7bbfa5c.png" alt="Top 14 Rugby" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/34effd51-a6cb-4bec-b8d7-d61426b355d6.png" alt="Roland Garros" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/8aad4de9-74f9-4c82-9119-9e94dd067261.png" alt="Rolex Paris Masters" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/a2894542-6a3d-4286-b7f2-a7a17728aee5.png" alt="Paris FC New" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/7334e868-cc93-4188-894e-6f7066ad5a99.png" alt="Red Star FC" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/6a36cd92-4abc-4cd6-a438-d6faf357ef4e.png" alt="Stade Français" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/a204fb77-efa7-4cc3-8fb6-096b54a0ad71.png" alt="Racing 92" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/3b68fa36-0f64-42fa-bc8e-d0781a1dab9f.png" alt="Paris Basket" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
               <img src={versaillesLogo} alt="FC Versailles" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
             </div>
           </div>
@@ -99,12 +102,15 @@ export const PublicHomepage = () => {
             <div className="flex items-center space-x-12 md:space-x-16">
               <img src={psgLogo} alt="PSG" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
               <img src={pfcLogo} alt="Paris FC" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
-              <div className="h-10 w-10 bg-red-500 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
-                <span className="text-white font-bold text-sm">RS</span>
-              </div>
-              <div className="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
-                <span className="text-white font-bold text-sm">PA13</span>
-              </div>
+              <img src="/lovable-uploads/08c4f6e7-de7f-490a-92cd-ab192d330279.png" alt="Versailles FC" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/2a2ac2c8-7c11-4e98-b943-009ee7bbfa5c.png" alt="Top 14 Rugby" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/34effd51-a6cb-4bec-b8d7-d61426b355d6.png" alt="Roland Garros" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/8aad4de9-74f9-4c82-9119-9e94dd067261.png" alt="Rolex Paris Masters" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/a2894542-6a3d-4286-b7f2-a7a17728aee5.png" alt="Paris FC New" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/7334e868-cc93-4188-894e-6f7066ad5a99.png" alt="Red Star FC" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/6a36cd92-4abc-4cd6-a438-d6faf357ef4e.png" alt="Stade Français" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/a204fb77-efa7-4cc3-8fb6-096b54a0ad71.png" alt="Racing 92" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/3b68fa36-0f64-42fa-bc8e-d0781a1dab9f.png" alt="Paris Basket" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
               <img src={versaillesLogo} alt="FC Versailles" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
             </div>
           </div>
