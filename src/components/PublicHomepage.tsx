@@ -167,7 +167,7 @@ export const PublicHomepage = () => {
                             Les Mariannes 92
                           </h3>
                           <p className="text-sm text-muted-foreground mb-1">
-                            {event.date}
+                            Saison 25/26
                           </p>
                           <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
                             {event.venue}
