@@ -119,7 +119,7 @@ export const PublicHomepage = () => {
                 title: "PSG vs SCO Angers - Journée 1 Ligue 1",
                 date: "Dimanche 24 Août",
                 venue: "Parc des Princes",
-                price: "À partir de 45€",
+                price: "À partir de 36€",
                 image: "/lovable-uploads/147eb088-277c-4032-b6b4-e01dfed524d3.png"
               }, {
                 title: "Paris Basketball",
