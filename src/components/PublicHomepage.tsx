@@ -147,8 +147,8 @@ export const PublicHomepage = () => {
                 originalPrice: "105€",
                 image: "/lovable-uploads/498f232f-981f-4bb2-ab0f-d9d08551a8fb.png"
               }, {
-                title: "Handball Paris SG",
-                date: "Jeu, 31 Jul",
+                title: "Handball - Dunkerque / Journée 1 StarLigue",
+                date: "Dim, 07 Sep",
                 venue: "Stade Pierre de Coubertin",
                 price: "À partir de 18€",
                 image: handballPsgImage
