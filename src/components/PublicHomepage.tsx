@@ -164,10 +164,10 @@ export const PublicHomepage = () => {
                         {/* Event info */}
                         <div className="p-3 md:p-4">
                           <h3 className="font-monument text-sm md:text-base font-semibold mb-1 group-hover:text-primary transition-colors line-clamp-2">
-                            Les Mariannes 92
+                            {event.title}
                           </h3>
                           <p className="text-sm text-muted-foreground mb-1">
-                            Saison 25/26
+                            {event.date}
                           </p>
                           <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
                             {event.venue}
