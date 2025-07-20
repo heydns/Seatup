@@ -62,7 +62,7 @@ export const PublicHomepage = () => {
       </section>
 
       {/* Sports Carousel */}
-      <section className="py-16 overflow-hidden bg-[#f3f3f3]">
+      <section className="py-16 overflow-hidden bg-[#f8f4ed]">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-4xl font-monument text-center mb-12">
             Tous les sports vous attendent
