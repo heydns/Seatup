@@ -93,8 +93,8 @@ export const Footer = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-border mt-8 pt-8">
-          <p className="text-muted-foreground text-sm text-center">
+        <div className="mt-8 pt-8">
+          <p className="text-muted-foreground text-sm text-left">
             © 2024 Seatup.co Tous droits réservés.
           </p>
         </div>
