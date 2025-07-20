@@ -26,13 +26,13 @@ export const PublicHomepage = () => {
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl md:text-7xl font-monument font-bold mb-6 animate-fade-up">
+            <h1 className="text-4xl md:text-6xl font-monument font-bold mb-6 animate-fade-up">
               <span className="text-brand">Vivez le sport,</span>
               <br />
               <span className="text-brand">simplement.</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-muted-foreground mb-8 font-medium animate-fade-up" style={{ animationDelay: '0.2s' }}>
+            <p className="text-lg md:text-xl text-muted-foreground mb-8 font-medium animate-fade-up" style={{ animationDelay: '0.2s' }}>
               La première billetterie sportive pensée pour les salariés.
             </p>
             
@@ -56,7 +56,7 @@ export const PublicHomepage = () => {
       {/* Sports Carousel */}
       <section className="py-16 overflow-hidden">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-monument text-center mb-12">
+          <h2 className="text-2xl md:text-4xl font-monument text-center mb-12">
             Tous les sports vous attendent
           </h2>
           
@@ -67,7 +67,7 @@ export const PublicHomepage = () => {
                 className="flex-none w-32 h-32 card-sport flex flex-col items-center justify-center group"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">
+                <div className="text-2xl mb-2 group-hover:scale-110 transition-transform">
                   {sport.icon}
                 </div>
                 <span className="font-monument text-sm text-center">
@@ -146,7 +146,7 @@ export const PublicHomepage = () => {
         <div className="absolute inset-0 bg-gradient-hero opacity-5"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <Trophy className="h-16 w-16 mx-auto mb-6 text-primary" />
-          <h2 className="text-3xl md:text-4xl font-monument mb-6">
+          <h2 className="text-2xl md:text-4xl font-monument mb-6">
             Prêt à vivre vos prochaines émotions sportives ?
           </h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">

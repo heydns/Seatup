@@ -37,7 +37,7 @@ export const AuthPage = () => {
 
         <Card className="card-sport">
           <CardHeader className="text-center">
-            <div className="text-3xl font-monument font-bold text-brand mb-4">
+            <div className="text-2xl font-monument font-bold text-brand mb-4">
               seatup
             </div>
             <CardTitle className="text-2xl font-monument">
@@ -181,7 +181,7 @@ export const AuthPage = () => {
 
             {!isLogin && (
               <div className="mt-4 p-3 bg-muted/50 rounded-lg">
-                <p className="text-xs text-muted-foreground text-center">
+                <p className="text-sm text-muted-foreground text-center">
                   En vous inscrivant, vous acceptez nos conditions d'utilisation 
                   et notre politique de confidentialité.
                 </p>

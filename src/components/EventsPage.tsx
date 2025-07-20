@@ -125,7 +125,7 @@ export const EventsPage = () => {
         {/* Header with Balance */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
-            <h1 className="text-4xl md:text-5xl font-monument mb-2">
+            <h1 className="text-4xl md:text-6xl font-monument mb-2">
               Événements sportifs
             </h1>
             <p className="text-xl text-muted-foreground">
@@ -202,7 +202,7 @@ export const EventsPage = () => {
         {filteredEvents.length === 0 ? (
           <div className="text-center py-12">
             <div className="card-sport max-w-md mx-auto">
-              <div className="text-6xl mb-4">🎯</div>
+              <div className="text-4xl mb-4">🎯</div>
               <h3 className="text-xl font-monument mb-2">
                 Aucun événement trouvé
               </h3>

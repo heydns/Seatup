@@ -118,11 +118,11 @@ export const EventCard = ({ event }: EventCardProps) => {
             <span className="text-xl font-monument text-primary">
               {subsidizedPrice}€
             </span>
-            <span className="text-xs bg-success/10 text-success px-2 py-1 rounded-full font-medium">
+            <span className="text-sm bg-success/10 text-success px-2 py-1 rounded-full font-medium">
               -{Math.round(((originalPrice - subsidizedPrice) / originalPrice) * 100)}%
             </span>
           </div>
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Prix subventionné par votre CSE
           </p>
         </div>

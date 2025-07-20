@@ -18,7 +18,7 @@ export const Header = ({ user, balance, className }: HeaderProps) => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="text-3xl font-monument font-bold text-brand">
+            <div className="text-2xl font-monument font-bold text-brand">
               seatup
             </div>
           </Link>
