@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Users, Ticket, Star, Trophy } from "lucide-react";
+import { ArrowRight, Map, Ticket, Star, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
@@ -224,7 +224,7 @@ export const PublicHomepage = () => {
             <div className="card-sport text-center group">
               <div className="mb-6">
                 <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Users className="h-8 w-8 text-white" />
+                  <Map className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-lg font-monument mb-2">
                   Des milliers de billets
