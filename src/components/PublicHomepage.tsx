@@ -37,19 +37,10 @@ const sports = [{
 }];
 const clubs = ["PSG", "OM", "OL", "AS Monaco", "LOSC", "Stade Rennais", "RC Strasbourg", "OGC Nice", "Montpellier HSC", "FC Nantes"];
 export const PublicHomepage = () => {
-  return <div 
-    className="min-h-screen relative"
-    style={{
-      backgroundImage: "url('/lovable-uploads/85b23cdc-7ce6-4e21-881f-24af7be141cd.png')",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      backgroundAttachment: "fixed"
-    }}
-  >
+  return <div className="min-h-screen relative bg-white">
       
       {/* Hero Section */}
-      <section className="relative py-8 md:py-16 overflow-hidden">
+      <section className="relative py-20 md:py-32 overflow-hidden">
         
         
         
