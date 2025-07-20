@@ -67,7 +67,7 @@ export const EventCard = ({ event }: EventCardProps) => {
         {/* Competition Badge */}
         {event.Competition && (
           <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
-            <span className="text-sm font-spartan font-bold text-foreground">
+            <span className="text-sm font-monument text-foreground">
               {event.Competition}
             </span>
           </div>
@@ -76,7 +76,7 @@ export const EventCard = ({ event }: EventCardProps) => {
 
       <div className="p-6">
         {/* Event Title */}
-        <h3 className="font-spartan font-bold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+        <h3 className="font-monument text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
           {event.Event || "Événement sportif"}
         </h3>
 
@@ -115,7 +115,7 @@ export const EventCard = ({ event }: EventCardProps) => {
             <span className="text-sm text-muted-foreground line-through">
               {originalPrice}€
             </span>
-            <span className="text-xl font-spartan font-bold text-primary">
+            <span className="text-xl font-monument text-primary">
               {subsidizedPrice}€
             </span>
             <span className="text-xs bg-success/10 text-success px-2 py-1 rounded-full font-medium">

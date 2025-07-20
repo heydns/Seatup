@@ -16,10 +16,10 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         // Seatup Custom Variants
-        hero: "bg-gradient-primary text-white font-spartan font-bold shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-vintage)] transform hover:scale-105 transition-all duration-300",
-        sport: "bg-white/90 backdrop-blur-sm text-foreground font-spartan font-bold border border-border/50 hover:bg-primary hover:text-primary-foreground transform hover:scale-105 transition-all duration-300",
-        balance: "bg-gradient-primary text-white font-spartan font-bold shadow-[var(--shadow-card)]",
-        cta: "bg-foreground text-background font-spartan font-bold hover:bg-primary hover:text-primary-foreground transform hover:scale-105 transition-all duration-300",
+        hero: "bg-gradient-primary text-white font-monument shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-vintage)] transform hover:scale-105 transition-all duration-300",
+        sport: "bg-white/90 backdrop-blur-sm text-foreground font-monument border border-border/50 hover:bg-primary hover:text-primary-foreground transform hover:scale-105 transition-all duration-300",
+        balance: "bg-gradient-primary text-white font-monument shadow-[var(--shadow-card)]",
+        cta: "bg-foreground text-background font-monument hover:bg-primary hover:text-primary-foreground transform hover:scale-105 transition-all duration-300",
       },
       size: {
         default: "h-10 px-4 py-2",

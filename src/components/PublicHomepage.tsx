@@ -56,7 +56,7 @@ export const PublicHomepage = () => {
       {/* Sports Carousel */}
       <section className="py-16 overflow-hidden">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-spartan font-bold text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-monument text-center mb-12">
             Tous les sports vous attendent
           </h2>
           
@@ -70,7 +70,7 @@ export const PublicHomepage = () => {
                 <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">
                   {sport.icon}
                 </div>
-                <span className="font-spartan font-bold text-sm text-center">
+                <span className="font-monument text-sm text-center">
                   {sport.name}
                 </span>
               </div>
@@ -82,7 +82,7 @@ export const PublicHomepage = () => {
       {/* Clubs Ticker */}
       <section className="py-8 bg-gradient-primary">
         <div className="overflow-hidden">
-          <div className="flex animate-marquee space-x-8 text-white font-spartan font-bold text-lg">
+          <div className="flex animate-marquee space-x-8 text-white font-monument text-lg">
             {[...clubs, ...clubs].map((club, index) => (
               <div key={index} className="flex-none px-4">
                 {club}
@@ -101,7 +101,7 @@ export const PublicHomepage = () => {
                 <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Users className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-spartan font-bold mb-2">
+                <h3 className="text-xl font-monument mb-2">
                   Des milliers de billets
                 </h3>
                 <p className="text-muted-foreground">
@@ -115,7 +115,7 @@ export const PublicHomepage = () => {
                 <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Ticket className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-spartan font-bold mb-2">
+                <h3 className="text-xl font-monument mb-2">
                   Accès facile via votre CSE
                 </h3>
                 <p className="text-muted-foreground">
@@ -129,7 +129,7 @@ export const PublicHomepage = () => {
                 <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Star className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-spartan font-bold mb-2">
+                <h3 className="text-xl font-monument mb-2">
                   Une sélection pour tous les goûts
                 </h3>
                 <p className="text-muted-foreground">
@@ -146,7 +146,7 @@ export const PublicHomepage = () => {
         <div className="absolute inset-0 bg-gradient-hero opacity-5"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <Trophy className="h-16 w-16 mx-auto mb-6 text-primary" />
-          <h2 className="text-3xl md:text-4xl font-spartan font-bold mb-6">
+          <h2 className="text-3xl md:text-4xl font-monument mb-6">
             Prêt à vivre vos prochaines émotions sportives ?
           </h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">

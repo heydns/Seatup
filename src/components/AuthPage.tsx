@@ -37,10 +37,10 @@ export const AuthPage = () => {
 
         <Card className="card-sport">
           <CardHeader className="text-center">
-            <div className="text-3xl font-spartan font-black text-brand mb-4">
+            <div className="text-3xl font-monument font-bold text-brand mb-4">
               seatup
             </div>
-            <CardTitle className="text-2xl font-spartan font-bold">
+            <CardTitle className="text-2xl font-monument">
               {isLogin ? "Connexion" : "Inscription"}
             </CardTitle>
             <CardDescription>
@@ -173,7 +173,7 @@ export const AuthPage = () => {
               <Button
                 variant="link"
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-primary font-spartan font-bold"
+                className="text-primary font-monument"
               >
                 {isLogin ? "S'inscrire" : "Se connecter"}
               </Button>

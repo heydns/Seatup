@@ -125,7 +125,7 @@ export const EventsPage = () => {
         {/* Header with Balance */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
-            <h1 className="text-4xl md:text-5xl font-spartan font-black mb-2">
+            <h1 className="text-4xl md:text-5xl font-monument mb-2">
               Événements sportifs
             </h1>
             <p className="text-xl text-muted-foreground">
@@ -165,7 +165,7 @@ export const EventsPage = () => {
             <div className="space-y-4 p-4 bg-white/50 backdrop-blur-sm rounded-lg border border-border/50">
               {/* Sport Filter */}
               <div>
-                <h3 className="font-spartan font-bold mb-2">Sport</h3>
+                <h3 className="font-monument mb-2">Sport</h3>
                 <div className="flex flex-wrap gap-2">
                   {SPORTS_FILTERS.map((sport) => (
                     <button
@@ -181,7 +181,7 @@ export const EventsPage = () => {
 
               {/* Competition Filter */}
               <div>
-                <h3 className="font-spartan font-bold mb-2">Compétition</h3>
+                <h3 className="font-monument mb-2">Compétition</h3>
                 <div className="flex flex-wrap gap-2">
                   {COMPETITION_FILTERS.map((competition) => (
                     <button
@@ -203,7 +203,7 @@ export const EventsPage = () => {
           <div className="text-center py-12">
             <div className="card-sport max-w-md mx-auto">
               <div className="text-6xl mb-4">🎯</div>
-              <h3 className="text-xl font-spartan font-bold mb-2">
+              <h3 className="text-xl font-monument mb-2">
                 Aucun événement trouvé
               </h3>
               <p className="text-muted-foreground mb-4">
