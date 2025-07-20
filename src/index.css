@@ -98,23 +98,23 @@
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-spartan font-bold;
+    @apply font-monument font-bold;
   }
 }
 
 @layer components {
   /* Brand Typography */
   .text-brand {
-    @apply font-spartan font-black;
+    @apply font-monument font-bold;
     color: #3A7BFF;
   }
   
   .text-tagline {
-    @apply font-spartan font-bold;
+    @apply font-monument font-bold;
   }
   
   .text-cta {
-    @apply font-spartan font-bold;
+    @apply font-monument font-bold;
   }
   
   /* Gradient Backgrounds */
@@ -147,13 +147,13 @@
   
   /* Button Variants */
   .btn-hero {
-    @apply bg-gradient-primary text-white font-spartan font-bold px-8 py-4 rounded-xl;
+    @apply bg-gradient-primary text-white font-monument font-bold px-8 py-4 rounded-xl;
     @apply shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-vintage)];
     @apply transform hover:scale-105 transition-all duration-300;
   }
   
   .btn-sport {
-    @apply bg-white/90 backdrop-blur-sm text-foreground font-spartan font-bold;
+    @apply bg-white/90 backdrop-blur-sm text-foreground font-monument font-bold;
     @apply px-6 py-3 rounded-lg border border-border/50;
     @apply hover:bg-primary hover:text-primary-foreground;
     @apply transform hover:scale-105 transition-all duration-300;
@@ -178,7 +178,7 @@
   /* Balance Badge */
   .balance-badge {
     @apply bg-gradient-primary text-white px-4 py-2 rounded-full;
-    @apply font-spartan font-bold text-sm;
+    @apply font-monument font-bold text-sm;
     @apply shadow-[var(--shadow-card)];
   }
   
