@@ -95,6 +95,10 @@ export const PublicHomepage = () => {
               <img src="/lovable-uploads/a204fb77-efa7-4cc3-8fb6-096b54a0ad71.png" alt="Racing 92" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
               <img src="/lovable-uploads/3b68fa36-0f64-42fa-bc8e-d0781a1dab9f.png" alt="Paris Basket" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
               <img src={versaillesLogo} alt="FC Versailles" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/7b9ccfc3-4cad-4647-9a2f-f8c490fcdd8c.png" alt="France Rugby" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/1fa9cbb3-3ec6-426f-a18a-4323c7d35960.png" alt="HYROX" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/f2330819-356a-4512-a76a-609eaaec5ea5.png" alt="Marathon de Paris" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/e59b4674-e9ba-4cdc-a6ec-2a0ee62e29c7.png" alt="Stade de France" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
             </div>
           </div>
           {/* Duplicate set for seamless loop */}
@@ -112,6 +116,10 @@ export const PublicHomepage = () => {
               <img src="/lovable-uploads/a204fb77-efa7-4cc3-8fb6-096b54a0ad71.png" alt="Racing 92" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
               <img src="/lovable-uploads/3b68fa36-0f64-42fa-bc8e-d0781a1dab9f.png" alt="Paris Basket" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
               <img src={versaillesLogo} alt="FC Versailles" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/7b9ccfc3-4cad-4647-9a2f-f8c490fcdd8c.png" alt="France Rugby" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/1fa9cbb3-3ec6-426f-a18a-4323c7d35960.png" alt="HYROX" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/f2330819-356a-4512-a76a-609eaaec5ea5.png" alt="Marathon de Paris" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src="/lovable-uploads/e59b4674-e9ba-4cdc-a6ec-2a0ee62e29c7.png" alt="Stade de France" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
             </div>
           </div>
         </div>
