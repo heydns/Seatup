@@ -18,7 +18,7 @@ export const Header = ({
   className
 }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  return <header className={`sticky top-0 z-50 relative border-b border-border/50 ${className}`}>
+  return <header className={`sticky top-0 z-50 relative border-b border-border/50 bg-background ${className}`}>
       <div className="absolute inset-0 bg-gradient-hero opacity-10"></div>
       <div className="vintage-grain absolute inset-0 bg-transparent"></div>
       <div className="container mx-auto px-4 relative z-10">
