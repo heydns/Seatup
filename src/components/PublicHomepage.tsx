@@ -50,7 +50,7 @@ export const PublicHomepage = () => {
               <span className="text-brand">simplement.</span>
             </h1>
             
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 font-medium animate-fade-up" style={{
+            <p className="text-lg md:text-xl text-foreground mb-8 font-medium animate-fade-up" style={{
             animationDelay: '0.2s'
           }}>
               La première billetterie sportive pensée pour les salariés.
