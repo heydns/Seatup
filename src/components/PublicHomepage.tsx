@@ -53,7 +53,7 @@ export const PublicHomepage = () => {
             <p className="text-base md:text-lg text-foreground mb-8 font-medium animate-fade-up" style={{
             animationDelay: '0.2s'
           }}>
-              La première billetterie sportive pensée pour les salariés.
+              La première billetterie 100% sport pensée pour les salariés.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up" style={{
