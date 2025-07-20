@@ -13,12 +13,12 @@ export const Header = ({
   className
 }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  return <header className={`sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-border/50 ${className}`}>
+  return <header className={`sticky top-0 z-50 header-gradient border-b border-white/20 ${className}`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 bg-[#f8f4ed]/0">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-monument font-bold text-brand">
+            <div className="text-2xl font-monument font-bold text-white">
               seatup.co
             </div>
           </Link>
@@ -26,10 +26,10 @@ export const Header = ({
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
             {user ? <>
-                <Link to="/events" className="text-foreground hover:text-primary transition-colors font-medium">
+                <Link to="/events" className="text-white/90 hover:text-white transition-colors font-medium">
                   Événements
                 </Link>
-                <Link to="/my-tickets" className="text-foreground hover:text-primary transition-colors font-medium flex items-center gap-2">
+                <Link to="/my-tickets" className="text-white/90 hover:text-white transition-colors font-medium flex items-center gap-2">
                   <ShoppingBag className="h-4 w-4" />
                   Mes billets
                 </Link>
@@ -37,7 +37,7 @@ export const Header = ({
                     Solde: {balance}€
                   </div>}
                 <Link to="/profile">
-                  <Button variant="ghost" size="icon">
+                  <Button variant="ghost" size="icon" className="text-white hover:bg-white/20">
                     <User className="h-4 w-4" />
                   </Button>
                 </Link>
@@ -51,26 +51,26 @@ export const Header = ({
           </nav>
 
           {/* Mobile Menu Button */}
-          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          <Button variant="ghost" size="icon" className="md:hidden text-white hover:bg-white/20" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
 
         {/* Mobile Navigation */}
-        {isMobileMenuOpen && <div className="md:hidden py-4 border-t border-border/50 bg-white/95 backdrop-blur-sm">
+        {isMobileMenuOpen && <div className="md:hidden py-4 border-t border-white/20 bg-black/20 backdrop-blur-sm">
             <nav className="flex flex-col space-y-4">
               {user ? <>
-                  <Link to="/events" className="text-foreground hover:text-primary transition-colors font-medium px-4 py-2" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Link to="/events" className="text-white/90 hover:text-white transition-colors font-medium px-4 py-2" onClick={() => setIsMobileMenuOpen(false)}>
                     Événements
                   </Link>
-                  <Link to="/my-tickets" className="text-foreground hover:text-primary transition-colors font-medium px-4 py-2 flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Link to="/my-tickets" className="text-white/90 hover:text-white transition-colors font-medium px-4 py-2 flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
                     <ShoppingBag className="h-4 w-4" />
                     Mes billets
                   </Link>
                   {balance !== undefined && <div className="balance-badge mx-4 self-start">
                       Solde: {balance}€
                     </div>}
-                  <Link to="/profile" className="text-foreground hover:text-primary transition-colors font-medium px-4 py-2 flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Link to="/profile" className="text-white/90 hover:text-white transition-colors font-medium px-4 py-2 flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
                     <User className="h-4 w-4" />
                     Mon profil
                   </Link>
