@@ -69,7 +69,8 @@
 
     /* Header gradient with grain effect */
     --header-gradient: linear-gradient(135deg, rgba(58, 123, 255, 0.15) 0%, rgba(200, 29, 133, 0.15) 100%);
-    --grain-opacity: 0.08;
+    --grain-opacity: 0.25;
+    --grain-secondary: 0.18;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -271,12 +272,73 @@
     right: 0;
     bottom: 0;
     background-image: 
-      radial-gradient(circle at 25% 25%, transparent 2%, rgba(255,255,255,var(--grain-opacity)) 2.5%, transparent 3%),
-      radial-gradient(circle at 75% 75%, transparent 2%, rgba(255,255,255,var(--grain-opacity)) 2.5%, transparent 3%),
-      radial-gradient(circle at 50% 50%, transparent 1.5%, rgba(0,0,0,calc(var(--grain-opacity) * 0.7)) 2%, transparent 2.5%);
-    background-size: 50px 50px, 60px 60px, 40px 40px;
-    background-position: 0 0, 30px 30px, 15px 15px;
+      /* Multiple layers of grain for vintage texture */
+      radial-gradient(circle at 15% 25%, transparent 1%, rgba(255,255,255,var(--grain-opacity)) 1.8%, transparent 2.5%),
+      radial-gradient(circle at 85% 75%, transparent 1%, rgba(255,255,255,var(--grain-secondary)) 1.8%, transparent 2.5%),
+      radial-gradient(circle at 45% 10%, transparent 0.8%, rgba(0,0,0,calc(var(--grain-opacity) * 0.6)) 1.5%, transparent 2%),
+      radial-gradient(circle at 75% 45%, transparent 1.2%, rgba(255,255,255,calc(var(--grain-opacity) * 0.8)) 2%, transparent 2.8%),
+      radial-gradient(circle at 25% 85%, transparent 0.5%, rgba(0,0,0,calc(var(--grain-secondary) * 0.7)) 1.2%, transparent 1.8%),
+      radial-gradient(circle at 60% 30%, transparent 1%, rgba(255,255,255,calc(var(--grain-opacity) * 0.9)) 1.6%, transparent 2.3%),
+      /* Fine noise pattern */
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 1px,
+        rgba(255,255,255,0.02) 1px,
+        rgba(255,255,255,0.02) 2px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 1px,
+        rgba(0,0,0,0.015) 1px,
+        rgba(0,0,0,0.015) 2px
+      );
+    background-size: 
+      35px 35px, 
+      45px 45px, 
+      28px 28px, 
+      52px 52px, 
+      32px 32px, 
+      38px 38px,
+      4px 4px,
+      6px 6px;
+    background-position: 
+      0 0, 
+      25px 25px, 
+      12px 12px, 
+      38px 38px, 
+      8px 8px, 
+      20px 20px,
+      0 0,
+      3px 3px;
     pointer-events: none;
-    opacity: 0.8;
+    opacity: 0.9;
+    animation: grain-shift 8s ease-in-out infinite;
+  }
+
+  @keyframes grain-shift {
+    0%, 100% { 
+      background-position: 
+        0 0, 
+        25px 25px, 
+        12px 12px, 
+        38px 38px, 
+        8px 8px, 
+        20px 20px,
+        0 0,
+        3px 3px;
+    }
+    50% { 
+      background-position: 
+        3px 2px, 
+        28px 27px, 
+        15px 14px, 
+        41px 40px, 
+        11px 10px, 
+        23px 22px,
+        2px 1px,
+        5px 4px;
+    }
   }
 }
