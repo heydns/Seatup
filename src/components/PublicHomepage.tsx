@@ -255,7 +255,7 @@ export const PublicHomepage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="pt-20 pb-20 relative overflow-hidden z-10 bg-white">
+      <section className="pt-12 pb-20 relative overflow-hidden z-10 bg-white">
         <div className="container mx-auto px-4 text-center relative z-10">
           <h2 className="text-xl md:text-3xl font-monument mb-6">
             Prêt à vivre vos prochaines émotions sportives ?
