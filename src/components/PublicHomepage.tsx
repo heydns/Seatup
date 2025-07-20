@@ -80,7 +80,7 @@ export const PublicHomepage = () => {
         <div className="container mx-auto px-4">
           <div className="mb-8">
             <h2 className="text-xl md:text-3xl font-monument mb-2">
-              Événements tendance à Paris
+              Événements à venir à Paris
             </h2>
             <p className="text-base text-muted-foreground">
               Découvrez les événements sportifs les plus populaires de la capitale
