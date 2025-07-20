@@ -21,7 +21,7 @@ export default {
 			fontFamily: {
 				'inter': ['Inter', 'sans-serif'],
 				'spartan': ['League Spartan', 'sans-serif'],
-				'monument': ['Monument Extended', 'sans-serif'],
+				'monument': ['Montserrat', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
