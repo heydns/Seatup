@@ -10,7 +10,7 @@ export const Footer = () => {
           <div className="col-span-1 md:col-span-1">
             <h3 className="font-monument text-xl mb-4 text-brand">Seatup.co</h3>
             <p className="text-muted-foreground text-sm mb-4">
-              La première billetterie 100% sport pensée pour les salariés. Vivez le sport simplement et localement.
+              La première billetterie 100% sport pensée pour les salariés. Vivez le sport simplement grâce à votre CSE.
             </p>
             {/* Social Media Links */}
             <div className="flex space-x-3">
