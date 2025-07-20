@@ -116,8 +116,8 @@ export const PublicHomepage = () => {
           })]}>
               <CarouselContent className="-ml-2 md:-ml-4">
                 {[{
-                title: "PSG vs OM",
-                date: "Sam, 26 Jul",
+                title: "PSG vs SCO Angers - Journée 1 Ligue 1",
+                date: "Dimanche 24 Août",
                 venue: "Parc des Princes",
                 price: "À partir de 45€",
                 image: psgOmImage
