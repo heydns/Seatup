@@ -150,7 +150,8 @@ export const PublicHomepage = () => {
                 title: "Handball - Dunkerque / Journée 1 StarLigue",
                 date: "Dim, 07 Sep",
                 venue: "Stade Pierre de Coubertin",
-                price: "À partir de 18€",
+                price: "À partir de 28€",
+                originalPrice: "35€",
                 image: handballPsgImage
               }].map((event, index) => <CarouselItem key={event.title} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/4">
                     <div className="group cursor-pointer animate-fade-up" style={{
