@@ -136,7 +136,7 @@ export const PublicHomepage = () => {
                 venue: "La Défense U Arena",
                 price: "À partir de 64€",
                 originalPrice: "80€",
-                image: rolandGarrosImage
+                image: "/lovable-uploads/7809806e-e8e7-44e8-8cb6-4e9157c04ac5.png"
               }, {
                 title: "Hoka Semi Marathon Paris 2025",
                 date: "Mar, 29 Jul",
