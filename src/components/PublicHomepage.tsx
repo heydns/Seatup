@@ -37,11 +37,14 @@ const sports = [{
 }];
 const clubs = ["PSG", "OM", "OL", "AS Monaco", "LOSC", "Stade Rennais", "RC Strasbourg", "OGC Nice", "Montpellier HSC", "FC Nantes"];
 export const PublicHomepage = () => {
-  return <div className="min-h-screen">
+  return <div className="min-h-screen relative">
+      <div className="absolute inset-0 bg-gradient-hero opacity-10"></div>
+      <div className="vintage-grain absolute inset-0 bg-transparent"></div>
+      
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-hero opacity-10"></div>
-        <div className="vintage-grain absolute inset-0 bg-transparent"></div>
+        
+        
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -77,7 +80,7 @@ export const PublicHomepage = () => {
       </section>
 
       {/* Clubs Logos Ticker */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden z-10">
         <div className="flex animate-scroll">
           {/* First set of logos */}
           <div className="flex items-center justify-around min-w-full py-6">
@@ -111,9 +114,9 @@ export const PublicHomepage = () => {
       </section>
 
       {/* Featured Events - Dice.fm Style */}
-      <section className="py-[30px] bg-transparent">
+      <section className="py-[30px] relative z-10">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl rounded-3xl shadow-lg border border-border/30 p-8 px-[20px] py-[20px] mx-0 bg-[#f3f3f3]">
+          <div className="max-w-5xl rounded-3xl shadow-lg border border-border/30 p-8 px-[20px] py-[20px] mx-0 bg-white/95 backdrop-blur-sm">
             <div className="mb-8">
               <h2 className="text-xl md:text-3xl font-monument mb-2">
                 Événements à venir à Paris
@@ -220,7 +223,7 @@ export const PublicHomepage = () => {
       
 
       {/* Value Propositions */}
-      <section className="py-20">
+      <section className="py-20 relative z-10">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="card-sport text-center group">
@@ -269,8 +272,7 @@ export const PublicHomepage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-hero opacity-5"></div>
+      <section className="py-20 relative overflow-hidden z-10">
         <div className="container mx-auto px-4 text-center relative z-10">
           <Trophy className="h-16 w-16 mx-auto mb-6 text-primary" />
           <h2 className="text-xl md:text-3xl font-monument mb-6">
