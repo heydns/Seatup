@@ -256,18 +256,13 @@ export const PublicHomepage = () => {
       {/* CTA Section */}
       <section className="py-20 relative overflow-hidden z-10 bg-white">
         <div className="container mx-auto px-4 text-center relative z-10">
-          <img 
-            src="/lovable-uploads/bade9f5a-0111-4e27-8a89-601d8a7dc669.png" 
-            alt="Cycliste français en action" 
-            className="w-[640px] h-auto mx-auto mb-6 rounded-lg shadow-md"
-          />
           <h2 className="text-xl md:text-3xl font-monument mb-6">
             Prêt à vivre vos prochaines émotions sportives ?
           </h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
             Rejoignez des milliers de salariés qui découvrent le sport autrement grâce à Seatup.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <Link to="/events">
               <Button variant="hero" size="xl" className="group">
                 Découvrir les événements
@@ -278,6 +273,11 @@ export const PublicHomepage = () => {
               Contact entreprise
             </Button>
           </div>
+          <img 
+            src="/lovable-uploads/bade9f5a-0111-4e27-8a89-601d8a7dc669.png" 
+            alt="Cycliste français en action" 
+            className="w-[448px] h-auto mx-auto rounded-lg shadow-md"
+          />
         </div>
       </section>
     </div>;
