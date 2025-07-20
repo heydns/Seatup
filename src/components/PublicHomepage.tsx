@@ -144,7 +144,7 @@ export const PublicHomepage = () => {
                 date: "Mer, 30 Jul",
                 venue: "Stade Pierre de Coubertin",
                 price: "À partir de 15€",
-                image: volleyballImage
+                image: "/lovable-uploads/498f232f-981f-4bb2-ab0f-d9d08551a8fb.png"
               }, {
                 title: "Handball Paris SG",
                 date: "Jeu, 31 Jul",
