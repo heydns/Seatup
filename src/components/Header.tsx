@@ -93,39 +93,5 @@ export const Header = ({
             </nav>
           </div>}
       </div>
-
-      {/* Clubs Logos Ticker */}
-      <div className="relative overflow-hidden border-t border-border/30 bg-transparent backdrop-blur-sm">
-        <div className="flex animate-scroll">
-          {/* First set of logos */}
-          <div className="flex items-center justify-around min-w-full py-3 px-4">
-            <div className="flex items-center space-x-8 md:space-x-12">
-              <img src={psgLogo} alt="PSG" className="h-8 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
-              <img src={pfcLogo} alt="Paris FC" className="h-8 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
-              <div className="h-8 w-8 bg-red-500 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
-                <span className="text-white font-bold text-xs">RS</span>
-              </div>
-              <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
-                <span className="text-white font-bold text-xs">PA13</span>
-              </div>
-              <img src={versaillesLogo} alt="FC Versailles" className="h-8 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
-            </div>
-          </div>
-          {/* Duplicate set for seamless loop */}
-          <div className="flex items-center justify-around min-w-full py-3 px-4">
-            <div className="flex items-center space-x-8 md:space-x-12">
-              <img src={psgLogo} alt="PSG" className="h-8 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
-              <img src={pfcLogo} alt="Paris FC" className="h-8 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
-              <div className="h-8 w-8 bg-red-500 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
-                <span className="text-white font-bold text-xs">RS</span>
-              </div>
-              <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
-                <span className="text-white font-bold text-xs">PA13</span>
-              </div>
-              <img src={versaillesLogo} alt="FC Versailles" className="h-8 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
-            </div>
-          </div>
-        </div>
-      </div>
     </header>;
 };

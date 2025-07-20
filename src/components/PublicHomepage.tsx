@@ -11,6 +11,11 @@ import rolandGarrosImage from "@/assets/roland-garros.jpg";
 import rugbyMatchImage from "@/assets/rugby-match.jpg";
 import volleyballImage from "@/assets/volleyball.jpg";
 import handballPsgImage from "@/assets/handball-psg.jpg";
+
+// Import club logos
+import psgLogo from "@/assets/clubs/psg-logo.png";
+import pfcLogo from "@/assets/clubs/pfc-logo.png";
+import versaillesLogo from "@/assets/clubs/versailles-logo.png";
 const sports = [{
   name: "Football",
   icon: "⚽"
@@ -66,6 +71,40 @@ export const PublicHomepage = () => {
                   Nous contacter
                 </Button>
               </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Clubs Logos Ticker */}
+      <section className="relative overflow-hidden">
+        <div className="flex animate-scroll">
+          {/* First set of logos */}
+          <div className="flex items-center justify-around min-w-full py-6">
+            <div className="flex items-center space-x-12 md:space-x-16">
+              <img src={psgLogo} alt="PSG" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src={pfcLogo} alt="Paris FC" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <div className="h-10 w-10 bg-red-500 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
+                <span className="text-white font-bold text-sm">RS</span>
+              </div>
+              <div className="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
+                <span className="text-white font-bold text-sm">PA13</span>
+              </div>
+              <img src={versaillesLogo} alt="FC Versailles" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+            </div>
+          </div>
+          {/* Duplicate set for seamless loop */}
+          <div className="flex items-center justify-around min-w-full py-6">
+            <div className="flex items-center space-x-12 md:space-x-16">
+              <img src={psgLogo} alt="PSG" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <img src={pfcLogo} alt="Paris FC" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
+              <div className="h-10 w-10 bg-red-500 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
+                <span className="text-white font-bold text-sm">RS</span>
+              </div>
+              <div className="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
+                <span className="text-white font-bold text-sm">PA13</span>
+              </div>
+              <img src={versaillesLogo} alt="FC Versailles" className="h-10 w-auto opacity-70 hover:opacity-100 transition-opacity filter grayscale hover:grayscale-0" />
             </div>
           </div>
         </div>
