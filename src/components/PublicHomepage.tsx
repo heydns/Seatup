@@ -271,7 +271,7 @@ export const PublicHomepage = () => {
               </Button>
             </Link>
             <Button variant="sport" size="xl">
-              Contact entreprise
+              Nous contacter
             </Button>
           </div>
           <img 
