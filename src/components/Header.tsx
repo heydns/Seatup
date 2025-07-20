@@ -18,15 +18,7 @@ export const Header = ({
   className
 }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  return <header 
-    className={`sticky top-0 z-50 relative border-b border-border/50 ${className}`}
-    style={{
-      backgroundImage: 'url(/lovable-uploads/03882315-1238-44d2-9921-be8e2ae5cf5f.png)',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
-    }}
-  >
+  return <header className={`sticky top-0 z-50 relative border-b border-border/50 bg-white ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex items-center justify-between h-16 bg-transparent">
           {/* Logo */}
