@@ -1,11 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Users, Ticket, Star, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
 // Import images
@@ -40,7 +36,7 @@ export const PublicHomepage = () => {
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-hero opacity-10"></div>
-        <div className="vintage-grain absolute inset-0"></div>
+        <div className="vintage-grain absolute inset-0 bg-transparent"></div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -88,81 +84,64 @@ export const PublicHomepage = () => {
               </p>
             </div>
             
-            <Carousel 
-              className="w-full max-w-full"
-              opts={{
-                align: "start",
-                loop: true,
-                dragFree: true,
-                skipSnaps: false,
-                containScroll: "trimSnaps",
-                duration: 30
-              }}
-              plugins={[
-                Autoplay({
-                  delay: 4000,
-                  stopOnInteraction: true,
-                  stopOnMouseEnter: true,
-                  stopOnFocusIn: true
-                })
-              ]}
-            >
+            <Carousel className="w-full max-w-full" opts={{
+            align: "start",
+            loop: true,
+            dragFree: true,
+            skipSnaps: false,
+            containScroll: "trimSnaps",
+            duration: 30
+          }} plugins={[Autoplay({
+            delay: 4000,
+            stopOnInteraction: true,
+            stopOnMouseEnter: true,
+            stopOnFocusIn: true
+          })]}>
               <CarouselContent className="-ml-2 md:-ml-4">
-                {[
-                  {
-                    title: "PSG vs OM",
-                    date: "Sam, 26 Jul",
-                    venue: "Parc des Princes",
-                    price: "À partir de 45€",
-                    image: psgOmImage
-                  },
-                  {
-                    title: "Paris Basketball",
-                    date: "Dim, 27 Jul", 
-                    venue: "Accor Arena",
-                    price: "À partir de 25€",
-                    image: parisBasketballImage
-                  },
-                  {
-                    title: "Open de Tennis",
-                    date: "Lun, 28 Jul",
-                    venue: "Roland Garros",
-                    price: "À partir de 35€",
-                    image: rolandGarrosImage
-                  },
-                  {
-                    title: "Racing 92 vs Stade Français",
-                    date: "Mar, 29 Jul",
-                    venue: "U Arena",
-                    price: "À partir de 20€",
-                    image: rugbyMatchImage
-                  },
-                  {
-                    title: "Volley-Ball Féminin",
-                    date: "Mer, 30 Jul",
-                    venue: "Stade Pierre de Coubertin",
-                    price: "À partir de 15€",
-                    image: volleyballImage
-                  },
-                  {
-                    title: "Handball Paris SG",
-                    date: "Jeu, 31 Jul",
-                    venue: "Stade Pierre de Coubertin", 
-                    price: "À partir de 18€",
-                    image: handballPsgImage
-                  }
-                ].map((event, index) => (
-                  <CarouselItem key={event.title} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/4">
-                    <div className="group cursor-pointer animate-fade-up"
-                         style={{ animationDelay: `${index * 0.1}s` }}>
+                {[{
+                title: "PSG vs OM",
+                date: "Sam, 26 Jul",
+                venue: "Parc des Princes",
+                price: "À partir de 45€",
+                image: psgOmImage
+              }, {
+                title: "Paris Basketball",
+                date: "Dim, 27 Jul",
+                venue: "Accor Arena",
+                price: "À partir de 25€",
+                image: parisBasketballImage
+              }, {
+                title: "Open de Tennis",
+                date: "Lun, 28 Jul",
+                venue: "Roland Garros",
+                price: "À partir de 35€",
+                image: rolandGarrosImage
+              }, {
+                title: "Racing 92 vs Stade Français",
+                date: "Mar, 29 Jul",
+                venue: "U Arena",
+                price: "À partir de 20€",
+                image: rugbyMatchImage
+              }, {
+                title: "Volley-Ball Féminin",
+                date: "Mer, 30 Jul",
+                venue: "Stade Pierre de Coubertin",
+                price: "À partir de 15€",
+                image: volleyballImage
+              }, {
+                title: "Handball Paris SG",
+                date: "Jeu, 31 Jul",
+                venue: "Stade Pierre de Coubertin",
+                price: "À partir de 18€",
+                image: handballPsgImage
+              }].map((event, index) => <CarouselItem key={event.title} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/4">
+                    <div className="group cursor-pointer animate-fade-up" style={{
+                  animationDelay: `${index * 0.1}s`
+                }}>
                       <div className="relative overflow-hidden rounded-lg bg-card border border-border shadow-sm hover:shadow-md transition-all duration-300 group-hover:scale-[1.02]">
                         {/* Event image */}
                         <div className="aspect-[4/3] overflow-hidden">
-                          <img 
-                            src={event.image} 
-                            alt={event.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
+                          <img src={event.image} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                         </div>
                         
                         {/* Event info */}
@@ -182,8 +161,7 @@ export const PublicHomepage = () => {
                         </div>
                       </div>
                     </div>
-                  </CarouselItem>
-                ))}
+                  </CarouselItem>)}
               </CarouselContent>
             </Carousel>
             
