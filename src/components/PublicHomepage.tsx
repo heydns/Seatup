@@ -129,7 +129,7 @@ export const PublicHomepage = () => {
                 venue: "Adidas Arena",
                 price: "À partir de 200€",
                 originalPrice: "250€",
-                image: parisBasketballImage
+                image: "/lovable-uploads/2837c0cc-2ffb-4656-92c6-96c4f4dfd60f.png"
               }, {
                 title: "Rolex Paris Master 2025",
                 date: "Lun, 28 Jul",
