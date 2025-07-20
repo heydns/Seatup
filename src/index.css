@@ -235,6 +235,16 @@
   .animate-marquee {
     animation: marquee 30s linear infinite;
   }
+
+  /* Clubs Scroll Animation */
+  @keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-scroll {
+    animation: scroll 30s linear infinite;
+  }
   
   /* Line Clamp Utilities */
   .line-clamp-1 {
