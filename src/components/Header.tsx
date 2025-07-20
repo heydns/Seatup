@@ -13,9 +13,11 @@ export const Header = ({
   className
 }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  return <header className={`sticky top-0 z-50 header-gradient backdrop-blur-md border-b border-border/50 ${className}`}>
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 bg-[#f8f4ed]/0">
+  return <header className={`sticky top-0 z-50 relative backdrop-blur-md border-b border-border/50 ${className}`}>
+      <div className="absolute inset-0 bg-gradient-hero opacity-10"></div>
+      <div className="vintage-grain absolute inset-0 bg-transparent"></div>
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="text-2xl font-monument font-bold text-brand">
