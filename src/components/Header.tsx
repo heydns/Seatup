@@ -47,9 +47,6 @@ export const Header = ({
                     Se connecter
                   </Button>
                 </Link>
-                <Button variant="hero" size="sm">
-                  Entreprise
-                </Button>
               </>}
           </nav>
 
@@ -78,15 +75,12 @@ export const Header = ({
                     Mon profil
                   </Link>
                 </> : <>
-                  <div className="px-4 space-y-3">
+                  <div className="px-4">
                     <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
                       <Button variant="sport" size="sm" className="w-full">
                         Se connecter
                       </Button>
                     </Link>
-                    <Button variant="hero" size="sm" className="w-full">
-                      Entreprise
-                    </Button>
                   </div>
                 </>}
             </nav>
