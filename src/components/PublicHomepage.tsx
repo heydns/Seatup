@@ -143,7 +143,8 @@ export const PublicHomepage = () => {
                 title: "Les Mariannes 92 - Saison 25/26",
                 date: "Mer, 30 Jul",
                 venue: "Le palais des sports Marcel Cerdan",
-                price: "À partir de 15€",
+                price: "À partir de 84€",
+                originalPrice: "105€",
                 image: "/lovable-uploads/498f232f-981f-4bb2-ab0f-d9d08551a8fb.png"
               }, {
                 title: "Handball Paris SG",
@@ -174,10 +175,10 @@ export const PublicHomepage = () => {
                           </p>
                           <div className="flex items-center gap-2">
                             <p className="text-sm text-secondary line-through">
-                              {event.price.replace("À partir de ", "").replace("€", "")}€
+                              {event.originalPrice || event.price.replace("À partir de ", "").replace("€", "") + "€"}
                             </p>
                             <p className="text-sm font-medium text-primary">
-                              {event.price.replace(/\d+/, (match) => String(Math.round(parseInt(match) * 0.8)))}
+                              {event.price}
                             </p>
                           </div>
                         </div>
