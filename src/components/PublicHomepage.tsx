@@ -259,7 +259,7 @@ export const PublicHomepage = () => {
           <img 
             src="/lovable-uploads/bade9f5a-0111-4e27-8a89-601d8a7dc669.png" 
             alt="Cycliste français en action" 
-            className="h-32 w-auto mx-auto mb-6 rounded-lg shadow-md"
+            className="h-64 w-auto mx-auto mb-6 rounded-lg shadow-md"
           />
           <h2 className="text-xl md:text-3xl font-monument mb-6">
             Prêt à vivre vos prochaines émotions sportives ?
