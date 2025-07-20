@@ -164,7 +164,7 @@ export const PublicHomepage = () => {
                         {/* Event info */}
                         <div className="p-3 md:p-4">
                           <h3 className="font-monument text-sm md:text-base font-semibold mb-1 group-hover:text-primary transition-colors line-clamp-2">
-                            {event.title}
+                            Les Mariannes 92
                           </h3>
                           <p className="text-sm text-muted-foreground mb-1">
                             {event.date}
