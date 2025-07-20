@@ -49,7 +49,7 @@ export const PublicHomepage = () => {
   >
       
       {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden">
+      <section className="relative py-8 md:py-16 overflow-hidden">
         
         
         
