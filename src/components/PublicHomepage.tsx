@@ -157,7 +157,7 @@ export const PublicHomepage = () => {
                 venue: "Stade Pierre de Coubertin",
                 price: "À partir de 28€",
                 originalPrice: "35€",
-                image: "/lovable-uploads/467bc43b-edf0-4902-8ff3-0ff4bf304b47.png"
+                image: "/lovable-uploads/585f742a-f198-48d5-aaff-54c375f30f55.png"
               }].map((event, index) => <CarouselItem key={event.title} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/4">
                     <div className="group cursor-pointer animate-fade-up" style={{
                   animationDelay: `${index * 0.1}s`
