@@ -18,6 +18,7 @@ import handballPsgImage from "@/assets/handball-psg.jpg";
 import psgLogo from "@/assets/clubs/psg-logo.png";
 import pfcLogo from "@/assets/clubs/pfc-logo.png";
 import versaillesLogo from "@/assets/clubs/versailles-logo.png";
+
 const sports = [{
   name: "Football",
   icon: "⚽"
@@ -120,6 +121,7 @@ export const PublicHomepage = () => {
                 date: "Dimanche 24 Août",
                 venue: "Parc des Princes",
                 price: "À partir de 36€",
+                originalPrice: "45€",
                 image: "/lovable-uploads/147eb088-277c-4032-b6b4-e01dfed524d3.png"
               }, {
                 title: "Paris Basketball",
