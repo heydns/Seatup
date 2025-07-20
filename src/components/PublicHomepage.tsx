@@ -116,7 +116,7 @@ export const PublicHomepage = () => {
       {/* Featured Events - Dice.fm Style */}
       <section className="py-[30px] relative z-10">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl rounded-3xl shadow-lg border border-border/30 p-8 px-[20px] py-[20px] mx-auto bg-white/95 backdrop-blur-sm">
+          <div className="max-w-7xl rounded-3xl shadow-lg border border-border/30 p-8 px-[20px] py-[20px] mx-auto bg-white/95 backdrop-blur-sm">
             <div className="mb-8">
               <h2 className="text-xl md:text-3xl font-monument mb-2">
                 Événements à venir à Paris
