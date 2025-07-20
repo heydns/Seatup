@@ -105,8 +105,8 @@
 @layer components {
   /* Brand Typography */
   .text-brand {
-    @apply font-spartan font-black text-transparent bg-clip-text;
-    background-image: var(--gradient-primary);
+    @apply font-spartan font-black;
+    color: #3A7BFF;
   }
   
   .text-tagline {
