@@ -124,21 +124,21 @@ export const PublicHomepage = () => {
                 originalPrice: "45€",
                 image: "/lovable-uploads/147eb088-277c-4032-b6b4-e01dfed524d3.png"
               }, {
-                title: "Paris Basketball",
+                title: "Paris Basketball - Abonnement 25/26",
                 date: "Dim, 27 Jul",
-                venue: "Accor Arena",
+                venue: "Adidas Arena",
                 price: "À partir de 25€",
                 image: parisBasketballImage
               }, {
-                title: "Open de Tennis",
+                title: "Rolex Paris Master 2025",
                 date: "Lun, 28 Jul",
-                venue: "Roland Garros",
+                venue: "La Défense U Arena",
                 price: "À partir de 35€",
                 image: rolandGarrosImage
               }, {
-                title: "Racing 92 vs Stade Français",
+                title: "Hoka Semi Marathon Paris 2025",
                 date: "Mar, 29 Jul",
-                venue: "U Arena",
+                venue: "Ville de Paris",
                 price: "À partir de 20€",
                 image: rugbyMatchImage
               }, {
