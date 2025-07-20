@@ -120,7 +120,7 @@ export const EventsPage = () => {
   }
 
   return (
-    <div className="min-h-screen pt-24 pb-12">
+    <div className="min-h-screen pt-24 pb-12 bg-white">
       <div className="container mx-auto px-4">
         {/* Header with Balance */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
