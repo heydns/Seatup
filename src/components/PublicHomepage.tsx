@@ -93,14 +93,16 @@ export const PublicHomepage = () => {
               align: "start",
               loop: true,
               dragFree: true,
-              skipSnaps: true,
-              duration: 60
+              skipSnaps: false,
+              containScroll: "trimSnaps",
+              duration: 30
             }}
             plugins={[
               Autoplay({
-                delay: 3000,
+                delay: 4000,
                 stopOnInteraction: true,
-                stopOnMouseEnter: true
+                stopOnMouseEnter: true,
+                stopOnFocusIn: true
               })
             ]}
           >
