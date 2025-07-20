@@ -257,7 +257,7 @@ export const PublicHomepage = () => {
       <section className="py-20 relative overflow-hidden z-10 bg-white">
         <div className="container mx-auto px-4 text-center relative z-10">
           <img 
-            src="/lovable-uploads/cb5fec3b-4a3b-4914-a59f-a7c9db6750b6.png" 
+            src="/lovable-uploads/bade9f5a-0111-4e27-8a89-601d8a7dc669.png" 
             alt="Cycliste français en action" 
             className="h-32 w-auto mx-auto mb-6 rounded-lg shadow-md"
           />
