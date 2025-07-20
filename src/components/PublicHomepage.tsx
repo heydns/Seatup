@@ -44,13 +44,13 @@ export const PublicHomepage = () => {
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-monument font-bold mb-6 animate-fade-up">
+            <h1 className="text-3xl md:text-5xl font-monument font-bold mb-6 animate-fade-up">
               <span className="text-brand">Vivez le sport,</span>
               <br />
               <span className="text-brand">simplement.</span>
             </h1>
             
-            <p className="text-lg md:text-xl text-foreground mb-8 font-medium animate-fade-up" style={{
+            <p className="text-base md:text-lg text-foreground mb-8 font-medium animate-fade-up" style={{
             animationDelay: '0.2s'
           }}>
               La première billetterie sportive pensée pour les salariés.
@@ -79,10 +79,10 @@ export const PublicHomepage = () => {
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="mb-8">
-            <h2 className="text-2xl md:text-4xl font-monument mb-2">
+            <h2 className="text-xl md:text-3xl font-monument mb-2">
               Événements tendance à Paris
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-base text-muted-foreground">
               Découvrez les événements sportifs les plus populaires de la capitale
             </p>
           </div>
@@ -207,7 +207,7 @@ export const PublicHomepage = () => {
                 <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Users className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-monument mb-2">
+                <h3 className="text-lg font-monument mb-2">
                   Des milliers de billets
                 </h3>
                 <p className="text-muted-foreground">
@@ -221,7 +221,7 @@ export const PublicHomepage = () => {
                 <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Ticket className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-monument mb-2">
+                <h3 className="text-lg font-monument mb-2">
                   Accès facile via votre CSE
                 </h3>
                 <p className="text-muted-foreground">
@@ -235,7 +235,7 @@ export const PublicHomepage = () => {
                 <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Star className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-monument mb-2">
+                <h3 className="text-lg font-monument mb-2">
                   Une sélection pour tous les goûts
                 </h3>
                 <p className="text-muted-foreground">
@@ -252,10 +252,10 @@ export const PublicHomepage = () => {
         <div className="absolute inset-0 bg-gradient-hero opacity-5"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <Trophy className="h-16 w-16 mx-auto mb-6 text-primary" />
-          <h2 className="text-2xl md:text-4xl font-monument mb-6">
+          <h2 className="text-xl md:text-3xl font-monument mb-6">
             Prêt à vivre vos prochaines émotions sportives ?
           </h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
             Rejoignez des milliers de salariés qui découvrent le sport autrement grâce à Seatup.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
