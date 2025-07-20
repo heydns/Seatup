@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import { Mail, Phone, MapPin, Instagram, Linkedin } from "lucide-react";
 
 export const Footer = () => {
   return (
@@ -8,10 +8,19 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo & Description */}
           <div className="col-span-1 md:col-span-1">
-            <h3 className="font-monument text-xl mb-4 text-brand">Seatup</h3>
+            <h3 className="font-monument text-xl mb-4 text-brand">Seatup.co</h3>
             <p className="text-muted-foreground text-sm mb-4">
               La première billetterie 100% sport pensée pour les salariés. Vivez le sport simplement et localement.
             </p>
+            {/* Social Media Links */}
+            <div className="flex space-x-3">
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Linkedin className="h-4 w-4" />
+              </a>
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Instagram className="h-4 w-4" />
+              </a>
+            </div>
           </div>
 
           {/* Navigation Links */}
@@ -84,26 +93,10 @@ export const Footer = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-border mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-muted-foreground text-sm">
-            © 2024 Seatup. Tous droits réservés.
+        <div className="border-t border-border mt-8 pt-8">
+          <p className="text-muted-foreground text-sm text-center">
+            © 2024 Seatup.co Tous droits réservés.
           </p>
-          
-          {/* Social Media Links */}
-          <div className="flex space-x-4 mt-4 md:mt-0">
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-              <Facebook className="h-5 w-5" />
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-              <Twitter className="h-5 w-5" />
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-              <Instagram className="h-5 w-5" />
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-              <Linkedin className="h-5 w-5" />
-            </a>
-          </div>
         </div>
       </div>
     </footer>
