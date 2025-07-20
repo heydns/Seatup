@@ -127,19 +127,22 @@ export const PublicHomepage = () => {
                 title: "Paris Basketball - Abonnement 25/26",
                 date: "Dim, 27 Jul",
                 venue: "Adidas Arena",
-                price: "À partir de 25€",
+                price: "À partir de 200€",
+                originalPrice: "250€",
                 image: parisBasketballImage
               }, {
                 title: "Rolex Paris Master 2025",
                 date: "Lun, 28 Jul",
                 venue: "La Défense U Arena",
-                price: "À partir de 35€",
+                price: "À partir de 64€",
+                originalPrice: "80€",
                 image: rolandGarrosImage
               }, {
                 title: "Hoka Semi Marathon Paris 2025",
                 date: "Mar, 29 Jul",
                 venue: "Ville de Paris",
-                price: "À partir de 20€",
+                price: "À partir de 44€",
+                originalPrice: "55€",
                 image: rugbyMatchImage
               }, {
                 title: "Les Mariannes 92 - Saison 25/26",
