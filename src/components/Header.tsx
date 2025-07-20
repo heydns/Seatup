@@ -22,14 +22,14 @@ export const Header = ({
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex items-center justify-between h-16 bg-transparent">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2 animate-fade-up" style={{ animationDelay: '0.1s' }}>
             <div className="text-2xl font-monument font-bold text-brand">
               seatup.co
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
+          <nav className="hidden md:flex items-center space-x-6 animate-fade-up" style={{ animationDelay: '0.2s' }}>
             {user ? <>
                 <Link to="/events" className="text-foreground hover:text-primary transition-colors font-medium">
                   Événements
@@ -56,7 +56,7 @@ export const Header = ({
           </nav>
 
           {/* Mobile Menu Button */}
-          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          <Button variant="ghost" size="icon" className="md:hidden animate-fade-up" style={{ animationDelay: '0.3s' }} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
