@@ -140,9 +140,9 @@ export const PublicHomepage = () => {
                 price: "À partir de 20€",
                 image: rugbyMatchImage
               }, {
-                title: "Les Mariannes 92",
+                title: "Les Mariannes 92 - Saison 25/26",
                 date: "Mer, 30 Jul",
-                venue: "Stade Pierre de Coubertin",
+                venue: "Le palais des sports Marcel Cerdan",
                 price: "À partir de 15€",
                 image: "/lovable-uploads/498f232f-981f-4bb2-ab0f-d9d08551a8fb.png"
               }, {
