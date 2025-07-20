@@ -5,6 +5,7 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 import Autoplay from "embla-carousel-autoplay";
 import LogoTicker from "./LogoTicker";
 import { AnimatedText } from "./AnimatedText";
+import { Footer } from "./Footer";
 
 // Import images
 import psgOmImage from "@/assets/psg-om.jpg";
@@ -280,5 +281,8 @@ export const PublicHomepage = () => {
           />
         </div>
       </section>
+
+      {/* Footer */}
+      <Footer />
     </div>;
 };
