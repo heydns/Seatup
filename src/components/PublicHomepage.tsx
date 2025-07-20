@@ -40,7 +40,7 @@ export const PublicHomepage = () => {
   return <div 
     className="min-h-screen relative"
     style={{
-      backgroundImage: "url('/lovable-uploads/82b99a06-6d6b-4325-80df-2ae8246850b7.png')",
+      backgroundImage: "url('/lovable-uploads/85b23cdc-7ce6-4e21-881f-24af7be141cd.png')",
       backgroundSize: "cover",
       backgroundPosition: "center",
       backgroundRepeat: "no-repeat",
