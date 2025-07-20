@@ -37,9 +37,7 @@ const sports = [{
 }];
 const clubs = ["PSG", "OM", "OL", "AS Monaco", "LOSC", "Stade Rennais", "RC Strasbourg", "OGC Nice", "Montpellier HSC", "FC Nantes"];
 export const PublicHomepage = () => {
-  return <div className="min-h-screen relative">
-      <div className="absolute inset-0 bg-gradient-hero opacity-10"></div>
-      <div className="vintage-grain absolute inset-0 bg-transparent"></div>
+  return <div className="min-h-screen relative bg-white">
       
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">
@@ -272,7 +270,7 @@ export const PublicHomepage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 relative overflow-hidden z-10">
+      <section className="py-20 relative overflow-hidden z-10 bg-white">
         <div className="container mx-auto px-4 text-center relative z-10">
           <Trophy className="h-16 w-16 mx-auto mb-6 text-primary" />
           <h2 className="text-xl md:text-3xl font-monument mb-6">

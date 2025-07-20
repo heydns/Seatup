@@ -18,9 +18,7 @@ export const Header = ({
   className
 }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  return <header className={`sticky top-0 z-50 relative border-b border-border/50 bg-background ${className}`}>
-      <div className="absolute inset-0 bg-gradient-hero opacity-10"></div>
-      <div className="vintage-grain absolute inset-0 bg-transparent"></div>
+  return <header className={`sticky top-0 z-50 relative border-b border-border/50 bg-white ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex items-center justify-between h-16 bg-transparent">
           {/* Logo */}
