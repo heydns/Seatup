@@ -119,11 +119,16 @@
 
   body {
     @apply bg-background text-foreground font-inter antialiased;
-    background-image: url('./assets/gradient-background.png');
-    background-size: cover;
-    background-position: center;
+    background: linear-gradient(180deg, 
+      hsl(250, 85%, 65%) 0%,     /* Bleu-violet du haut */
+      hsl(280, 70%, 60%) 25%,    /* Violet */
+      hsl(320, 65%, 65%) 50%,    /* Magenta-rose */
+      hsl(15, 80%, 70%) 75%,     /* Rose-orange */
+      hsl(25, 85%, 75%) 100%     /* Orange clair du bas */
+    );
     background-attachment: fixed;
     background-repeat: no-repeat;
+    min-height: 100vh;
   }
   
   h1, h2, h3, h4, h5, h6 {
