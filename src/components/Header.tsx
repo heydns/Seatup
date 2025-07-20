@@ -29,13 +29,13 @@ export const Header = ({ user, balance, className }: HeaderProps) => {
               <>
                 <Link 
                   to="/events" 
-                  className="text-foreground hover:text-primary transition-colors font-medium"
+                  className="text-foreground hover:text-primary transition-colors font-spartan font-bold"
                 >
                   Événements
                 </Link>
                 <Link 
                   to="/my-tickets" 
-                  className="text-foreground hover:text-primary transition-colors font-medium flex items-center gap-2"
+                  className="text-foreground hover:text-primary transition-colors font-spartan font-bold flex items-center gap-2"
                 >
                   <ShoppingBag className="h-4 w-4" />
                   Mes billets
@@ -55,7 +55,7 @@ export const Header = ({ user, balance, className }: HeaderProps) => {
               <>
                 <Link 
                   to="/events" 
-                  className="text-foreground hover:text-primary transition-colors font-medium"
+                  className="text-foreground hover:text-primary transition-colors font-spartan font-bold"
                 >
                   Découvrir
                 </Link>
@@ -90,14 +90,14 @@ export const Header = ({ user, balance, className }: HeaderProps) => {
                 <>
                   <Link 
                     to="/events"
-                    className="text-foreground hover:text-primary transition-colors font-medium px-4 py-2"
+                    className="text-foreground hover:text-primary transition-colors font-spartan font-bold px-4 py-2"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Événements
                   </Link>
                   <Link 
                     to="/my-tickets"
-                    className="text-foreground hover:text-primary transition-colors font-medium px-4 py-2 flex items-center gap-2"
+                    className="text-foreground hover:text-primary transition-colors font-spartan font-bold px-4 py-2 flex items-center gap-2"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <ShoppingBag className="h-4 w-4" />
@@ -110,7 +110,7 @@ export const Header = ({ user, balance, className }: HeaderProps) => {
                   )}
                   <Link 
                     to="/profile"
-                    className="text-foreground hover:text-primary transition-colors font-medium px-4 py-2 flex items-center gap-2"
+                    className="text-foreground hover:text-primary transition-colors font-spartan font-bold px-4 py-2 flex items-center gap-2"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <User className="h-4 w-4" />
@@ -121,7 +121,7 @@ export const Header = ({ user, balance, className }: HeaderProps) => {
                 <>
                   <Link 
                     to="/events"
-                    className="text-foreground hover:text-primary transition-colors font-medium px-4 py-2"
+                    className="text-foreground hover:text-primary transition-colors font-spartan font-bold px-4 py-2"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Découvrir
