@@ -61,24 +61,112 @@ export const PublicHomepage = () => {
         </div>
       </section>
 
-      {/* Sports Carousel */}
-      <section className="py-16 overflow-hidden bg-[#f8f4ed]">
+      {/* Featured Events - Dice.fm Style */}
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-4xl font-monument text-center mb-12">
-            Tous les sports vous attendent
-          </h2>
+          <div className="mb-8">
+            <h2 className="text-2xl md:text-4xl font-monument mb-2">
+              Événements tendance à Paris
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Découvrez les événements sportifs les plus populaires de la capitale
+            </p>
+          </div>
           
-          <div className="flex animate-slide-right space-x-8 overflow-x-auto pb-4">
-            {sports.map((sport, index) => <div key={sport.name} className="flex-none w-32 h-32 card-sport flex flex-col items-center justify-center group" style={{
-            animationDelay: `${index * 0.1}s`
-          }}>
-                <div className="text-2xl mb-2 group-hover:scale-110 transition-transform">
-                  {sport.icon}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {[
+              {
+                title: "PSG vs OM",
+                date: "Sam, 26 Jul",
+                venue: "Parc des Princes",
+                price: "À partir de 45€",
+                image: "🏟️",
+                sport: "⚽"
+              },
+              {
+                title: "Paris Basketball",
+                date: "Dim, 27 Jul", 
+                venue: "Accor Arena",
+                price: "À partir de 25€",
+                image: "🏀",
+                sport: "🏀"
+              },
+              {
+                title: "Open de Tennis",
+                date: "Lun, 28 Jul",
+                venue: "Roland Garros",
+                price: "À partir de 35€",
+                image: "🎾",
+                sport: "🎾"
+              },
+              {
+                title: "Racing 92 vs Stade Français",
+                date: "Mar, 29 Jul",
+                venue: "U Arena",
+                price: "À partir de 20€",
+                image: "🏉",
+                sport: "🏉"
+              },
+              {
+                title: "Volley-Ball Féminin",
+                date: "Mer, 30 Jul",
+                venue: "Stade Pierre de Coubertin",
+                price: "À partir de 15€",
+                image: "🏐",
+                sport: "🏐"
+              },
+              {
+                title: "Handball Paris SG",
+                date: "Jeu, 31 Jul",
+                venue: "Stade Pierre de Coubertin", 
+                price: "À partir de 18€",
+                image: "🤾",
+                sport: "🤾"
+              }
+            ].map((event, index) => (
+              <div 
+                key={event.title} 
+                className="group cursor-pointer animate-fade-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="relative overflow-hidden rounded-lg bg-card border border-border shadow-sm hover:shadow-md transition-all duration-300 group-hover:scale-[1.02]">
+                  {/* Image placeholder with sport icon */}
+                  <div className="aspect-square bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center relative">
+                    <div className="text-4xl md:text-6xl opacity-20">
+                      {event.image}
+                    </div>
+                    <div className="absolute top-2 right-2 text-xl bg-background/80 backdrop-blur-sm rounded-full w-8 h-8 flex items-center justify-center">
+                      {event.sport}
+                    </div>
+                  </div>
+                  
+                  {/* Event info */}
+                  <div className="p-3 md:p-4">
+                    <h3 className="font-monument text-sm md:text-base font-semibold mb-1 group-hover:text-primary transition-colors line-clamp-2">
+                      {event.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-1">
+                      {event.date}
+                    </p>
+                    <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
+                      {event.venue}
+                    </p>
+                    <p className="text-sm font-medium text-primary">
+                      {event.price}
+                    </p>
+                  </div>
                 </div>
-                <span className="font-monument text-sm text-center">
-                  {sport.name}
-                </span>
-              </div>)}
+              </div>
+            ))}
+          </div>
+          
+          <div className="text-center mt-8">
+            <Link to="/events">
+              <Button variant="sport" size="lg" className="group">
+                Voir tous les événements
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
