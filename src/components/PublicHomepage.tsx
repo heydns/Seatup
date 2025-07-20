@@ -173,7 +173,7 @@ export const PublicHomepage = () => {
                             {event.venue}
                           </p>
                           <div className="flex items-center gap-2">
-                            <p className="text-sm text-primary line-through">
+                            <p className="text-sm text-secondary line-through">
                               {event.price.replace("À partir de ", "").replace("€", "")}€
                             </p>
                             <p className="text-sm font-medium text-primary">
