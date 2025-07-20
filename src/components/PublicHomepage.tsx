@@ -116,11 +116,11 @@ export const PublicHomepage = () => {
           })]}>
               <CarouselContent className="-ml-2 md:-ml-4">
                 {[{
-                title: "PSG vs OM",
+                title: "Les Mariannes 92",
                 date: "Sam, 26 Jul",
                 venue: "Parc des Princes",
                 price: "À partir de 45€",
-                image: psgOmImage
+                image: volleyballImage
               }, {
                 title: "Paris Basketball",
                 date: "Dim, 27 Jul",
