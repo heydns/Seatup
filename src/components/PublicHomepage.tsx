@@ -277,7 +277,7 @@ export const PublicHomepage = () => {
           <img 
             src="/lovable-uploads/bade9f5a-0111-4e27-8a89-601d8a7dc669.png" 
             alt="Cycliste français en action" 
-            className="w-[448px] h-auto mx-auto mt-8 rounded-lg shadow-md"
+            className="w-[448px] h-auto mx-auto mt-16 rounded-lg shadow-md"
           />
         </div>
       </section>
