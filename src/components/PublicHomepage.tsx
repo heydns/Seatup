@@ -120,7 +120,7 @@ export const PublicHomepage = () => {
                 date: "Dimanche 24 Août",
                 venue: "Parc des Princes",
                 price: "À partir de 45€",
-                image: psgOmImage
+                image: "/lovable-uploads/147eb088-277c-4032-b6b4-e01dfed524d3.png"
               }, {
                 title: "Paris Basketball",
                 date: "Dim, 27 Jul",
