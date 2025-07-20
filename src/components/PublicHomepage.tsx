@@ -140,7 +140,7 @@ export const PublicHomepage = () => {
                 price: "À partir de 20€",
                 image: rugbyMatchImage
               }, {
-                title: "Volley-Ball Féminin",
+                title: "Les Mariannes 92",
                 date: "Mer, 30 Jul",
                 venue: "Stade Pierre de Coubertin",
                 price: "À partir de 15€",
