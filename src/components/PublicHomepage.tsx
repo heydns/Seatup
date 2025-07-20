@@ -18,7 +18,6 @@ import handballPsgImage from "@/assets/handball-psg.jpg";
 import psgLogo from "@/assets/clubs/psg-logo.png";
 import pfcLogo from "@/assets/clubs/pfc-logo.png";
 import versaillesLogo from "@/assets/clubs/versailles-logo.png";
-
 const sports = [{
   name: "Football",
   icon: "⚽"
@@ -53,11 +52,7 @@ export const PublicHomepage = () => {
               <span className="text-brand">Vivez le sport,</span>
               <br />
               <span className="text-brand">
-                <AnimatedText 
-                  words={["simplement.", "localement."]} 
-                  className="text-brand"
-                  interval={3000}
-                />
+                <AnimatedText words={["simplement.", "localement."]} className="text-brand" interval={3000} />
               </span>
             </h1>
             
@@ -229,9 +224,7 @@ export const PublicHomepage = () => {
                 <h3 className="text-lg font-monument mb-2">
                   Des milliers de billets
                 </h3>
-                <p className="text-muted-foreground">
-                  Accédez à une large sélection d'événements sportifs à prix avantageux grâce à votre CSE.
-                </p>
+                <p className="text-muted-foreground">L'offre sportive la plus complète du marché. Dès événements les plus gros au plus locaux.</p>
               </div>
             </div>
 
@@ -240,9 +233,7 @@ export const PublicHomepage = () => {
                 <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Ticket className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-lg font-monument mb-2">
-                  Accès facile via votre CSE
-                </h3>
+                <h3 className="text-lg font-monument mb-2">Un Accès simplifié via votre CSE</h3>
                 <p className="text-muted-foreground">
                   Réservez en quelques clics grâce à votre compte entreprise. Simple et sécurisé.
                 </p>
@@ -254,12 +245,8 @@ export const PublicHomepage = () => {
                 <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Star className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-lg font-monument mb-2">
-                  Une sélection pour tous les goûts
-                </h3>
-                <p className="text-muted-foreground">
-                  Du football de Ligue 1 aux sports méconnus, découvrez une offre variée et accessible.
-                </p>
+                <h3 className="text-lg font-monument mb-2">Des tarifs avantageux</h3>
+                <p className="text-muted-foreground">Grâce à des prix remisés et des subventions entreprises, profitez des meilleurs offres. </p>
               </div>
             </div>
           </div>
