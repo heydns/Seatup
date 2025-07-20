@@ -15,7 +15,7 @@ const LogoTicker = () => {
     { src: "/lovable-uploads/6a36cd92-4abc-4cd6-a438-d6faf357ef4e.png", alt: "Stade Français" },
     { src: "/lovable-uploads/a204fb77-efa7-4cc3-8fb6-096b54a0ad71.png", alt: "Racing 92" },
     { src: "/lovable-uploads/3b68fa36-0f64-42fa-bc8e-d0781a1dab9f.png", alt: "Paris Basket" },
-    { src: versaillesLogo, alt: "FC Versailles" },
+    
     { src: "/lovable-uploads/7b9ccfc3-4cad-4647-9a2f-f8c490fcdd8c.png", alt: "France Rugby" },
     { src: "/lovable-uploads/1fa9cbb3-3ec6-426f-a18a-4323c7d35960.png", alt: "HYROX" },
     { src: "/lovable-uploads/f2330819-356a-4512-a76a-609eaaec5ea5.png", alt: "Marathon de Paris" },
