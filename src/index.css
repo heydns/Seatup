@@ -263,6 +263,32 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
+
+  /* Flip Board Animation */
+  .flip-board {
+    perspective: 1000px;
+    display: inline-block;
+    position: relative;
+  }
+
+  .flip-board-text {
+    display: inline-block;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: flipBoard 3s ease-in-out infinite;
+  }
+
+  @keyframes flipBoard {
+    0%, 45% {
+      transform: rotateX(0deg);
+    }
+    50% {
+      transform: rotateX(-90deg);
+    }
+    55%, 100% {
+      transform: rotateX(0deg);
+    }
+  }
   
   .line-clamp-3 {
     overflow: hidden;

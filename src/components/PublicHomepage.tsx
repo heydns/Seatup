@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import LogoTicker from "./LogoTicker";
+import { AnimatedText } from "./AnimatedText";
 
 // Import images
 import psgOmImage from "@/assets/psg-om.jpg";
@@ -50,7 +51,13 @@ export const PublicHomepage = () => {
             <h1 className="text-3xl md:text-5xl font-monument font-bold mb-6 animate-fade-up">
               <span className="text-brand">Vivez le sport,</span>
               <br />
-              <span className="text-brand">simplement.</span>
+              <span className="text-brand">
+                <AnimatedText 
+                  words={["simplement.", "localement."]} 
+                  className="text-brand"
+                  interval={4000}
+                />
+              </span>
             </h1>
             
             <p className="text-base md:text-lg text-foreground mb-8 font-medium animate-fade-up" style={{
