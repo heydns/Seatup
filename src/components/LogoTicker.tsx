@@ -15,7 +15,11 @@ const LogoTicker = () => {
     { src: "/lovable-uploads/6a36cd92-4abc-4cd6-a438-d6faf357ef4e.png", alt: "Stade Français" },
     { src: "/lovable-uploads/a204fb77-efa7-4cc3-8fb6-096b54a0ad71.png", alt: "Racing 92" },
     { src: "/lovable-uploads/3b68fa36-0f64-42fa-bc8e-d0781a1dab9f.png", alt: "Paris Basket" },
-    
+    { src: "/lovable-uploads/f67d5787-0bc1-4ea7-ad6c-2d963ea6db91.png", alt: "Nanterre 92" },
+    { src: "/lovable-uploads/ebd99088-d4e1-4def-9c5f-a71294f9e53c.png", alt: "Levallois Metropolitans" },
+    { src: "/lovable-uploads/abad0fd2-2cc4-4821-b144-8b0dfb13912d.png", alt: "USC Handball" },
+    { src: "/lovable-uploads/20f1ae6b-3638-432a-9892-ad2cd5d37906.png", alt: "Racing Club de France" },
+    { src: "/lovable-uploads/f7260997-3f77-4ca9-8e25-6945c10a2711.png", alt: "Garmin Triathlon Paris" },
     { src: "/lovable-uploads/7b9ccfc3-4cad-4647-9a2f-f8c490fcdd8c.png", alt: "France Rugby" },
     { src: "/lovable-uploads/1fa9cbb3-3ec6-426f-a18a-4323c7d35960.png", alt: "HYROX" },
     { src: "/lovable-uploads/f2330819-356a-4512-a76a-609eaaec5ea5.png", alt: "Marathon de Paris" },
