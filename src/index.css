@@ -9,21 +9,33 @@
 @layer base {
   :root {
     /* Seatup Brand Colors */
-    --primary: 221 100% 61%;          /* Electric Blue #3A7BFF */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 336 71% 46%;         /* Softened Bright Magenta #C81D85 */
-    --secondary-foreground: 0 0% 100%;
+    --color-primary: hsl(221, 100%, 61%);
+    --color-secondary: hsl(336, 71%, 46%);
     
     /* Background & Text */
-    --background: 240 33% 96%;        /* Off-white #f3f3f3 */
-    --foreground: 0 0% 0%;            /* Black for text/CTA */
-    
-    /* Brand Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
-    --gradient-vintage: linear-gradient(45deg, hsl(var(--primary) / 0.1), hsl(var(--secondary) / 0.1));
+    --color-background: hsl(240, 33%, 96%);
+    --color-foreground: hsl(0, 0%, 0%);
     
     /* Semantic Colors */
+    --color-success: hsl(142, 71%, 45%);
+    --color-warning: hsl(48, 96%, 53%);
+    --color-danger: hsl(0, 84%, 60%);
+    
+    /* UI Elements */
+    --color-card: hsl(0, 0%, 100%);
+    --color-muted: hsl(240, 20%, 94%);
+    --color-muted-fg: hsl(0, 0%, 45%);
+    --color-accent: hsl(221, 100%, 97%);
+    --color-border: hsl(240, 20%, 88%);
+    --color-input: var(--color-border);
+    
+    /* Legacy variables for compatibility */
+    --primary: 221 100% 61%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 336 71% 46%;
+    --secondary-foreground: 0 0% 100%;
+    --background: 240 33% 96%;
+    --foreground: 0 0% 0%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 0%;
     --muted: 240 20% 94%;
@@ -36,17 +48,20 @@
     --success-foreground: 0 0% 100%;
     --warning: 48 96% 53%;
     --warning-foreground: 0 0% 0%;
-    
-    /* UI Elements */
     --border: 240 20% 88%;
     --input: 240 20% 88%;
     --ring: 221 100% 61%;
     --radius: 0.75rem;
     
+    /* Brand Gradients */
+    --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    --gradient-hero: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    --gradient-vintage: linear-gradient(45deg, hsl(221 100% 61% / 0.1), hsl(336 71% 46% / 0.1));
+    
     /* Shadows & Effects */
-    --shadow-vintage: 0 4px 20px hsl(var(--primary) / 0.15);
+    --shadow-vintage: 0 4px 20px hsl(221 100% 61% / 0.15);
     --shadow-card: 0 2px 10px hsl(0 0% 0% / 0.1);
-    --shadow-button: 0 4px 14px hsl(var(--primary) / 0.3);
+    --shadow-button: 0 4px 14px hsl(221 100% 61% / 0.3);
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -63,11 +78,17 @@
   }
 
   .dark {
-    --background: 0 0% 7%;
-    --foreground: 0 0% 95%;
-    --card: 0 0% 10%;
-    --card-foreground: 0 0% 95%;
-    --muted: 0 0% 15%;
+    --color-background: hsl(0, 0%, 10%);
+    --color-foreground: hsl(0, 0%, 100%);
+    --color-card: hsl(240, 10%, 15%);
+    --color-muted: hsl(240, 10%, 20%);
+    
+    /* Legacy variables for compatibility */
+    --background: 0 0% 10%;
+    --foreground: 0 0% 100%;
+    --card: 240 10% 15%;
+    --card-foreground: 0 0% 100%;
+    --muted: 240 10% 20%;
     --muted-foreground: 0 0% 60%;
     --accent: 0 0% 15%;
     --accent-foreground: 0 0% 95%;
@@ -106,7 +127,7 @@
   /* Brand Typography */
   .text-brand {
     @apply font-monument font-bold;
-    color: #3A7BFF;
+    color: var(--color-primary);
   }
   
   .text-tagline {
