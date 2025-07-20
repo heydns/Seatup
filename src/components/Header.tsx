@@ -44,9 +44,9 @@ export const Header = ({
                   </Button>
                 </Link>
               </> : <>
-                <Link to="/contact">
+                <Link to="/auth">
                   <Button variant="sport" size="sm">
-                    Nous contacter
+                    Se connecter
                   </Button>
                 </Link>
               </>}
@@ -78,9 +78,9 @@ export const Header = ({
                   </Link>
                 </> : <>
                   <div className="px-4">
-                    <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
                       <Button variant="sport" size="sm" className="w-full">
-                        Nous contacter
+                        Se connecter
                       </Button>
                     </Link>
                   </div>
