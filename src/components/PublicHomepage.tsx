@@ -212,6 +212,14 @@ export const PublicHomepage = () => {
       {/* Value Propositions */}
       <section className="py-20 relative z-10">
         <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-xl md:text-3xl font-monument mb-4">
+              Pourquoi choisir Seatup ?
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              La plateforme qui révolutionne l'accès au sport pour les salariés
+            </p>
+          </div>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="card-sport text-center group">
               <div className="mb-6">
