@@ -172,9 +172,14 @@ export const PublicHomepage = () => {
                           <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
                             {event.venue}
                           </p>
-                          <p className="text-sm font-medium text-primary">
-                            {event.price}
-                          </p>
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm text-muted-foreground line-through">
+                              {event.price.replace("À partir de ", "").replace("€", "")}€
+                            </p>
+                            <p className="text-sm font-medium text-primary">
+                              {event.price.replace(/\d+/, (match) => String(Math.round(parseInt(match) * 0.8)))}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
