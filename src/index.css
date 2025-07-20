@@ -119,9 +119,9 @@
 
   body {
     @apply bg-background text-foreground font-inter antialiased;
-    background-image: url('/lovable-uploads/3cf99598-edf4-477d-bfd2-7eac04b2c295.png');
+    background-image: url('/lovable-uploads/546d7362-84d0-4d53-96fd-d550c4966b04.png');
     background-attachment: fixed;
-    background-size: cover;
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
   }
