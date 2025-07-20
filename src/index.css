@@ -119,8 +119,11 @@
 
   body {
     @apply bg-background text-foreground font-inter antialiased;
-    background-image: var(--gradient-vintage);
+    background-image: url('/lovable-uploads/7713c19f-39cd-4d2e-a35b-c25e2e8442cb.png');
     background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
   
   h1, h2, h3, h4, h5, h6 {
