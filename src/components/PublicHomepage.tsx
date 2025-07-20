@@ -1,24 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Users, Ticket, Star, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
-
-const sports = [
-  { name: "Football", icon: "⚽" },
-  { name: "Basketball", icon: "🏀" },
-  { name: "Tennis", icon: "🎾" },
-  { name: "Rugby", icon: "🏉" },
-  { name: "Handball", icon: "🤾" },
-  { name: "Volleyball", icon: "🏐" },
-];
-
-const clubs = [
-  "PSG", "OM", "OL", "AS Monaco", "LOSC", "Stade Rennais",
-  "RC Strasbourg", "OGC Nice", "Montpellier HSC", "FC Nantes"
-];
-
+const sports = [{
+  name: "Football",
+  icon: "⚽"
+}, {
+  name: "Basketball",
+  icon: "🏀"
+}, {
+  name: "Tennis",
+  icon: "🎾"
+}, {
+  name: "Rugby",
+  icon: "🏉"
+}, {
+  name: "Handball",
+  icon: "🤾"
+}, {
+  name: "Volleyball",
+  icon: "🏐"
+}];
+const clubs = ["PSG", "OM", "OL", "AS Monaco", "LOSC", "Stade Rennais", "RC Strasbourg", "OGC Nice", "Montpellier HSC", "FC Nantes"];
 export const PublicHomepage = () => {
-  return (
-    <div className="min-h-screen">
+  return <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-hero opacity-10"></div>
@@ -32,11 +36,15 @@ export const PublicHomepage = () => {
               <span className="text-brand">simplement.</span>
             </h1>
             
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 font-medium animate-fade-up" style={{ animationDelay: '0.2s' }}>
+            <p className="text-lg md:text-xl text-muted-foreground mb-8 font-medium animate-fade-up" style={{
+            animationDelay: '0.2s'
+          }}>
               La première billetterie sportive pensée pour les salariés.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up" style={{ animationDelay: '0.4s' }}>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up" style={{
+            animationDelay: '0.4s'
+          }}>
               <Link to="/events">
                 <Button variant="hero" size="xl" className="group">
                   Explorer les événements
@@ -54,43 +62,29 @@ export const PublicHomepage = () => {
       </section>
 
       {/* Sports Carousel */}
-      <section className="py-16 overflow-hidden">
+      <section className="py-16 overflow-hidden bg-[#f3f3f3]">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-4xl font-monument text-center mb-12">
             Tous les sports vous attendent
           </h2>
           
           <div className="flex animate-slide-right space-x-8 overflow-x-auto pb-4">
-            {sports.map((sport, index) => (
-              <div 
-                key={sport.name}
-                className="flex-none w-32 h-32 card-sport flex flex-col items-center justify-center group"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
+            {sports.map((sport, index) => <div key={sport.name} className="flex-none w-32 h-32 card-sport flex flex-col items-center justify-center group" style={{
+            animationDelay: `${index * 0.1}s`
+          }}>
                 <div className="text-2xl mb-2 group-hover:scale-110 transition-transform">
                   {sport.icon}
                 </div>
                 <span className="font-monument text-sm text-center">
                   {sport.name}
                 </span>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
       </section>
 
       {/* Clubs Ticker */}
-      <section className="py-8 bg-gradient-primary">
-        <div className="overflow-hidden">
-          <div className="flex animate-marquee space-x-8 text-white font-monument text-lg">
-            {[...clubs, ...clubs].map((club, index) => (
-              <div key={index} className="flex-none px-4">
-                {club}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      
 
       {/* Value Propositions */}
       <section className="py-20">
@@ -165,6 +159,5 @@ export const PublicHomepage = () => {
           </div>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
