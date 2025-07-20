@@ -42,9 +42,6 @@ export const Header = ({
                   </Button>
                 </Link>
               </> : <>
-                <Link to="/events" className="text-foreground hover:text-primary transition-colors font-medium">
-                  Découvrir
-                </Link>
                 <Link to="/auth">
                   <Button variant="sport" size="sm">
                     Se connecter
@@ -81,9 +78,6 @@ export const Header = ({
                     Mon profil
                   </Link>
                 </> : <>
-                  <Link to="/events" className="text-foreground hover:text-primary transition-colors font-medium px-4 py-2" onClick={() => setIsMobileMenuOpen(false)}>
-                    Découvrir
-                  </Link>
                   <div className="px-4 space-y-3">
                     <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
                       <Button variant="sport" size="sm" className="w-full">
