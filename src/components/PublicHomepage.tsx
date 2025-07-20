@@ -143,7 +143,7 @@ export const PublicHomepage = () => {
                 venue: "Ville de Paris",
                 price: "À partir de 44€",
                 originalPrice: "55€",
-                image: "/lovable-uploads/9056327e-f381-4924-8908-0f3b813f8a21.png"
+                image: "/lovable-uploads/56eb70ed-a5f5-4845-b859-1354756c82ff.png"
               }, {
                 title: "Les Mariannes 92 - Saison 25/26",
                 date: "Mer, 30 Jul",
