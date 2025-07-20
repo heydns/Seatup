@@ -25,8 +25,6 @@ export type Database = {
           Link: string | null
           Location: string | null
           Organization: string | null
-          Original_Price: string | null
-          Our_Price: string | null
           Sport: string | null
         }
         Insert: {
@@ -39,8 +37,6 @@ export type Database = {
           Link?: string | null
           Location?: string | null
           Organization?: string | null
-          Original_Price?: string | null
-          Our_Price?: string | null
           Sport?: string | null
         }
         Update: {
@@ -53,8 +49,6 @@ export type Database = {
           Link?: string | null
           Location?: string | null
           Organization?: string | null
-          Original_Price?: string | null
-          Our_Price?: string | null
           Sport?: string | null
         }
         Relationships: []

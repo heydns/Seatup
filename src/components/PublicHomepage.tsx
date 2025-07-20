@@ -5,7 +5,6 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 import Autoplay from "embla-carousel-autoplay";
 import LogoTicker from "./LogoTicker";
 import { AnimatedText } from "./AnimatedText";
-import { useEvents } from "@/hooks/useEvents";
 
 // Import images
 import psgOmImage from "@/assets/psg-om.jpg";
@@ -40,18 +39,6 @@ const sports = [{
 }];
 const clubs = ["PSG", "OM", "OL", "AS Monaco", "LOSC", "Stade Rennais", "RC Strasbourg", "OGC Nice", "Montpellier HSC", "FC Nantes"];
 export const PublicHomepage = () => {
-  const { data: events, isLoading, error } = useEvents();
-
-  // Mapping des événements aux images (temporaire)
-  const eventImageMap: Record<string, string> = {
-    "PSG vs OM": psgOmImage,
-    "Paris Basketball": parisBasketballImage,
-    "Open de Tennis": rolandGarrosImage,
-    "Racing 92 vs Stade Français": rugbyMatchImage,
-    "Les Mariannes 92 - Saison 25/26": "/lovable-uploads/498f232f-981f-4bb2-ab0f-d9d08551a8fb.png",
-    "Handball Paris SG": handballPsgImage,
-  };
-
   return <div className="min-h-screen relative bg-white">
       
       {/* Hero Section */}
@@ -114,67 +101,92 @@ export const PublicHomepage = () => {
               </p>
             </div>
             
-            {isLoading ? (
-              <div className="text-center">Chargement des événements...</div>
-            ) : error ? (
-              <div className="text-center text-red-500">Erreur lors du chargement des événements</div>
-            ) : (
-              <Carousel className="w-full max-w-full" opts={{
-                align: "start",
-                loop: true,
-                dragFree: true,
-                skipSnaps: false,
-                containScroll: "trimSnaps",
-                duration: 30
-              }} plugins={[Autoplay({
-                delay: 4000,
-                stopOnInteraction: true,
-                stopOnMouseEnter: true,
-                stopOnFocusIn: true
-              })]}>
-                <CarouselContent className="-ml-2 md:-ml-4">
-                  {events?.map((event, index) => (
-                    <CarouselItem key={event.ID_event} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/4">
-                      <div className="group cursor-pointer animate-fade-up" style={{
-                        animationDelay: `${index * 0.1}s`
-                      }}>
-                        <div className="relative overflow-hidden rounded-lg bg-card border border-border shadow-sm hover:shadow-md transition-all duration-300 group-hover:scale-[1.02]">
-                          {/* Event image */}
-                          <div className="aspect-[4/3] overflow-hidden">
-                            <img 
-                              src={eventImageMap[event.Event || ""] || "/placeholder.svg"} 
-                              alt={event.Event || ""} 
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                            />
-                          </div>
-                          
-                          {/* Event info */}
-                          <div className="p-3 md:p-4">
-                            <h3 className="font-monument text-sm md:text-base font-semibold mb-1 group-hover:text-primary transition-colors line-clamp-2 h-10 md:h-12 leading-tight">
-                              {event.Event}
-                            </h3>
-                            <p className="text-sm text-muted-foreground mb-1">
-                              {event.Date}
+            <Carousel className="w-full max-w-full" opts={{
+            align: "start",
+            loop: true,
+            dragFree: true,
+            skipSnaps: false,
+            containScroll: "trimSnaps",
+            duration: 30
+          }} plugins={[Autoplay({
+            delay: 4000,
+            stopOnInteraction: true,
+            stopOnMouseEnter: true,
+            stopOnFocusIn: true
+          })]}>
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {[{
+                title: "PSG vs OM",
+                date: "Sam, 26 Jul",
+                venue: "Parc des Princes",
+                price: "À partir de 45€",
+                image: psgOmImage
+              }, {
+                title: "Paris Basketball",
+                date: "Dim, 27 Jul",
+                venue: "Accor Arena",
+                price: "À partir de 25€",
+                image: parisBasketballImage
+              }, {
+                title: "Open de Tennis",
+                date: "Lun, 28 Jul",
+                venue: "Roland Garros",
+                price: "À partir de 35€",
+                image: rolandGarrosImage
+              }, {
+                title: "Racing 92 vs Stade Français",
+                date: "Mar, 29 Jul",
+                venue: "U Arena",
+                price: "À partir de 20€",
+                image: rugbyMatchImage
+              }, {
+                title: "Les Mariannes 92 - Saison 25/26",
+                date: "Mer, 30 Jul",
+                venue: "Le palais des sports Marcel Cerdan",
+                price: "À partir de 84€",
+                originalPrice: "105€",
+                image: "/lovable-uploads/498f232f-981f-4bb2-ab0f-d9d08551a8fb.png"
+              }, {
+                title: "Handball Paris SG",
+                date: "Jeu, 31 Jul",
+                venue: "Stade Pierre de Coubertin",
+                price: "À partir de 18€",
+                image: handballPsgImage
+              }].map((event, index) => <CarouselItem key={event.title} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/4">
+                    <div className="group cursor-pointer animate-fade-up" style={{
+                  animationDelay: `${index * 0.1}s`
+                }}>
+                      <div className="relative overflow-hidden rounded-lg bg-card border border-border shadow-sm hover:shadow-md transition-all duration-300 group-hover:scale-[1.02]">
+                        {/* Event image */}
+                        <div className="aspect-[4/3] overflow-hidden">
+                          <img src={event.image} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                        </div>
+                        
+                        {/* Event info */}
+                        <div className="p-3 md:p-4">
+                          <h3 className="font-monument text-sm md:text-base font-semibold mb-1 group-hover:text-primary transition-colors line-clamp-2 h-10 md:h-12 leading-tight">
+                            {event.title}
+                          </h3>
+                          <p className="text-sm text-muted-foreground mb-1">
+                            {event.date}
+                          </p>
+                          <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
+                            {event.venue}
+                          </p>
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm text-secondary line-through">
+                              {event.originalPrice || event.price.replace("À partir de ", "").replace("€", "") + "€"}
                             </p>
-                            <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
-                              {event.Location}
+                            <p className="text-sm font-medium text-primary">
+                              {event.price}
                             </p>
-                            <div className="flex items-center gap-2">
-                              <p className="text-sm text-secondary line-through">
-                                {event.Original_Price}
-                              </p>
-                              <p className="text-sm font-medium text-primary">
-                                {event.Our_Price}
-                              </p>
-                            </div>
                           </div>
                         </div>
                       </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
-            )}
+                    </div>
+                  </CarouselItem>)}
+              </CarouselContent>
+            </Carousel>
             
             <div className="text-center mt-8">
               <Link to="/events">
