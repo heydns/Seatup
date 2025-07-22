@@ -358,56 +358,6 @@ export const EventsPage = () => {
           </div>
         ) : (
           <>
-            {/* Popular Events Section - Dice.fm Style */}
-            <div className="mb-8">
-              <h3 className="text-xl font-monument mb-4 flex items-center gap-2">
-                <Star className="h-5 w-5 text-yellow-500" />
-                Événements populaires
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                {filteredEvents.slice(0, 4).map((event) => (
-                  <div key={`popular-${event.ID_event}`} className="group cursor-pointer" onClick={() => navigate(`/event/${event.ID_event}`)}>
-                    <div className="relative overflow-hidden rounded-lg bg-card border border-border shadow-sm hover:shadow-md transition-all duration-300 group-hover:scale-[1.02]">
-                      <div className="aspect-square overflow-hidden relative">
-                        <img 
-                          src={`https://picsum.photos/300/300?random=${event.ID_event}`} 
-                          alt={event.Event} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                        />
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleFavorite(event.ID_event);
-                          }}
-                          className="absolute top-2 right-2 w-8 h-8 bg-black/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/40 transition-colors"
-                        >
-                          <Heart 
-                            className={`h-4 w-4 ${favorites.includes(event.ID_event) ? 'text-red-500 fill-red-500' : 'text-white'}`} 
-                          />
-                        </button>
-                        <div className="absolute bottom-2 left-2">
-                          <span className="bg-primary text-white px-2 py-1 rounded text-xs font-medium">
-                            {event.Sport}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="p-3">
-                        <h4 className="font-monument text-sm font-semibold mb-1 group-hover:text-primary transition-colors line-clamp-2">
-                          {event.Event}
-                        </h4>
-                        <p className="text-xs text-muted-foreground mb-1">
-                          {event.Date}
-                        </p>
-                        <p className="text-xs text-muted-foreground line-clamp-1">
-                          {event.Location}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* All Events Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredEvents.map((event) => (
