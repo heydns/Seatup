@@ -1,95 +1,88 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, ShoppingBag } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
-// Import club logos
-import psgLogo from "@/assets/clubs/psg-logo.png";
-import pfcLogo from "@/assets/clubs/pfc-logo.png";
-import versaillesLogo from "@/assets/clubs/versailles-logo.png";
-interface HeaderProps {
-  user?: any;
-  balance?: number;
-  className?: string;
-}
-export const Header = ({
-  user,
-  balance,
-  className
-}: HeaderProps) => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  return <header className={`sticky top-0 z-50 relative border-b border-border/50 bg-white ${className}`}>
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="flex items-center justify-between h-16 bg-transparent">
+export const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const isActive = (path: string) => location.pathname === path;
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 animate-fade-up" style={{ animationDelay: '0.1s' }}>
-            <div className="text-2xl font-monument font-bold text-brand">
-              seatup.co
+          <Link to="/" className="flex items-center gap-2 animate-fade-up" style={{animationDelay: '0.1s'}}>
+            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg">S</span>
             </div>
+            <span className="font-monument text-xl font-bold text-brand">Seatup</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-            {user ? <>
-                <Link to="/events" className="text-foreground hover:text-primary transition-colors font-medium">
-                  Événements
-                </Link>
-                <Link to="/my-tickets" className="text-foreground hover:text-primary transition-colors font-medium flex items-center gap-2">
-                  <ShoppingBag className="h-4 w-4" />
-                  Mes billets
-                </Link>
-                {balance !== undefined && <div className="balance-badge">
-                    Solde: {balance}€
-                  </div>}
-                <Link to="/profile">
-                  <Button variant="ghost" size="icon">
-                    <User className="h-4 w-4" />
-                  </Button>
-                </Link>
-              </> : <>
-                <Link to="/auth">
-                  <Button variant="sport" size="sm">
-                    Se connecter
-                  </Button>
-                </Link>
-              </>}
+          <nav className="hidden md:flex items-center gap-8 animate-fade-up" style={{animationDelay: '0.2s'}}>
+            <Link 
+              to="/events" 
+              className={`font-medium transition-colors hover:text-primary ${
+                isActive('/events') ? 'text-primary' : 'text-foreground'
+              }`}
+            >
+              Événements
+            </Link>
+            <Link 
+              to="/contact" 
+              className={`font-medium transition-colors hover:text-primary ${
+                isActive('/contact') ? 'text-primary' : 'text-foreground'
+              }`}
+            >
+              Contact
+            </Link>
+            <Button variant="hero" asChild>
+              <Link to="/auth">Se connecter</Link>
+            </Button>
           </nav>
 
           {/* Mobile Menu Button */}
-          <Button variant="ghost" size="icon" className="md:hidden animate-fade-up" style={{ animationDelay: '0.3s' }} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 hover:bg-muted rounded-lg transition-colors animate-fade-up"
+            style={{animationDelay: '0.3s'}}
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
 
         {/* Mobile Navigation */}
-        {isMobileMenuOpen && <div className="md:hidden py-4 border-t border-border/50 bg-white/95 backdrop-blur-sm">
-            <nav className="flex flex-col space-y-4">
-              {user ? <>
-                  <Link to="/events" className="text-foreground hover:text-primary transition-colors font-medium px-4 py-2" onClick={() => setIsMobileMenuOpen(false)}>
-                    Événements
-                  </Link>
-                  <Link to="/my-tickets" className="text-foreground hover:text-primary transition-colors font-medium px-4 py-2 flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
-                    <ShoppingBag className="h-4 w-4" />
-                    Mes billets
-                  </Link>
-                  {balance !== undefined && <div className="balance-badge mx-4 self-start">
-                      Solde: {balance}€
-                    </div>}
-                  <Link to="/profile" className="text-foreground hover:text-primary transition-colors font-medium px-4 py-2 flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
-                    <User className="h-4 w-4" />
-                    Mon profil
-                  </Link>
-                </> : <>
-                  <div className="px-4">
-                    <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button variant="sport" size="sm" className="w-full">
-                        Se connecter
-                      </Button>
-                    </Link>
-                  </div>
-                </>}
+        {isMenuOpen && (
+          <div className="md:hidden py-4 border-t border-border animate-fade-in">
+            <nav className="flex flex-col gap-4">
+              <Link 
+                to="/events" 
+                className={`font-medium transition-colors hover:text-primary ${
+                  isActive('/events') ? 'text-primary' : 'text-foreground'
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Événements
+              </Link>
+              <Link 
+                to="/contact" 
+                className={`font-medium transition-colors hover:text-primary ${
+                  isActive('/contact') ? 'text-primary' : 'text-foreground'
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact
+              </Link>
+              <Button variant="hero" asChild className="w-fit">
+                <Link to="/auth" onClick={() => setIsMenuOpen(false)}>Se connecter</Link>
+              </Button>
             </nav>
-          </div>}
+          </div>
+        )}
       </div>
-    </header>;
+    </header>
+  );
 };

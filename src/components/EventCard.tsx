@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Tag, ExternalLink } from "lucide-react";
+import { Calendar, MapPin, Tag, ExternalLink, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface Event {
@@ -51,99 +51,85 @@ export const EventCard = ({ event }: EventCardProps) => {
   const subsidizedPrice = getSubsidizedPrice(originalPrice);
 
   return (
-    <div className="card-event group">
-      {/* Event Image Placeholder */}
-      <div className="h-48 bg-gradient-primary flex items-center justify-center text-white text-6xl relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative z-10">
-          {event.Sport === "Football" ? "⚽" : 
-           event.Sport === "Basketball" ? "🏀" :
-           event.Sport === "Tennis" ? "🎾" :
-           event.Sport === "Rugby" ? "🏉" :
-           event.Sport === "Handball" ? "🤾" :
-           "🏆"}
-        </div>
-        
-        {/* Competition Badge */}
-        {event.Competition && (
-          <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
-            <span className="text-sm font-monument text-foreground">
-              {event.Competition}
-            </span>
-          </div>
-        )}
+    <div className="card-sport group hover:scale-[1.02] transition-all duration-300">
+      {/* Event image with click navigation */}
+      <div className="aspect-[4/3] overflow-hidden rounded-t-lg mb-4 cursor-pointer" onClick={() => window.location.href = `/event/${event.ID_event}`}>
+        <img 
+          src={`https://picsum.photos/400/300?random=${event.ID_event}`} 
+          alt={event.Event} 
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+        />
       </div>
-
-      <div className="p-6">
-        {/* Event Title */}
-        <h3 className="font-monument text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-          {event.Event || "Événement sportif"}
+      
+      {/* Event info */}
+      <div className="space-y-3">
+        {/* Competition badge */}
+        {event.Competition && (
+          <span className="inline-block bg-primary text-white px-2 py-1 rounded text-xs font-medium">
+            {event.Competition}
+          </span>
+        )}
+        
+        {/* Event title with click navigation */}
+        <h3 
+          className="text-lg font-monument font-semibold line-clamp-2 group-hover:text-primary transition-colors cursor-pointer" 
+          onClick={() => window.location.href = `/event/${event.ID_event}`}
+        >
+          {event.Event}
         </h3>
-
+        
         {/* Organization */}
         {event.Organization && (
-          <p className="text-muted-foreground text-sm mb-3 font-medium">
+          <p className="text-sm text-muted-foreground">
             {event.Organization}
           </p>
         )}
-
-        {/* Event Details */}
-        <div className="space-y-2 mb-4">
+        
+        {/* Date and Location */}
+        <div className="space-y-1">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Calendar className="h-4 w-4" />
             <span>{formatDate(event.Date)}</span>
           </div>
-          
           {event.Location && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <MapPin className="h-4 w-4" />
-              <span className="line-clamp-1">{event.Location}</span>
-            </div>
-          )}
-
-          {event.Sport && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Tag className="h-4 w-4" />
-              <span>{event.Sport}</span>
+              <span>{event.Location}</span>
             </div>
           )}
         </div>
-
+        
+        {/* Sport */}
+        <div className="flex items-center gap-2 text-sm">
+          <span className="font-medium text-primary">{event.Sport}</span>
+        </div>
+        
         {/* Pricing */}
-        <div className="mb-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground line-through">
-              {originalPrice}€
-            </span>
-            <span className="text-xl font-monument text-primary">
-              {subsidizedPrice}€
-            </span>
-            <span className="text-sm bg-success/10 text-success px-2 py-1 rounded-full font-medium">
-              -{Math.round(((originalPrice - subsidizedPrice) / originalPrice) * 100)}%
-            </span>
+        <div className="flex items-center justify-between pt-2">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-bold text-primary">
+                {subsidizedPrice}€
+              </span>
+              <span className="text-sm text-muted-foreground line-through">
+                {originalPrice}€
+              </span>
+            </div>
+            <p className="text-xs text-green-600">
+              Économisez {originalPrice - subsidizedPrice}€
+            </p>
           </div>
-          <p className="text-sm text-muted-foreground mt-1">
-            Prix subventionné par votre CSE
-          </p>
         </div>
-
-        {/* Action Buttons */}
-        <div className="flex gap-2">
-          <Link to={`/event/${event.ID_event}`} className="flex-1">
-            <Button variant="hero" className="w-full">
-              Réserver
-            </Button>
-          </Link>
-          
+        
+        {/* Actions */}
+        <div className="flex gap-2 pt-2">
+          <Button variant="hero" size="sm" className="flex-1">
+            Réserver
+          </Button>
           {event.Link && (
-            <Button variant="sport" size="icon" asChild>
-              <a 
-                href={event.Link} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                aria-label="Voir plus d'informations"
-              >
-                <ExternalLink className="h-4 w-4" />
+            <Button variant="sport" size="sm" asChild>
+              <a href={event.Link} target="_blank" rel="noopener noreferrer">
+                <Globe className="h-4 w-4" />
               </a>
             </Button>
           )}

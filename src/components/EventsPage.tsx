@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Search, Filter, MapPin, Calendar, Euro, Users, Heart, Star, Zap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { EventCard } from "./EventCard";
+import { Header } from "./Header";
 
 interface Event {
   ID_event: number;
@@ -166,7 +167,9 @@ export const EventsPage = () => {
   }
 
   return (
-    <div className="min-h-screen pt-24 pb-12 bg-white">
+    <>
+      <Header />
+      <div className="min-h-screen pt-24 pb-12 bg-white">
       <div className="container mx-auto px-4">
         {/* Header with Balance */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
@@ -312,7 +315,7 @@ export const EventsPage = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 {filteredEvents.slice(0, 4).map((event) => (
-                  <div key={`popular-${event.ID_event}`} className="group cursor-pointer">
+                  <div key={`popular-${event.ID_event}`} className="group cursor-pointer" onClick={() => window.location.href = `/event/${event.ID_event}`}>
                     <div className="relative overflow-hidden rounded-lg bg-card border border-border shadow-sm hover:shadow-md transition-all duration-300 group-hover:scale-[1.02]">
                       <div className="aspect-square overflow-hidden relative">
                         <img 
@@ -321,7 +324,10 @@ export const EventsPage = () => {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
                         />
                         <button
-                          onClick={() => toggleFavorite(event.ID_event)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleFavorite(event.ID_event);
+                          }}
                           className="absolute top-2 right-2 w-8 h-8 bg-black/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/40 transition-colors"
                         >
                           <Heart 
@@ -371,5 +377,6 @@ export const EventsPage = () => {
         )}
       </div>
     </div>
+    </>
   );
 };

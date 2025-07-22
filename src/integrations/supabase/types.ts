@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      event: {
+        Row: {
+          access: string | null
+          adress: string | null
+          competition: string | null
+          created_at: string | null
+          date: string | null
+          event: string | null
+          id_event: number
+          link: string | null
+          location: string | null
+          organization: string | null
+          original_price: string | null
+          our_price: string | null
+          sport: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          access?: string | null
+          adress?: string | null
+          competition?: string | null
+          created_at?: string | null
+          date?: string | null
+          event?: string | null
+          id_event?: number
+          link?: string | null
+          location?: string | null
+          organization?: string | null
+          original_price?: string | null
+          our_price?: string | null
+          sport?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          access?: string | null
+          adress?: string | null
+          competition?: string | null
+          created_at?: string | null
+          date?: string | null
+          event?: string | null
+          id_event?: number
+          link?: string | null
+          location?: string | null
+          organization?: string | null
+          original_price?: string | null
+          our_price?: string | null
+          sport?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       Event: {
         Row: {
           Access: string | null
