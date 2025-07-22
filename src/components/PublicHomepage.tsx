@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Map, Ticket, Star, Trophy } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import LogoTicker from "./LogoTicker";
@@ -40,6 +40,8 @@ const sports = [{
 }];
 const clubs = ["PSG", "OM", "OL", "AS Monaco", "LOSC", "Stade Rennais", "RC Strasbourg", "OGC Nice", "Montpellier HSC", "FC Nantes"];
 export const PublicHomepage = () => {
+  const navigate = useNavigate();
+  
   return <div className="min-h-screen relative bg-white">
       
       {/* Hero Section */}
@@ -163,7 +165,7 @@ export const PublicHomepage = () => {
               }].map((event, index) => <CarouselItem key={event.title} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/4">
                     <div className="group cursor-pointer animate-fade-up" style={{
                   animationDelay: `${index * 0.1}s`
-                }} onClick={() => window.location.href = `/event/${event.id}`}>
+                }} onClick={() => navigate(`/event/${event.id}`)}>
                       <div className="relative overflow-hidden rounded-lg bg-card border border-border shadow-sm hover:shadow-md transition-all duration-300 group-hover:scale-[1.02]">
                         {/* Event image */}
                         <div className="aspect-[4/3] overflow-hidden">

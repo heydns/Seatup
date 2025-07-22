@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Tag, ExternalLink, Globe } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Event {
   ID_event: number;
@@ -20,6 +20,8 @@ interface EventCardProps {
 }
 
 export const EventCard = ({ event }: EventCardProps) => {
+  const navigate = useNavigate();
+  
   const formatDate = (dateString: string) => {
     if (!dateString) return "Date à confirmer";
     
@@ -53,7 +55,7 @@ export const EventCard = ({ event }: EventCardProps) => {
   return (
     <div className="card-sport group hover:scale-[1.02] transition-all duration-300">
       {/* Event image with click navigation */}
-      <div className="aspect-[4/3] overflow-hidden rounded-t-lg mb-4 cursor-pointer" onClick={() => window.location.href = `/event/${event.ID_event}`}>
+      <div className="aspect-[4/3] overflow-hidden rounded-t-lg mb-4 cursor-pointer" onClick={() => navigate(`/event/${event.ID_event}`)}>
         <img 
           src={`https://picsum.photos/400/300?random=${event.ID_event}`} 
           alt={event.Event} 
@@ -73,7 +75,7 @@ export const EventCard = ({ event }: EventCardProps) => {
         {/* Event title with click navigation */}
         <h3 
           className="text-lg font-monument font-semibold line-clamp-2 group-hover:text-primary transition-colors cursor-pointer" 
-          onClick={() => window.location.href = `/event/${event.ID_event}`}
+          onClick={() => navigate(`/event/${event.ID_event}`)}
         >
           {event.Event}
         </h3>

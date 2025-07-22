@@ -5,6 +5,7 @@ import { Search, Filter, MapPin, Calendar, Euro, Users, Heart, Star, Zap } from 
 import { supabase } from "@/integrations/supabase/client";
 import { EventCard } from "./EventCard";
 import { Header } from "./Header";
+import { useNavigate } from "react-router-dom";
 
 interface Event {
   ID_event: number;
@@ -56,6 +57,7 @@ const VENUE_FILTERS = [
 ];
 
 export const EventsPage = () => {
+  const navigate = useNavigate();
   const [events, setEvents] = useState<Event[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -315,7 +317,7 @@ export const EventsPage = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 {filteredEvents.slice(0, 4).map((event) => (
-                  <div key={`popular-${event.ID_event}`} className="group cursor-pointer" onClick={() => window.location.href = `/event/${event.ID_event}`}>
+                  <div key={`popular-${event.ID_event}`} className="group cursor-pointer" onClick={() => navigate(`/event/${event.ID_event}`)}>
                     <div className="relative overflow-hidden rounded-lg bg-card border border-border shadow-sm hover:shadow-md transition-all duration-300 group-hover:scale-[1.02]">
                       <div className="aspect-square overflow-hidden relative">
                         <img 
