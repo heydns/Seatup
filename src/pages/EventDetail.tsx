@@ -29,7 +29,34 @@ export const EventDetail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
+    console.log('EventDetail component mounted, ID from params:', id);
     fetchEvent();
+    
+    // Test direct query for debugging
+    const testDirectQuery = async () => {
+      try {
+        console.log('Testing direct Supabase connection...');
+        const { data: testData, error: testError } = await supabase
+          .from('Event')
+          .select('ID_event, Event')
+          .limit(5);
+        
+        console.log('Direct query test result:', { testData, testError });
+        
+        if (id) {
+          const { data: specificData, error: specificError } = await supabase
+            .from('Event')
+            .select('*')
+            .eq('ID_event', parseInt(id));
+          
+          console.log('Specific ID query result:', { specificData, specificError, id: parseInt(id) });
+        }
+      } catch (error) {
+        console.error('Direct query test failed:', error);
+      }
+    };
+    
+    testDirectQuery();
   }, [id]);
 
   const fetchEvent = async () => {
@@ -117,6 +144,12 @@ export const EventDetail = () => {
         <div className="min-h-screen pt-24 flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-monument mb-4">Événement non trouvé</h1>
+            <p className="text-muted-foreground mb-4">
+              Impossible de charger l'événement avec l'ID: {id}
+            </p>
+            <p className="text-sm text-muted-foreground mb-4">
+              Vérifiez la console pour plus d'informations de débogage
+            </p>
             <Link to="/events">
               <Button variant="sport">Retour aux événements</Button>
             </Link>
