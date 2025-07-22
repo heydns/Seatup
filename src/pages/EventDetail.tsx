@@ -49,6 +49,18 @@ export const EventDetail = () => {
     }
   };
 
+  const getEventImage = (eventId: number) => {
+    const imageMap: { [key: number]: string } = {
+      11: "/lovable-uploads/147eb088-277c-4032-b6b4-e01dfed524d3.png", // PSG vs SCO Angers
+      12: "/lovable-uploads/2837c0cc-2ffb-4656-92c6-96c4f4dfd60f.png", // Paris Basketball
+      13: "/lovable-uploads/7809806e-e8e7-44e8-8cb6-4e9157c04ac5.png", // Rolex Paris Master
+      14: "/lovable-uploads/56eb70ed-a5f5-4845-b859-1354756c82ff.png", // Hoka Semi Marathon
+      15: "/lovable-uploads/498f232f-981f-4bb2-ab0f-d9d08551a8fb.png", // Les Mariannes 92
+      16: "/lovable-uploads/585f742a-f198-48d5-aaff-54c375f30f55.png"  // PSG Handball
+    };
+    return imageMap[eventId] || `https://picsum.photos/800/450?random=${eventId}`;
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('fr-FR', {
       weekday: 'long',
@@ -95,6 +107,26 @@ export const EventDetail = () => {
 
   const originalPrice = event.Original_Price ? parseInt(event.Original_Price) : getRandomPrice();
   const subsidizedPrice = event.Our_Price ? parseInt(event.Our_Price) : getSubsidizedPrice(originalPrice);
+  const eventImage = getEventImage(event.ID_event);
+
+  const getAboutText = () => {
+    if (event.ID_event === 12) {
+      return "Vivez une saison exceptionnelle avec Paris Basketball ! Cet abonnement vous donne accès à tous les matchs de l'équipe dans la prestigieuse Adidas Arena. Découvrez le basketball français au plus haut niveau avec une équipe ambitieuse qui fait vibrer la capitale. Une expérience unique dans l'une des plus belles salles d'Europe.";
+    }
+    if (event.Sport === 'Football' && event.Competition === 'Ligue 1') {
+      return "Vivez l'intensité de la Ligue 1 dans l'un des stades les plus emblématiques de France. Une expérience unique pour tous les passionnés de football.";
+    }
+    if (event.Sport === 'Basketball') {
+      return "Découvrez le basketball français au plus haut niveau. Une ambiance électrique garantie pour vivre des moments inoubliables.";
+    }
+    if (event.Sport === 'Tennis') {
+      return "Le tennis de haut niveau vous attend dans ce tournoi d'exception. Assistez aux plus beaux échanges dans un cadre prestigieux.";
+    }
+    if (event.Sport === 'Course à pied') {
+      return "Participez ou soutenez cette course emblématique qui traverse la capitale. Une expérience sportive unique dans un cadre exceptionnel.";
+    }
+    return `Découvrez le ${event.Sport.toLowerCase()} dans toute sa splendeur lors de cet événement exceptionnel. Une occasion unique de vivre des émotions fortes.`;
+  };
 
   return (
     <>
@@ -118,7 +150,7 @@ export const EventDetail = () => {
               <div className="relative mb-8">
                 <div className="aspect-[16/9] overflow-hidden rounded-xl">
                   <img 
-                    src={`https://picsum.photos/800/450?random=${event.ID_event}`} 
+                    src={eventImage} 
                     alt={event.Event} 
                     className="w-full h-full object-cover" 
                   />
@@ -211,21 +243,7 @@ export const EventDetail = () => {
                 <div className="border-t pt-6">
                   <h2 className="text-xl font-monument mb-4">À propos</h2>
                   <p className="text-muted-foreground leading-relaxed">
-                    {event.Sport === 'Football' && event.Competition === 'Ligue 1' && 
-                      "Vivez l'intensité de la Ligue 1 dans l'un des stades les plus emblématiques de France. Une expérience unique pour tous les passionnés de football."
-                    }
-                    {event.Sport === 'Basketball' && 
-                      "Découvrez le basketball français au plus haut niveau. Une ambiance électrique garantie pour vivre des moments inoubliables."
-                    }
-                    {event.Sport === 'Tennis' && 
-                      "Le tennis de haut niveau vous attend dans ce tournoi d'exception. Assistez aux plus beaux échanges dans un cadre prestigieux."
-                    }
-                    {event.Sport === 'Course à pied' && 
-                      "Participez ou soutenez cette course emblématique qui traverse la capitale. Une expérience sportive unique dans un cadre exceptionnel."
-                    }
-                    {!['Football', 'Basketball', 'Tennis', 'Course à pied'].includes(event.Sport) && 
-                      `Découvrez le ${event.Sport.toLowerCase()} dans toute sa splendeur lors de cet événement exceptionnel. Une occasion unique de vivre des émotions fortes.`
-                    }
+                    {getAboutText()}
                   </p>
                 </div>
               </div>
