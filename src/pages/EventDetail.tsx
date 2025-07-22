@@ -31,21 +31,37 @@ export const EventDetail = () => {
   }, [id]);
 
   const fetchEvent = async () => {
-    if (!id) return;
+    if (!id) {
+      console.log('No ID provided');
+      return;
+    }
+    
+    console.log('Starting fetchEvent with ID:', id, 'Type:', typeof id);
+    const numericId = parseInt(id);
+    console.log('Parsed ID:', numericId, 'Is valid number:', !isNaN(numericId));
     
     try {
-      console.log('Fetching event with ID:', id);
+      console.log('Making Supabase query for ID_event =', numericId);
+      
       const { data, error } = await supabase
         .from('Event')
         .select('*')
-        .eq('ID_event', parseInt(id))
+        .eq('ID_event', numericId)
         .maybeSingle();
 
-      console.log('Supabase response:', { data, error });
-      if (error) throw error;
+      console.log('Supabase response:');
+      console.log('- Data:', data);
+      console.log('- Error:', error);
+      console.log('- Data is null:', data === null);
+      console.log('- Data is undefined:', data === undefined);
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
       
       if (!data) {
-        console.log('No event found with ID:', id);
+        console.log('No event found with ID:', numericId);
         setEvent(null);
         return;
       }
@@ -53,7 +69,7 @@ export const EventDetail = () => {
       console.log('Event loaded successfully:', data);
       setEvent(data);
     } catch (error) {
-      console.error('Error fetching event:', error);
+      console.error('Error in fetchEvent:', error);
       setEvent(null);
     } finally {
       setIsLoading(false);
