@@ -171,18 +171,21 @@ export const EventsPage = () => {
         {/* Header with Balance */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
-            <h1 className="text-4xl md:text-6xl font-monument mb-2">
-              Événements sportifs
+            <h1 className="text-xl md:text-3xl font-monument mb-2">
+              Nos événements à venir
             </h1>
             <p className="text-xl text-muted-foreground">
               Découvrez {filteredEvents.length} événements disponibles
             </p>
           </div>
-          <div className="mt-4 md:mt-0">
-            <div className="balance-badge">
-              💳 Solde: {userBalance}€
+          {/* Balance only shown when user is authenticated - will be implemented later */}
+          {false && (
+            <div className="mt-4 md:mt-0">
+              <div className="balance-badge">
+                💳 Solde: {userBalance}€
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Search Bar */}
