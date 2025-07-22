@@ -39,10 +39,23 @@ export const EventDetail = () => {
       try {
         console.log('Fetching event with ID:', id);
         
-        // Fallback data for event 12 in case of network issues
-        if (parseInt(id) === 12) {
-          console.log('Using fallback data for event 12');
-          const fallbackEvent = {
+        // Fallback data for all homepage events
+        const fallbackEvents: { [key: number]: any } = {
+          11: {
+            ID_event: 11,
+            Event: "PSG vs SCO Angers - Journée 1 Ligue 1",
+            Date: "2025-08-24",
+            Organization: "Paris Saint-Germain",
+            Sport: "Football",
+            Competition: "Ligue 1",
+            Location: "Parc des Princes",
+            Adress: "Parc des Princes, Paris",
+            Access: "Ticketing",
+            Link: "https://psg.fr",
+            Original_Price: "45€",
+            Our_Price: "36€"
+          },
+          12: {
             ID_event: 12,
             Event: "Paris Basketball - Abonnement 25/26",
             Date: "2025-07-27",
@@ -53,12 +66,72 @@ export const EventDetail = () => {
             Adress: "Adidas Arena, Paris La Défense",
             Access: "Ticketing",
             Link: "https://parisbasketball.com",
-            Original_Price: "250",
-            Our_Price: "200"
-          };
-          
+            Original_Price: "250€",
+            Our_Price: "200€"
+          },
+          13: {
+            ID_event: 13,
+            Event: "Rolex Paris Master 2025",
+            Date: "2025-07-28",
+            Organization: "Rolex Paris Masters",
+            Sport: "Tennis",
+            Competition: "ATP Masters 1000",
+            Location: "La Défense U Arena",
+            Adress: "La Défense U Arena, Nanterre",
+            Access: "Ticketing",
+            Link: "https://rolexparismasters.com",
+            Original_Price: "80€",
+            Our_Price: "64€"
+          },
+          14: {
+            ID_event: 14,
+            Event: "Hoka Semi Marathon Paris 2025",
+            Date: "2025-07-29",
+            Organization: "Hoka Running",
+            Sport: "Course à pied",
+            Competition: "Semi Marathon",
+            Location: "Ville de Paris",
+            Adress: "Paris, France",
+            Access: "Inscription",
+            Link: "https://hokaparis.com",
+            Original_Price: "55€",
+            Our_Price: "44€"
+          },
+          15: {
+            ID_event: 15,
+            Event: "Les Mariannes 92 - Saison 25/26",
+            Date: "2025-07-30",
+            Organization: "Les Mariannes 92",
+            Sport: "Volleyball",
+            Competition: "Ligue A Féminine",
+            Location: "Le palais des sports Marcel Cerdan",
+            Adress: "Palais des sports Marcel Cerdan, Levallois-Perret",
+            Access: "Ticketing",
+            Link: "https://lesmariannes92.com",
+            Original_Price: "105€",
+            Our_Price: "84€"
+          },
+          16: {
+            ID_event: 16,
+            Event: "PSG Handball - Dunkerque / Journée 1 StarLigue",
+            Date: "2025-09-07",
+            Organization: "PSG Handball",
+            Sport: "Handball",
+            Competition: "StarLigue",
+            Location: "Stade Pierre de Coubertin",
+            Adress: "Stade Pierre de Coubertin, Paris",
+            Access: "Ticketing",
+            Link: "https://psghandball.com",
+            Original_Price: "35€",
+            Our_Price: "28€"
+          }
+        };
+        
+        const eventId = parseInt(id);
+        if (fallbackEvents[eventId]) {
+          console.log(`Using fallback data for event ${eventId}`);
           setTimeout(() => {
-            setEvent(fallbackEvent);
+            setEvent(fallbackEvents[eventId]);
             setIsLoading(false);
           }, 1000);
           return;
@@ -85,9 +158,23 @@ export const EventDetail = () => {
         console.error('Error fetching event:', error);
         
         // Additional fallback for network errors
-        if (parseInt(id || '') === 12) {
-          console.log('Network error, using fallback for event 12');
-          const fallbackEvent = {
+        const eventId = parseInt(id || '');
+        const fallbackEvents: { [key: number]: any } = {
+          11: {
+            ID_event: 11,
+            Event: "PSG vs SCO Angers - Journée 1 Ligue 1",
+            Date: "2025-08-24",
+            Organization: "Paris Saint-Germain",
+            Sport: "Football",
+            Competition: "Ligue 1",
+            Location: "Parc des Princes",
+            Adress: "Parc des Princes, Paris",
+            Access: "Ticketing",
+            Link: "https://psg.fr",
+            Original_Price: "45€",
+            Our_Price: "36€"
+          },
+          12: {
             ID_event: 12,
             Event: "Paris Basketball - Abonnement 25/26",
             Date: "2025-07-27",
@@ -98,10 +185,70 @@ export const EventDetail = () => {
             Adress: "Adidas Arena, Paris La Défense",
             Access: "Ticketing",
             Link: "https://parisbasketball.com",
-            Original_Price: "250",
-            Our_Price: "200"
-          };
-          setEvent(fallbackEvent);
+            Original_Price: "250€",
+            Our_Price: "200€"
+          },
+          13: {
+            ID_event: 13,
+            Event: "Rolex Paris Master 2025",
+            Date: "2025-07-28",
+            Organization: "Rolex Paris Masters",
+            Sport: "Tennis",
+            Competition: "ATP Masters 1000",
+            Location: "La Défense U Arena",
+            Adress: "La Défense U Arena, Nanterre",
+            Access: "Ticketing",
+            Link: "https://rolexparismasters.com",
+            Original_Price: "80€",
+            Our_Price: "64€"
+          },
+          14: {
+            ID_event: 14,
+            Event: "Hoka Semi Marathon Paris 2025",
+            Date: "2025-07-29",
+            Organization: "Hoka Running",
+            Sport: "Course à pied",
+            Competition: "Semi Marathon",
+            Location: "Ville de Paris",
+            Adress: "Paris, France",
+            Access: "Inscription",
+            Link: "https://hokaparis.com",
+            Original_Price: "55€",
+            Our_Price: "44€"
+          },
+          15: {
+            ID_event: 15,
+            Event: "Les Mariannes 92 - Saison 25/26",
+            Date: "2025-07-30",
+            Organization: "Les Mariannes 92",
+            Sport: "Volleyball",
+            Competition: "Ligue A Féminine",
+            Location: "Le palais des sports Marcel Cerdan",
+            Adress: "Palais des sports Marcel Cerdan, Levallois-Perret",
+            Access: "Ticketing",
+            Link: "https://lesmariannes92.com",
+            Original_Price: "105€",
+            Our_Price: "84€"
+          },
+          16: {
+            ID_event: 16,
+            Event: "PSG Handball - Dunkerque / Journée 1 StarLigue",
+            Date: "2025-09-07",
+            Organization: "PSG Handball",
+            Sport: "Handball",
+            Competition: "StarLigue",
+            Location: "Stade Pierre de Coubertin",
+            Adress: "Stade Pierre de Coubertin, Paris",
+            Access: "Ticketing",
+            Link: "https://psghandball.com",
+            Original_Price: "35€",
+            Our_Price: "28€"
+          }
+        };
+        
+        if (fallbackEvents[eventId]) {
+          console.log(`Network error, using fallback for event ${eventId}`);
+          setEvent(fallbackEvents[eventId]);
         } else {
           setEvent(null);
         }

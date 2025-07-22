@@ -38,21 +38,33 @@ export const EventCard = ({ event }: EventCardProps) => {
     }
   };
 
-  // Get specific image for Paris Basketball event
+  // Get specific image for homepage events
   const getEventImage = () => {
-    if (event.ID_event === 12 && event.Event?.includes("Paris Basketball")) {
-      return "/lovable-uploads/2837c0cc-2ffb-4656-92c6-96c4f4dfd60f.png";
-    }
-    return `https://picsum.photos/400/300?random=${event.ID_event}`;
+    const eventImages: { [key: number]: string } = {
+      11: "/lovable-uploads/147eb088-277c-4032-b6b4-e01dfed524d3.png", // PSG vs SCO Angers
+      12: "/lovable-uploads/2837c0cc-2ffb-4656-92c6-96c4f4dfd60f.png", // Paris Basketball
+      13: "/lovable-uploads/7809806e-e8e7-44e8-8cb6-4e9157c04ac5.png", // Rolex Paris Master
+      14: "/lovable-uploads/56eb70ed-a5f5-4845-b859-1354756c82ff.png", // Hoka Semi Marathon
+      15: "/lovable-uploads/498f232f-981f-4bb2-ab0f-d9d08551a8fb.png", // Les Mariannes 92
+      16: "/lovable-uploads/585f742a-f198-48d5-aaff-54c375f30f55.png"  // PSG Handball
+    };
+    
+    return eventImages[event.ID_event] || `https://picsum.photos/400/300?random=${event.ID_event}`;
   };
 
-  // Get specific pricing for Paris Basketball event
+  // Get specific pricing for homepage events
   const getEventPricing = () => {
-    if (event.ID_event === 12 && event.Event?.includes("Paris Basketball")) {
-      return {
-        originalPrice: 250,
-        subsidizedPrice: 200
-      };
+    const eventPricing: { [key: number]: { originalPrice: number; subsidizedPrice: number } } = {
+      11: { originalPrice: 45, subsidizedPrice: 36 },   // PSG vs SCO Angers
+      12: { originalPrice: 250, subsidizedPrice: 200 }, // Paris Basketball
+      13: { originalPrice: 80, subsidizedPrice: 64 },   // Rolex Paris Master
+      14: { originalPrice: 55, subsidizedPrice: 44 },   // Hoka Semi Marathon
+      15: { originalPrice: 105, subsidizedPrice: 84 },  // Les Mariannes 92
+      16: { originalPrice: 35, subsidizedPrice: 28 }    // PSG Handball
+    };
+    
+    if (eventPricing[event.ID_event]) {
+      return eventPricing[event.ID_event];
     }
     
     // Mock pricing for other events
