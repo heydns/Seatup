@@ -34,16 +34,27 @@ export const EventDetail = () => {
     if (!id) return;
     
     try {
+      console.log('Fetching event with ID:', id);
       const { data, error } = await supabase
         .from('Event')
         .select('*')
         .eq('ID_event', parseInt(id))
-        .single();
+        .maybeSingle();
 
+      console.log('Supabase response:', { data, error });
       if (error) throw error;
+      
+      if (!data) {
+        console.log('No event found with ID:', id);
+        setEvent(null);
+        return;
+      }
+      
+      console.log('Event loaded successfully:', data);
       setEvent(data);
     } catch (error) {
       console.error('Error fetching event:', error);
+      setEvent(null);
     } finally {
       setIsLoading(false);
     }
