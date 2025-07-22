@@ -101,13 +101,22 @@ export const EventsPage = () => {
         Adress: "Adidas Arena, Paris La Défense",
         Access: "Ticketing",
         Link: "https://parisbasketball.com",
-        Original_Price: "250",
-        Our_Price: "200"
+        Original_Price: "250€",
+        Our_Price: "200€"
       };
       
-      const allEvents = data || [];
-      // Add fallback event if not already present
-      if (!allEvents.some(event => event.ID_event === 12)) {
+      let allEvents = data || [];
+      
+      // Remove any existing Paris Basketball events with different dates
+      allEvents = allEvents.filter(event => 
+        !(event.Event?.includes("Paris Basketball") && event.Date !== "2025-07-27")
+      );
+      
+      // Add or update the correct fallback event
+      const existingEventIndex = allEvents.findIndex(event => event.ID_event === 12);
+      if (existingEventIndex >= 0) {
+        allEvents[existingEventIndex] = fallbackEvent;
+      } else {
         allEvents.push(fallbackEvent);
       }
       
@@ -127,8 +136,8 @@ export const EventsPage = () => {
         Adress: "Adidas Arena, Paris La Défense",
         Access: "Ticketing",
         Link: "https://parisbasketball.com",
-        Original_Price: "250",
-        Our_Price: "200"
+        Original_Price: "250€",
+        Our_Price: "200€"
       };
       setEvents([fallbackEvent]);
     } finally {

@@ -38,26 +38,39 @@ export const EventCard = ({ event }: EventCardProps) => {
     }
   };
 
-  const getRandomPrice = () => {
-    // Mock pricing - in real app this would come from the event data
-    return Math.floor(Math.random() * 80) + 20;
+  // Get specific image for Paris Basketball event
+  const getEventImage = () => {
+    if (event.ID_event === 12 && event.Event?.includes("Paris Basketball")) {
+      return "/lovable-uploads/2837c0cc-2ffb-4656-92c6-96c4f4dfd60f.png";
+    }
+    return `https://picsum.photos/400/300?random=${event.ID_event}`;
   };
 
-  const getSubsidizedPrice = (price: number) => {
-    // Mock 30-50% subsidy
+  // Get specific pricing for Paris Basketball event
+  const getEventPricing = () => {
+    if (event.ID_event === 12 && event.Event?.includes("Paris Basketball")) {
+      return {
+        originalPrice: 250,
+        subsidizedPrice: 200
+      };
+    }
+    
+    // Mock pricing for other events
+    const originalPrice = Math.floor(Math.random() * 80) + 20;
     const subsidyRate = 0.3 + Math.random() * 0.2;
-    return Math.floor(price * (1 - subsidyRate));
+    const subsidizedPrice = Math.floor(originalPrice * (1 - subsidyRate));
+    
+    return { originalPrice, subsidizedPrice };
   };
 
-  const originalPrice = getRandomPrice();
-  const subsidizedPrice = getSubsidizedPrice(originalPrice);
+  const { originalPrice, subsidizedPrice } = getEventPricing();
 
   return (
     <div className="card-sport group hover:scale-[1.02] transition-all duration-300">
       {/* Event image with click navigation */}
       <div className="aspect-[4/3] overflow-hidden rounded-t-lg mb-4 cursor-pointer" onClick={() => navigate(`/event/${event.ID_event}`)}>
         <img 
-          src={`https://picsum.photos/400/300?random=${event.ID_event}`} 
+          src={getEventImage()} 
           alt={event.Event} 
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
         />
