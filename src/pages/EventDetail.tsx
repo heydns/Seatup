@@ -18,6 +18,8 @@ interface Event {
   Link: string;
   Original_Price?: string;
   Our_Price?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export const EventDetail = () => {
@@ -33,43 +35,35 @@ export const EventDetail = () => {
   const fetchEvent = async () => {
     if (!id) {
       console.log('No ID provided');
+      setIsLoading(false);
       return;
     }
     
-    console.log('Starting fetchEvent with ID:', id, 'Type:', typeof id);
     const numericId = parseInt(id);
-    console.log('Parsed ID:', numericId, 'Is valid number:', !isNaN(numericId));
+    console.log('Fetching event with ID:', numericId);
     
     try {
-      console.log('Making Supabase query for ID_event =', numericId);
-      
       const { data, error } = await supabase
         .from('Event')
         .select('*')
-        .eq('ID_event', numericId)
-        .maybeSingle();
+        .eq('ID_event', numericId);
 
-      console.log('Supabase response:');
-      console.log('- Data:', data);
-      console.log('- Error:', error);
-      console.log('- Data is null:', data === null);
-      console.log('- Data is undefined:', data === undefined);
+      console.log('Supabase query result:', { data, error, count: data?.length });
 
       if (error) {
         console.error('Supabase error:', error);
         throw error;
       }
       
-      if (!data) {
+      if (!data || data.length === 0) {
         console.log('No event found with ID:', numericId);
         setEvent(null);
-        return;
+      } else {
+        console.log('Event found:', data[0]);
+        setEvent(data[0]);
       }
-      
-      console.log('Event loaded successfully:', data);
-      setEvent(data);
     } catch (error) {
-      console.error('Error in fetchEvent:', error);
+      console.error('Error fetching event:', error);
       setEvent(null);
     } finally {
       setIsLoading(false);
