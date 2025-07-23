@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter, MapPin, Calendar, Euro, Users, Heart, Star, Zap, ChevronDown } from "lucide-react";
+import { Search, Filter, MapPin, Calendar, Euro, Users, Heart, Star, Zap, ChevronDown, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { EventCard } from "./EventCard";
 import { Header } from "./Header";
@@ -577,19 +577,89 @@ export const EventsPage = () => {
           )}
         </div>
 
-        {/* Search Bar */}
-        <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-          <Input
-            placeholder="Rechercher un événement, club, ville..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input pl-10 h-12 text-lg"
-          />
+        {/* Filtres Style Dice */}
+        <div className="flex flex-wrap gap-3 mb-8">
+          {/* Localisation */}
+          <div className="flex items-center gap-2 px-4 py-3 bg-muted/20 rounded-lg border border-border/50 backdrop-blur-sm min-w-[120px]">
+            <MapPin className="h-4 w-4 text-muted-foreground" />
+            <span className="font-medium text-sm">PARIS</span>
+          </div>
+
+          {/* Date - Style Dice */}
+          <div className="relative">
+            <div className="flex items-center gap-2 px-4 py-3 bg-muted/20 rounded-lg border border-border/50 backdrop-blur-sm cursor-pointer hover:bg-muted/30 transition-all min-w-[120px]">
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <span className="font-medium text-sm">DATE</span>
+            </div>
+          </div>
+
+          {/* Prix */}
+          <div className="flex items-center gap-2 px-4 py-3 bg-muted/20 rounded-lg border border-border/50 backdrop-blur-sm min-w-[120px]">
+            <Euro className="h-4 w-4 text-muted-foreground" />
+            <span className="font-medium text-sm">PRIX</span>
+          </div>
         </div>
 
-        {/* Date Filters - Default Display */}
-        <div className="flex flex-wrap gap-2 mb-6">
+        {/* Catégories Sport Style Dice */}
+        <div className="flex flex-wrap gap-3 mb-8">
+          {SPORTS_FILTERS.slice(0, -1).map((sport) => (
+            <button
+              key={sport.key}
+              onClick={() => setSelectedSport(sport.name)}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200 min-w-[100px] ${
+                selectedSport === sport.name
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'bg-muted/20 border-border/50 hover:bg-muted/30 backdrop-blur-sm'
+              }`}
+            >
+              <div className="w-6 h-6 flex items-center justify-center">
+                {sport.icon ? (
+                  <span className="text-lg">{sport.icon}</span>
+                ) : (
+                  <div className="w-4 h-4 rounded-full bg-current opacity-20"></div>
+                )}
+              </div>
+              <span className="font-medium text-sm">{sport.name}</span>
+            </button>
+          ))}
+          
+          {/* Autres sports avec dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setShowOtherSports(!showOtherSports)}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200 min-w-[100px] ${
+                OTHER_SPORTS.includes(selectedSport)
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'bg-muted/20 border-border/50 hover:bg-muted/30 backdrop-blur-sm'
+              }`}
+            >
+              <div className="w-6 h-6 flex items-center justify-center">
+                <span className="text-lg">⋯</span>
+              </div>
+              <span className="font-medium text-sm">Autres sports</span>
+              <ChevronDown className="h-3 w-3 ml-auto" />
+            </button>
+            {showOtherSports && (
+              <div className="absolute top-full left-0 mt-2 bg-background border border-border rounded-lg shadow-xl p-2 z-[60] min-w-[200px] backdrop-blur-sm">
+                {OTHER_SPORTS.map((otherSport) => (
+                  <button
+                    key={otherSport}
+                    onClick={() => {
+                      setSelectedSport(otherSport);
+                      setShowOtherSports(false);
+                    }}
+                    className="block w-full text-left px-3 py-2 text-sm hover:bg-muted/50 rounded-md transition-colors"
+                  >
+                    {otherSport}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Date Selection - sous les sports */}
+        <div className="flex flex-wrap gap-3 mb-6">
           {DATE_FILTERS.map((dateFilter) => (
             <button
               key={dateFilter.key}
@@ -597,13 +667,13 @@ export const EventsPage = () => {
                 setSelectedDate(dateFilter.key);
                 if (dateFilter.key !== "custom") setCustomDate("");
               }}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 ${
                 selectedDate === dateFilter.key
-                  ? 'bg-primary text-white border-primary'
-                  : 'bg-white border-border hover:border-primary/50 hover:bg-primary/5'
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'bg-muted/20 border-border/50 hover:bg-muted/30 backdrop-blur-sm'
               }`}
             >
-              <Calendar className="h-4 w-4" />
+              <Clock className="h-4 w-4" />
               <span className="font-medium text-sm">{dateFilter.name}</span>
             </button>
           ))}
@@ -614,14 +684,10 @@ export const EventsPage = () => {
                 value={customDate}
                 onChange={(e) => setCustomDate(e.target.value)}
                 onFocus={() => setShowDatePicker(true)}
-                className="px-4 py-2 border border-border rounded-full bg-white text-sm font-medium min-w-[140px] cursor-pointer"
+                className="px-4 py-2 bg-muted/20 border border-border/50 rounded-lg text-sm font-medium min-w-[140px] cursor-pointer backdrop-blur-sm hover:bg-muted/30 transition-all"
                 style={{
                   colorScheme: 'light',
                   appearance: 'none',
-                  background: 'white',
-                  padding: '8px 16px',
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: '9999px',
                   fontSize: '14px',
                   fontWeight: '500'
                 }}
@@ -630,12 +696,24 @@ export const EventsPage = () => {
           )}
         </div>
 
-        {/* Sort and Filters */}
+        {/* Barre de recherche déplacée */}
+        <div className="relative mb-6">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <Input
+            placeholder="Rechercher un événement, club, ville..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input pl-10 h-12 text-lg bg-muted/20 border-border/50 backdrop-blur-sm"
+          />
+        </div>
+
+        {/* Sort and Advanced Filters */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="flex gap-2">
             <Button
-              variant="sport"
+              variant="outline"
               onClick={() => setShowFilters(!showFilters)}
+              className="bg-muted/20 border-border/50 backdrop-blur-sm hover:bg-muted/30"
             >
               <Filter className="h-4 w-4 mr-2" />
               Filtres avancés {showFilters ? "▲" : "▼"}
@@ -646,7 +724,7 @@ export const EventsPage = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as "date" | "price" | "popularity")}
-              className="px-3 py-2 border border-border rounded-md bg-white text-sm font-medium"
+              className="px-3 py-2 bg-muted/20 border border-border/50 rounded-md text-sm font-medium backdrop-blur-sm hover:bg-muted/30 transition-all"
             >
               <option value="date">Trier par date</option>
               <option value="price">Trier par prix</option>
@@ -656,62 +734,7 @@ export const EventsPage = () => {
         </div>
 
         {showFilters && (
-          <div className="space-y-4 p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-border/50 mb-6">
-            {/* Sports Filter */}
-            <div>
-              <h3 className="font-monument mb-3 text-sm">Sports</h3>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {getAvailableSports().map((sport) => (
-                  <div key={sport.key} className="relative">
-                    {sport.hasDropdown ? (
-                      <div className="relative">
-                        <button
-                          onClick={() => setShowOtherSports(!showOtherSports)}
-                          className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 ${
-                            selectedSport === sport.name
-                              ? 'bg-primary text-white border-primary'
-                              : 'bg-white border-border hover:border-primary/50 hover:bg-primary/5'
-                          }`}
-                        >
-                          {sport.icon && <span className="text-sm">{sport.icon}</span>}
-                          <span className="font-medium text-sm">{sport.name}</span>
-                          <ChevronDown className="h-3 w-3" />
-                        </button>
-                        {showOtherSports && (
-                          <div className="absolute top-full left-0 mt-1 bg-white border border-border rounded-lg shadow-lg p-2 z-[60] min-w-48">
-                            {OTHER_SPORTS.map((otherSport) => (
-                              <button
-                                key={otherSport}
-                                onClick={() => {
-                                  setSelectedSport(otherSport);
-                                  setShowOtherSports(false);
-                                }}
-                                className="block w-full text-left px-3 py-2 text-sm hover:bg-primary/5 rounded-md transition-colors"
-                              >
-                                {otherSport}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => setSelectedSport(sport.name)}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 ${
-                          selectedSport === sport.name
-                            ? 'bg-primary text-white border-primary'
-                            : 'bg-white border-border hover:border-primary/50 hover:bg-primary/5'
-                        }`}
-                      >
-                        {sport.icon && <span className="text-sm">{sport.icon}</span>}
-                        <span className="font-medium text-sm">{sport.name}</span>
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
+          <div className="space-y-4 p-6 bg-muted/10 backdrop-blur-sm rounded-xl border border-border/50 mb-6">
             {/* Competition Filter - Dynamic based on sport */}
             <div>
               <h3 className="font-monument mb-3 text-sm">Compétition</h3>
@@ -720,7 +743,11 @@ export const EventsPage = () => {
                   <button
                     key={competition}
                     onClick={() => setSelectedCompetition(competition)}
-                    className={`filter-chip ${selectedCompetition === competition ? 'active' : ''}`}
+                    className={`px-4 py-2 rounded-lg border transition-all duration-200 text-sm font-medium ${
+                      selectedCompetition === competition
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-muted/20 border-border/50 hover:bg-muted/30 backdrop-blur-sm'
+                    }`}
                   >
                     {competition}
                   </button>
@@ -736,7 +763,11 @@ export const EventsPage = () => {
                   <button
                     key={venue}
                     onClick={() => setSelectedVenue(venue)}
-                    className={`filter-chip ${selectedVenue === venue ? 'active' : ''}`}
+                    className={`px-4 py-2 rounded-lg border transition-all duration-200 text-sm font-medium ${
+                      selectedVenue === venue
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-muted/20 border-border/50 hover:bg-muted/30 backdrop-blur-sm'
+                    }`}
                   >
                     {venue}
                   </button>
@@ -749,7 +780,7 @@ export const EventsPage = () => {
         {/* Results */}
         {filteredEvents.length === 0 ? (
           <div className="text-center py-12">
-            <div className="card-sport max-w-md mx-auto">
+            <div className="max-w-md mx-auto p-6 bg-muted/10 rounded-xl border border-border/50 backdrop-blur-sm">
               <div className="text-4xl mb-4">🎯</div>
               <h3 className="text-xl font-monument mb-2">
                 Aucun événement trouvé
@@ -758,7 +789,7 @@ export const EventsPage = () => {
                 Essayez de modifier vos critères de recherche
               </p>
               <Button
-                variant="sport"
+                variant="outline"
                 onClick={() => {
                   setSearchQuery("");
                   setSelectedSport("Tous");
@@ -767,6 +798,7 @@ export const EventsPage = () => {
                   setSelectedDate("Tous");
                   setCustomDate("");
                 }}
+                className="bg-muted/20 border-border/50 backdrop-blur-sm hover:bg-muted/30"
               >
                 Réinitialiser les filtres
               </Button>
