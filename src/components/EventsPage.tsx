@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, MapPin, Calendar, Euro, Users, Heart, Star, Zap } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Search, Filter, MapPin, Calendar, Euro, Users, Heart, Star, Zap, ChevronDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { EventCard } from "./EventCard";
 import { Header } from "./Header";
@@ -21,15 +22,73 @@ interface Event {
 }
 
 const SPORTS_FILTERS = [
-  { name: "Tous", icon: "⚽", key: "all" },
-  { name: "Football", icon: "⚽", key: "football" },
-  { name: "Basketball", icon: "🏀", key: "basketball" }, 
-  { name: "Tennis", icon: "🎾", key: "tennis" },
-  { name: "Rugby", icon: "🏉", key: "rugby" },
-  { name: "Handball", icon: "🤾", key: "handball" },
-  { name: "Volleyball", icon: "🏐", key: "volleyball" },
-  { name: "Natation", icon: "🏊", key: "natation" },
-  { name: "Cyclisme", icon: "🚴", key: "cyclisme" }
+  { name: "Tous", icon: "", key: "all" },
+  { name: "Football", icon: "⚪", key: "football" },
+  { name: "Basketball", icon: "○", key: "basketball" }, 
+  { name: "Tennis", icon: "◐", key: "tennis" },
+  { name: "Rugby", icon: "◯", key: "rugby" },
+  { name: "Handball", icon: "●", key: "handball" },
+  { name: "Volleyball", icon: "◎", key: "volleyball" },
+  { name: "Natation", icon: "〰", key: "natation" },
+  { name: "Cyclisme", icon: "○", key: "cyclisme" },
+  { name: "Autres sports", icon: "⋯", key: "others", hasDropdown: true }
+];
+
+const OTHER_SPORTS = [
+  "Course à pied",
+  "Trail", 
+  "Triathlon",
+  "Football Américain",
+  "Tennis de Table",
+  "Tennis Padel",
+  "Courses hippiques",
+  "Aquathlon",
+  "Dance",
+  "Skateboard",
+  "Athlétisme",
+  "Badminton"
+];
+
+const SPORT_RELATIONS = {
+  "Football": {
+    competitions: ["Ligue 1", "Ligue 2"],
+    venues: ["Parc des Princes", "Stade de France", "Stade Jean-Bouin", "Stade Charléty"]
+  },
+  "Basketball": {
+    competitions: ["Jeep Élite", "Pro B"],
+    venues: ["Paris La Défense Arena", "Halle Carpentier"]
+  },
+  "Tennis": {
+    competitions: ["Roland Garros", "Masters 1000", "Grand Chelem"],
+    venues: ["Roland-Garros", "Paris La Défense Arena"]
+  },
+  "Rugby": {
+    competitions: ["Top 14", "Pro D2"],
+    venues: ["Stade de France", "Stade Jean-Bouin"]
+  },
+  "Handball": {
+    competitions: ["LNH", "StarLigue"],
+    venues: ["Stade Pierre de Coubertin", "Halle Carpentier"]
+  },
+  "Volleyball": {
+    competitions: ["Ligue A Féminine", "Ligue A Masculine"],
+    venues: ["Halle Carpentier", "Paris La Défense Arena"]
+  },
+  "Natation": {
+    competitions: ["Championnats de France", "Meeting de Paris"],
+    venues: ["Paris La Défense Arena"]
+  },
+  "Cyclisme": {
+    competitions: ["Tour de France", "Paris-Roubaix"],
+    venues: ["Stade de France", "Ville de Paris"]
+  }
+};
+
+const DATE_FILTERS = [
+  { name: "Aujourd'hui", key: "today" },
+  { name: "Cette semaine", key: "week" },
+  { name: "Ce week-end", key: "weekend" },
+  { name: "Date précise", key: "custom" }
 ];
 
 const COMPETITION_FILTERS = [
@@ -64,6 +123,9 @@ export const EventsPage = () => {
   const [selectedSport, setSelectedSport] = useState("Tous");
   const [selectedCompetition, setSelectedCompetition] = useState("Toutes");
   const [selectedVenue, setSelectedVenue] = useState("Tous");
+  const [selectedDate, setSelectedDate] = useState("Tous");
+  const [customDate, setCustomDate] = useState("");
+  const [showOtherSports, setShowOtherSports] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [favorites, setFavorites] = useState<number[]>([]);
@@ -78,7 +140,57 @@ export const EventsPage = () => {
 
   useEffect(() => {
     filterEvents();
-  }, [events, searchQuery, selectedSport, selectedCompetition, selectedVenue, sortBy]);
+  }, [events, searchQuery, selectedSport, selectedCompetition, selectedVenue, selectedDate, customDate, sortBy]);
+
+  // Get filtered competitions and venues based on selected sport
+  const getAvailableCompetitions = () => {
+    if (selectedSport === "Tous" || !SPORT_RELATIONS[selectedSport]) {
+      return COMPETITION_FILTERS;
+    }
+    return ["Toutes", ...SPORT_RELATIONS[selectedSport].competitions];
+  };
+
+  const getAvailableVenues = () => {
+    if (selectedSport === "Tous" || !SPORT_RELATIONS[selectedSport]) {
+      return VENUE_FILTERS;
+    }
+    return ["Tous", ...SPORT_RELATIONS[selectedSport].venues];
+  };
+
+  // Filter by date
+  const filterByDate = (events: Event[]) => {
+    if (selectedDate === "Tous") return events;
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    return events.filter(event => {
+      const eventDate = new Date(event.Date);
+      eventDate.setHours(0, 0, 0, 0);
+      
+      switch (selectedDate) {
+        case "today":
+          return eventDate.getTime() === today.getTime();
+        case "week":
+          const weekEnd = new Date(today);
+          weekEnd.setDate(today.getDate() + 7);
+          return eventDate >= today && eventDate <= weekEnd;
+        case "weekend":
+          const nextSaturday = new Date(today);
+          nextSaturday.setDate(today.getDate() + (6 - today.getDay()));
+          const nextSunday = new Date(nextSaturday);
+          nextSunday.setDate(nextSaturday.getDate() + 1);
+          return eventDate.getTime() === nextSaturday.getTime() || eventDate.getTime() === nextSunday.getTime();
+        case "custom":
+          if (!customDate) return true;
+          const customDateObj = new Date(customDate);
+          customDateObj.setHours(0, 0, 0, 0);
+          return eventDate.getTime() === customDateObj.getTime();
+        default:
+          return true;
+      }
+    });
+  };
 
   const fetchEvents = async () => {
     try {
@@ -297,11 +409,20 @@ export const EventsPage = () => {
       );
     }
 
-    // Sport filter
+    // Date filter
+    filtered = filterByDate(filtered);
+
+    // Sport filter (including "Autres sports")
     if (selectedSport !== "Tous") {
-      filtered = filtered.filter(event => 
-        event.Sport?.toLowerCase().includes(selectedSport.toLowerCase())
-      );
+      if (selectedSport === "Autres sports") {
+        filtered = filtered.filter(event => 
+          OTHER_SPORTS.some(sport => event.Sport?.toLowerCase().includes(sport.toLowerCase()))
+        );
+      } else {
+        filtered = filtered.filter(event => 
+          event.Sport?.toLowerCase().includes(selectedSport.toLowerCase())
+        );
+      }
     }
 
     // Competition filter  
@@ -392,22 +513,33 @@ export const EventsPage = () => {
           />
         </div>
 
-        {/* Category Pills - Dice.fm Style */}
+        {/* Date Filters - Default Display */}
         <div className="flex flex-wrap gap-2 mb-6">
-          {SPORTS_FILTERS.map((sport) => (
+          {DATE_FILTERS.map((dateFilter) => (
             <button
-              key={sport.key}
-              onClick={() => setSelectedSport(sport.name)}
+              key={dateFilter.key}
+              onClick={() => {
+                setSelectedDate(dateFilter.key);
+                if (dateFilter.key !== "custom") setCustomDate("");
+              }}
               className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 ${
-                selectedSport === sport.name
+                selectedDate === dateFilter.key
                   ? 'bg-primary text-white border-primary'
                   : 'bg-white border-border hover:border-primary/50 hover:bg-primary/5'
               }`}
             >
-              <span className="text-sm">{sport.icon}</span>
-              <span className="font-medium text-sm">{sport.name}</span>
+              <Calendar className="h-4 w-4" />
+              <span className="font-medium text-sm">{dateFilter.name}</span>
             </button>
           ))}
+          {selectedDate === "custom" && (
+            <input
+              type="date"
+              value={customDate}
+              onChange={(e) => setCustomDate(e.target.value)}
+              className="px-3 py-2 border border-border rounded-full bg-white text-sm font-medium"
+            />
+          )}
         </div>
 
         {/* Sort and Filters */}
@@ -437,11 +569,66 @@ export const EventsPage = () => {
 
         {showFilters && (
           <div className="space-y-4 p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-border/50 mb-6">
-            {/* Competition Filter */}
+            {/* Sports Filter */}
+            <div>
+              <h3 className="font-monument mb-3 text-sm">Sports</h3>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {SPORTS_FILTERS.map((sport) => (
+                  <div key={sport.key} className="relative">
+                    {sport.hasDropdown ? (
+                      <div className="relative">
+                        <button
+                          onClick={() => setShowOtherSports(!showOtherSports)}
+                          className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 ${
+                            selectedSport === sport.name
+                              ? 'bg-primary text-white border-primary'
+                              : 'bg-white border-border hover:border-primary/50 hover:bg-primary/5'
+                          }`}
+                        >
+                          {sport.icon && <span className="text-sm">{sport.icon}</span>}
+                          <span className="font-medium text-sm">{sport.name}</span>
+                          <ChevronDown className="h-3 w-3" />
+                        </button>
+                        {showOtherSports && (
+                          <div className="absolute top-full left-0 mt-1 bg-white border border-border rounded-lg shadow-lg p-2 z-50 min-w-48">
+                            {OTHER_SPORTS.map((otherSport) => (
+                              <button
+                                key={otherSport}
+                                onClick={() => {
+                                  setSelectedSport(otherSport);
+                                  setShowOtherSports(false);
+                                }}
+                                className="block w-full text-left px-3 py-2 text-sm hover:bg-primary/5 rounded-md transition-colors"
+                              >
+                                {otherSport}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setSelectedSport(sport.name)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 ${
+                          selectedSport === sport.name
+                            ? 'bg-primary text-white border-primary'
+                            : 'bg-white border-border hover:border-primary/50 hover:bg-primary/5'
+                        }`}
+                      >
+                        {sport.icon && <span className="text-sm">{sport.icon}</span>}
+                        <span className="font-medium text-sm">{sport.name}</span>
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Competition Filter - Dynamic based on sport */}
             <div>
               <h3 className="font-monument mb-3 text-sm">Compétition</h3>
               <div className="flex flex-wrap gap-2">
-                {COMPETITION_FILTERS.map((competition) => (
+                {getAvailableCompetitions().map((competition) => (
                   <button
                     key={competition}
                     onClick={() => setSelectedCompetition(competition)}
@@ -453,11 +640,11 @@ export const EventsPage = () => {
               </div>
             </div>
 
-            {/* Venue Filter */}
+            {/* Venue Filter - Dynamic based on sport */}
             <div>
               <h3 className="font-monument mb-3 text-sm">Lieu</h3>
               <div className="flex flex-wrap gap-2">
-                {VENUE_FILTERS.map((venue) => (
+                {getAvailableVenues().map((venue) => (
                   <button
                     key={venue}
                     onClick={() => setSelectedVenue(venue)}
@@ -489,6 +676,8 @@ export const EventsPage = () => {
                   setSelectedSport("Tous");
                   setSelectedCompetition("Toutes");
                   setSelectedVenue("Tous");
+                  setSelectedDate("Tous");
+                  setCustomDate("");
                 }}
               >
                 Réinitialiser les filtres
