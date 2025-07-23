@@ -135,6 +135,7 @@ export const EventsPage = () => {
   const [sortBy, setSortBy] = useState<"date" | "price" | "popularity">("date");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   // Mock user balance - in real app this would come from context/props
   const userBalance = 75;
@@ -159,11 +160,16 @@ export const EventsPage = () => {
         setShowDatePicker(false);
         setLastScrollY(currentScrollY);
       }
+
+      // Close date picker after 3/4 scroll for better UX
+      if (scrollDifference > 75 && isDatePickerOpen) {
+        setIsDatePickerOpen(false);
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, [lastScrollY, isDatePickerOpen]);
 
   // Get filtered options based on current selections
   const getAvailableCompetitions = () => {
@@ -597,7 +603,7 @@ export const EventsPage = () => {
           {DATE_FILTERS.map((dateFilter) => (
             <div key={dateFilter.key}>
               {dateFilter.key === "custom" ? (
-                <Popover>
+                <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
                   <PopoverTrigger asChild>
                     <button
                       className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 ${
@@ -605,7 +611,10 @@ export const EventsPage = () => {
                           ? 'bg-primary text-white border-primary'
                           : 'bg-white border-border hover:border-primary/50 hover:bg-primary/5'
                       }`}
-                      onClick={() => setSelectedDate(dateFilter.key)}
+                      onClick={() => {
+                        setSelectedDate(dateFilter.key);
+                        setIsDatePickerOpen(true);
+                      }}
                     >
                       <Calendar className="h-4 w-4 cursor-pointer" />
                       <span className="font-medium text-sm">
@@ -613,16 +622,17 @@ export const EventsPage = () => {
                       </span>
                     </button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent className="w-auto p-0 bg-white border shadow-lg" align="start">
                     <CalendarComponent
                       mode="single"
                       selected={customDate}
                       onSelect={(date) => {
                         setCustomDate(date);
                         setSelectedDate("custom");
+                        setIsDatePickerOpen(false); // Close after selection
                       }}
                       initialFocus
-                      className="p-3 pointer-events-auto"
+                      className="p-3 pointer-events-auto bg-white"
                     />
                   </PopoverContent>
                 </Popover>
