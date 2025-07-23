@@ -130,6 +130,7 @@ export const EventsPage = () => {
   const [favorites, setFavorites] = useState<number[]>([]);
   const [sortBy, setSortBy] = useState<"date" | "price" | "popularity">("date");
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   // Mock user balance - in real app this would come from context/props
   const userBalance = 75;
@@ -142,16 +143,23 @@ export const EventsPage = () => {
     filterEvents();
   }, [events, searchQuery, selectedSport, selectedCompetition, selectedVenue, selectedDate, customDate, sortBy]);
 
-  // Close dropdowns and date picker on scroll
+  // Close dropdowns and date picker on significant scroll
   useEffect(() => {
     const handleScroll = () => {
-      setShowOtherSports(false);
-      setShowDatePicker(false);
+      const currentScrollY = window.scrollY;
+      const scrollDifference = Math.abs(currentScrollY - lastScrollY);
+      
+      // Close dropdowns only if user scrolled significantly (more than 100px)
+      if (scrollDifference > 100) {
+        setShowOtherSports(false);
+        setShowDatePicker(false);
+        setLastScrollY(currentScrollY);
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   // Get filtered options based on current selections
   const getAvailableCompetitions = () => {
@@ -670,7 +678,7 @@ export const EventsPage = () => {
                           <ChevronDown className="h-3 w-3" />
                         </button>
                         {showOtherSports && (
-                          <div className="absolute top-full left-0 mt-1 bg-white border border-border rounded-lg shadow-lg p-2 z-50 min-w-48">
+                          <div className="absolute top-full left-0 mt-1 bg-white border border-border rounded-lg shadow-lg p-2 z-[60] min-w-48">
                             {OTHER_SPORTS.map((otherSport) => (
                               <button
                                 key={otherSport}
