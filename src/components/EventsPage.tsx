@@ -23,30 +23,30 @@ interface Event {
 
 const SPORTS_FILTERS = [
   { name: "Tous", icon: "", key: "all" },
-  { name: "Football", icon: "⚪", key: "football" },
-  { name: "Basketball", icon: "○", key: "basketball" }, 
-  { name: "Tennis", icon: "◐", key: "tennis" },
-  { name: "Rugby", icon: "◯", key: "rugby" },
-  { name: "Handball", icon: "●", key: "handball" },
-  { name: "Volleyball", icon: "◎", key: "volleyball" },
-  { name: "Natation", icon: "〰", key: "natation" },
-  { name: "Cyclisme", icon: "○", key: "cyclisme" },
+  { name: "Football", icon: "⚽", key: "football" },
+  { name: "Basketball", icon: "🏀", key: "basketball" }, 
+  { name: "Tennis", icon: "🎾", key: "tennis" },
+  { name: "Rugby", icon: "🏉", key: "rugby" },
+  { name: "Handball", icon: "🤾", key: "handball" },
+  { name: "Volleyball", icon: "🏐", key: "volleyball" },
+  { name: "Natation", icon: "🏊", key: "natation" },
+  { name: "Cyclisme", icon: "🚴", key: "cyclisme" },
   { name: "Autres sports", icon: "⋯", key: "others", hasDropdown: true }
 ];
 
 const OTHER_SPORTS = [
+  "Aquathlon",
+  "Athlétisme",
+  "Badminton",
   "Course à pied",
-  "Trail", 
-  "Triathlon",
+  "Courses hippiques",
+  "Dance",
   "Football Américain",
+  "Skateboard",
   "Tennis de Table",
   "Tennis Padel",
-  "Courses hippiques",
-  "Aquathlon",
-  "Dance",
-  "Skateboard",
-  "Athlétisme",
-  "Badminton"
+  "Trail",
+  "Triathlon"
 ];
 
 const SPORT_RELATIONS = {
@@ -59,7 +59,7 @@ const SPORT_RELATIONS = {
     venues: ["Paris La Défense Arena", "Halle Carpentier"]
   },
   "Tennis": {
-    competitions: ["Roland Garros", "Masters 1000", "Grand Chelem"],
+    competitions: ["Masters 1000", "Grand Chelem"],
     venues: ["Roland-Garros", "Paris La Défense Arena"]
   },
   "Rugby": {
@@ -88,7 +88,7 @@ const DATE_FILTERS = [
   { name: "Aujourd'hui", key: "today" },
   { name: "Cette semaine", key: "week" },
   { name: "Ce week-end", key: "weekend" },
-  { name: "Date précise", key: "custom" }
+  { name: "Une date", key: "custom" }
 ];
 
 const COMPETITION_FILTERS = [
@@ -99,7 +99,6 @@ const COMPETITION_FILTERS = [
   "Pro D2",
   "Jeep Élite",
   "LNH",
-  "Roland Garros",
   "Masters 1000",
   "Grand Chelem"
 ];
@@ -130,6 +129,7 @@ export const EventsPage = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [sortBy, setSortBy] = useState<"date" | "price" | "popularity">("date");
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   // Mock user balance - in real app this would come from context/props
   const userBalance = 75;
@@ -142,19 +142,86 @@ export const EventsPage = () => {
     filterEvents();
   }, [events, searchQuery, selectedSport, selectedCompetition, selectedVenue, selectedDate, customDate, sortBy]);
 
-  // Get filtered competitions and venues based on selected sport
+  // Close dropdowns and date picker on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowOtherSports(false);
+      setShowDatePicker(false);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Get filtered options based on current selections
   const getAvailableCompetitions = () => {
-    if (selectedSport === "Tous" || !SPORT_RELATIONS[selectedSport]) {
-      return COMPETITION_FILTERS;
+    let availableCompetitions = COMPETITION_FILTERS;
+    
+    // Filter by sport
+    if (selectedSport !== "Tous" && SPORT_RELATIONS[selectedSport]) {
+      availableCompetitions = ["Toutes", ...SPORT_RELATIONS[selectedSport].competitions];
     }
-    return ["Toutes", ...SPORT_RELATIONS[selectedSport].competitions];
+    
+    // Filter by venue
+    if (selectedVenue !== "Tous") {
+      const sportsForVenue = Object.entries(SPORT_RELATIONS).filter(([sport, data]) => 
+        data.venues.includes(selectedVenue)
+      );
+      const competitionsForVenue = sportsForVenue.flatMap(([sport, data]) => data.competitions);
+      availableCompetitions = availableCompetitions.filter(comp => 
+        comp === "Toutes" || competitionsForVenue.includes(comp)
+      );
+    }
+    
+    return availableCompetitions;
   };
 
   const getAvailableVenues = () => {
-    if (selectedSport === "Tous" || !SPORT_RELATIONS[selectedSport]) {
-      return VENUE_FILTERS;
+    let availableVenues = VENUE_FILTERS;
+    
+    // Filter by sport
+    if (selectedSport !== "Tous" && SPORT_RELATIONS[selectedSport]) {
+      availableVenues = ["Tous", ...SPORT_RELATIONS[selectedSport].venues];
     }
-    return ["Tous", ...SPORT_RELATIONS[selectedSport].venues];
+    
+    // Filter by competition
+    if (selectedCompetition !== "Toutes") {
+      const sportsForCompetition = Object.entries(SPORT_RELATIONS).filter(([sport, data]) => 
+        data.competitions.includes(selectedCompetition)
+      );
+      const venuesForCompetition = sportsForCompetition.flatMap(([sport, data]) => data.venues);
+      availableVenues = availableVenues.filter(venue => 
+        venue === "Tous" || venuesForCompetition.includes(venue)
+      );
+    }
+    
+    return availableVenues;
+  };
+
+  const getAvailableSports = () => {
+    let availableSports = SPORTS_FILTERS;
+    
+    // Filter by competition
+    if (selectedCompetition !== "Toutes") {
+      const sportsForCompetition = Object.entries(SPORT_RELATIONS)
+        .filter(([sport, data]) => data.competitions.includes(selectedCompetition))
+        .map(([sport]) => sport);
+      availableSports = availableSports.filter(sportFilter => 
+        sportFilter.key === "all" || sportsForCompetition.includes(sportFilter.name)
+      );
+    }
+    
+    // Filter by venue
+    if (selectedVenue !== "Tous") {
+      const sportsForVenue = Object.entries(SPORT_RELATIONS)
+        .filter(([sport, data]) => data.venues.includes(selectedVenue))
+        .map(([sport]) => sport);
+      availableSports = availableSports.filter(sportFilter => 
+        sportFilter.key === "all" || sportsForVenue.includes(sportFilter.name)
+      );
+    }
+    
+    return availableSports;
   };
 
   // Filter by date
@@ -533,12 +600,25 @@ export const EventsPage = () => {
             </button>
           ))}
           {selectedDate === "custom" && (
-            <input
-              type="date"
-              value={customDate}
-              onChange={(e) => setCustomDate(e.target.value)}
-              className="px-3 py-2 border border-border rounded-full bg-white text-sm font-medium"
-            />
+            <div className="relative">
+              <input
+                type="date"
+                value={customDate}
+                onChange={(e) => setCustomDate(e.target.value)}
+                onFocus={() => setShowDatePicker(true)}
+                className="px-4 py-2 border border-border rounded-full bg-white text-sm font-medium min-w-[140px] cursor-pointer"
+                style={{
+                  colorScheme: 'light',
+                  appearance: 'none',
+                  background: 'white',
+                  padding: '8px 16px',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '9999px',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
+              />
+            </div>
           )}
         </div>
 
@@ -573,7 +653,7 @@ export const EventsPage = () => {
             <div>
               <h3 className="font-monument mb-3 text-sm">Sports</h3>
               <div className="flex flex-wrap gap-2 mb-4">
-                {SPORTS_FILTERS.map((sport) => (
+                {getAvailableSports().map((sport) => (
                   <div key={sport.key} className="relative">
                     {sport.hasDropdown ? (
                       <div className="relative">
