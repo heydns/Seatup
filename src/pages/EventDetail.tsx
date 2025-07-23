@@ -373,7 +373,13 @@ export const EventDetail = () => {
                   </h1>
                   {event.Organization && (
                     <p className="text-lg text-muted-foreground">
-                      Organisé par {event.Organization}
+                      Organisé par{" "}
+                      <Link 
+                        to={`/organizer/${encodeURIComponent(event.Organization)}`}
+                        className="text-primary hover:underline cursor-pointer"
+                      >
+                        {event.Organization}
+                      </Link>
                     </p>
                   )}
                 </div>

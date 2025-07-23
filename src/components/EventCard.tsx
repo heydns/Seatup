@@ -107,8 +107,10 @@ export const EventCard = ({ event }: EventCardProps) => {
         
         {/* Organization */}
         {event.Organization && (
-          <p className="text-sm text-muted-foreground">
-            {event.Organization}
+          <p className="text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer">
+            <Link to={`/organizer/${encodeURIComponent(event.Organization)}`}>
+              {event.Organization}
+            </Link>
           </p>
         )}
         

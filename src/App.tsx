@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthPage } from "@/components/AuthPage";
 import { EventsPage } from "@/components/EventsPage";
 import { EventDetail } from "@/pages/EventDetail";
+import { OrganizerDetail } from "@/pages/OrganizerDetail";
 import Index from "./pages/Index";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/event/:id" element={<EventDetail />} />
+          <Route path="/organizer/:name" element={<OrganizerDetail />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="*" element={<NotFound />} />
