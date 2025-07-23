@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Search, Filter, MapPin, Calendar, Euro, Users, Heart, Star, Zap, ChevronDown } from "lucide-react";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { supabase } from "@/integrations/supabase/client";
 import { EventCard } from "./EventCard";
 import { Header } from "./Header";
@@ -123,7 +127,7 @@ export const EventsPage = () => {
   const [selectedCompetition, setSelectedCompetition] = useState("Toutes");
   const [selectedVenue, setSelectedVenue] = useState("Tous");
   const [selectedDate, setSelectedDate] = useState("Tous");
-  const [customDate, setCustomDate] = useState("");
+  const [customDate, setCustomDate] = useState<Date>();
   const [showOtherSports, setShowOtherSports] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
@@ -591,43 +595,52 @@ export const EventsPage = () => {
         {/* Date Filters - Default Display */}
         <div className="flex flex-wrap gap-2 mb-6">
           {DATE_FILTERS.map((dateFilter) => (
-            <button
-              key={dateFilter.key}
-              onClick={() => {
-                setSelectedDate(dateFilter.key);
-                if (dateFilter.key !== "custom") setCustomDate("");
-              }}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 ${
-                selectedDate === dateFilter.key
-                  ? 'bg-primary text-white border-primary'
-                  : 'bg-white border-border hover:border-primary/50 hover:bg-primary/5'
-              }`}
-            >
-              <Calendar className="h-4 w-4" />
-              <span className="font-medium text-sm">{dateFilter.name}</span>
-            </button>
-          ))}
-          {selectedDate === "custom" && (
-            <div className="relative">
-              <input
-                type="date"
-                value={customDate}
-                onChange={(e) => setCustomDate(e.target.value)}
-                onFocus={() => setShowDatePicker(true)}
-                className="px-4 py-2 border border-border rounded-full bg-white text-sm font-medium min-w-[140px] cursor-pointer"
-                style={{
-                  colorScheme: 'light',
-                  appearance: 'none',
-                  background: 'white',
-                  padding: '8px 16px',
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: '9999px',
-                  fontSize: '14px',
-                  fontWeight: '500'
-                }}
-              />
+            <div key={dateFilter.key}>
+              {dateFilter.key === "custom" ? (
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button
+                      className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 ${
+                        selectedDate === dateFilter.key
+                          ? 'bg-primary text-white border-primary'
+                          : 'bg-white border-border hover:border-primary/50 hover:bg-primary/5'
+                      }`}
+                      onClick={() => setSelectedDate(dateFilter.key)}
+                    >
+                      <Calendar className="h-4 w-4 cursor-pointer" />
+                      <span className="font-medium text-sm">
+                        {customDate ? format(customDate, "dd/MM/yyyy", { locale: fr }) : dateFilter.name}
+                      </span>
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <CalendarComponent
+                      mode="single"
+                      selected={customDate}
+                      onSelect={(date) => {
+                        setCustomDate(date);
+                        setSelectedDate("custom");
+                      }}
+                      initialFocus
+                      className="p-3 pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
+              ) : (
+                <button
+                  onClick={() => setSelectedDate(dateFilter.key)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 ${
+                    selectedDate === dateFilter.key
+                      ? 'bg-primary text-white border-primary'
+                      : 'bg-white border-border hover:border-primary/50 hover:bg-primary/5'
+                  }`}
+                >
+                  <Calendar className="h-4 w-4" />
+                  <span className="font-medium text-sm">{dateFilter.name}</span>
+                </button>
+              )}
             </div>
-          )}
+          ))}
         </div>
 
         {/* Sort and Filters */}
@@ -765,7 +778,7 @@ export const EventsPage = () => {
                   setSelectedCompetition("Toutes");
                   setSelectedVenue("Tous");
                   setSelectedDate("Tous");
-                  setCustomDate("");
+                  setCustomDate(undefined);
                 }}
               >
                 Réinitialiser les filtres
