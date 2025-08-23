@@ -5,7 +5,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, Filter, MapPin, Users, Star, Building2 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { OrganizerCard } from "@/components/OrganizerCard";
-import { SportIcon } from "@/components/SportIcon";
 
 interface Organizer {
   name: string;
@@ -28,13 +27,13 @@ interface Organizer {
 
 const SPORT_FILTERS = [
   { name: "Tous", icon: "", key: "all" },
-  { name: "Football", icon: "football", key: "football" },
-  { name: "Basketball", icon: "basketball", key: "basketball" },
-  { name: "Tennis", icon: "tennis", key: "tennis" },
-  { name: "Rugby", icon: "rugby", key: "rugby" },
-  { name: "Handball", icon: "handball", key: "handball" },
-  { name: "Volleyball", icon: "volleyball", key: "volleyball" },
-  { name: "Course à pied", icon: "course", key: "course" },
+  { name: "Football", icon: "⚽", key: "football" },
+  { name: "Basketball", icon: "🏀", key: "basketball" },
+  { name: "Tennis", icon: "🎾", key: "tennis" },
+  { name: "Rugby", icon: "🏉", key: "rugby" },
+  { name: "Handball", icon: "🤾", key: "handball" },
+  { name: "Volleyball", icon: "🏐", key: "volleyball" },
+  { name: "Course à pied", icon: "🏃", key: "course" },
 ];
 
 const LOCATION_FILTERS = [
@@ -282,7 +281,7 @@ export const OrganizersPage = () => {
                   : 'bg-white border-border hover:border-primary/50 hover:bg-primary/5'
               }`}
             >
-              {sport.icon && <SportIcon sport={sport.icon} className="w-4 h-4" />}
+              {sport.icon && <span className="text-sm">{sport.icon}</span>}
               <span className="font-medium text-sm">{sport.name}</span>
             </button>
           ))}
