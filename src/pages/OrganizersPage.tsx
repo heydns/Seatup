@@ -70,7 +70,7 @@ const ORGANIZERS_DATA: Organizer[] = [
   {
     name: "Paris Saint-Germain",
     description: "Le Paris Saint-Germain Football Club est un club de football français fondé le 12 août 1970. Basé à Paris, le club évolue en Ligue 1.",
-    logo: "https://logos-world.net/wp-content/uploads/2020/06/PSG-Logo.png",
+    logo: "/lovable-uploads/7a7acfde-0c35-4b64-a3ee-20842182476b.png",
     website: "https://psg.fr",
     email: "contact@psg.fr",
     location: "Paris, France",
