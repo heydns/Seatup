@@ -61,8 +61,8 @@ export const OrganizerCard = ({ organizer }: OrganizerCardProps) => {
                 onClick={handleFollowClick}
                 className={`rounded-full p-2 transition-colors ${
                   isFollowing 
-                    ? 'text-red-500 hover:text-red-600' 
-                    : 'text-gray-400 hover:text-red-500'
+                    ? 'text-primary hover:text-primary/80' 
+                    : 'text-gray-400 hover:text-primary'
                 }`}
               >
                 <Heart className={`h-5 w-5 ${isFollowing ? 'fill-current' : ''} ${showConfetti ? 'animate-pulse' : ''}`} />
@@ -74,7 +74,7 @@ export const OrganizerCard = ({ organizer }: OrganizerCardProps) => {
                   {[...Array(8)].map((_, i) => (
                     <div
                       key={i}
-                      className="absolute top-1/2 left-1/2 w-1 h-1 bg-red-500 rounded-full animate-confetti"
+                      className="absolute top-1/2 left-1/2 w-1 h-1 bg-primary rounded-full animate-confetti"
                       style={{
                         '--angle': `${(i * 45)}deg`,
                         animationDelay: `${i * 50}ms`
