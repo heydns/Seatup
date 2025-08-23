@@ -96,7 +96,7 @@ export const OrganizerDetail = () => {
       "Rolex Paris Masters": {
         name: "Rolex Paris Masters",
         description: "Le Rolex Paris Masters est un tournoi de tennis masculin professionnel qui se déroule chaque année à Paris. Faisant partie de la série ATP Masters 1000, c'est l'un des neuf tournois les plus prestigieux du circuit masculin après les tournois du Grand Chelem.",
-        logo: "/lovable-uploads/7809806e-e8e7-44e8-8cb6-4e9157c04ac5.png", 
+        logo: "/lovable-uploads/b379a728-71d8-4301-8d46-73d92d4aa0ba.png", 
         website: "https://rolexparismasters.com",
         email: "info@rolexparismasters.com",
         location: "Nanterre, France",

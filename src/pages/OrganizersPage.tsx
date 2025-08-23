@@ -102,7 +102,7 @@ const ORGANIZERS_DATA: Organizer[] = [
   {
     name: "Rolex Paris Masters",
     description: "Le Rolex Paris Masters est un tournoi de tennis masculin professionnel qui se déroule chaque année à Paris.",
-    logo: "https://seeklogo.com/images/R/rolex-logo-FC562C4240-seeklogo.com.png",
+    logo: "/lovable-uploads/b379a728-71d8-4301-8d46-73d92d4aa0ba.png",
     website: "https://rolexparismasters.com",
     email: "info@rolexparismasters.com",
     location: "Nanterre, France",
