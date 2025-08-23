@@ -251,158 +251,95 @@ export const OrganizersPage = () => {
               </div>
             </div>
 
-            {/* Search Bar with Advanced Filters */}
-            <div className="bg-white rounded-xl border-2 focus-within:border-primary shadow-sm mb-6">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-                <Input
-                  placeholder="Rechercher un organisateur, sport, lieu..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 pr-4 h-14 text-lg border-0 rounded-xl bg-transparent focus-visible:ring-0"
-                />
-              </div>
-              
-              {/* Advanced Filters Row */}
-              <div className="border-t px-4 py-3">
-                <div className="flex flex-wrap gap-3 items-center">
-                  <span className="text-sm font-medium text-muted-foreground">Filtres:</span>
-                  
-                  {/* Type Filter */}
-                  <Select value={selectedType} onValueChange={setSelectedType}>
-                    <SelectTrigger className="w-auto h-8 px-3 text-sm border-0 bg-gray-100 hover:bg-gray-200 rounded-full">
-                      <SelectValue placeholder="Type" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white border shadow-lg z-50">
-                      {TYPE_FILTERS.map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+        {/* Search Bar */}
+        <div className="relative mb-6">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <Input
+            placeholder="Rechercher un organisateur, sport, lieu..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input pl-10 h-12 text-lg"
+          />
+        </div>
 
-                  {/* Location Filter */}
-                  <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-                    <SelectTrigger className="w-auto h-8 px-3 text-sm border-0 bg-gray-100 hover:bg-gray-200 rounded-full">
-                      <SelectValue placeholder="Ville" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white border shadow-lg z-50">
-                      {LOCATION_FILTERS.map((location) => (
-                        <SelectItem key={location} value={location}>
-                          {location}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+        {/* Sports Filters - Default Display */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          {SPORT_FILTERS.map((sport) => (
+            <button
+              key={sport.key}
+              onClick={() => setSelectedSport(sport.name)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 ${
+                selectedSport === sport.name
+                  ? 'bg-primary text-white border-primary'
+                  : 'bg-white border-border hover:border-primary/50 hover:bg-primary/5'
+              }`}
+            >
+              {sport.icon && <span className="text-sm">{sport.icon}</span>}
+              <span className="font-medium text-sm">{sport.name}</span>
+            </button>
+          ))}
+        </div>
 
-                  {/* Sort Filter */}
-                  <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-                    <SelectTrigger className="w-auto h-8 px-3 text-sm border-0 bg-gray-100 hover:bg-gray-200 rounded-full">
-                      <SelectValue placeholder="Trier" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white border shadow-lg z-50">
-                      <SelectItem value="name">Nom</SelectItem>
-                      <SelectItem value="events">Événements</SelectItem>
-                      <SelectItem value="followers">Abonnés</SelectItem>
-                    </SelectContent>
-                  </Select>
+        {/* Sort and Filters */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="flex gap-2">
+            <Button
+              variant="sport"
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              Filtres avancés {showFilters ? "▲" : "▼"}
+            </Button>
+          </div>
+          
+          <div className="flex gap-2 ml-auto">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as "name" | "events" | "followers")}
+              className="px-3 py-2 border border-border rounded-md bg-white text-sm font-medium"
+            >
+              <option value="name">Trier par nom</option>
+              <option value="events">Trier par événements</option>
+              <option value="followers">Trier par abonnés</option>
+            </select>
+          </div>
+        </div>
 
-                  {/* Clear Filters Button */}
-                  {(selectedType !== "Tous" || selectedLocation !== "Toutes" || sortBy !== "name") && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={clearFilters}
-                      className="h-8 px-3 text-sm text-muted-foreground hover:text-foreground"
-                    >
-                      Effacer
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Sports Filter Pills */}
-            <div className="mb-6">
+        {showFilters && (
+          <div className="space-y-4 p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-border/50 mb-6">
+            {/* Type Filter */}
+            <div>
+              <h3 className="font-monument mb-3 text-sm">Type d'organisateur</h3>
               <div className="flex flex-wrap gap-2">
-                {SPORT_FILTERS.map((sport) => (
-                  <Button
-                    key={sport.key}
-                    variant={selectedSport === sport.name ? "hero" : "sport"}
-                    size="sm"
-                    onClick={() => setSelectedSport(sport.name)}
-                    className="gap-2 h-10"
+                {TYPE_FILTERS.map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setSelectedType(type)}
+                    className={`filter-chip ${selectedType === type ? 'active' : ''}`}
                   >
-                    <span className="text-base">{sport.icon}</span>
-                    {sport.name}
-                  </Button>
+                    {type}
+                  </button>
                 ))}
               </div>
             </div>
 
-            {/* Filters */}
-            {showFilters && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
-                <div className="grid md:grid-cols-4 gap-4">
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground mb-2 block">Lieu</label>
-                    <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-                      <SelectTrigger className="h-12 bg-white">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white border shadow-lg z-50">
-                        {LOCATION_FILTERS.map((location) => (
-                          <SelectItem key={location} value={location}>
-                            {location}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground mb-2 block">Type</label>
-                    <Select value={selectedType} onValueChange={setSelectedType}>
-                      <SelectTrigger className="h-12 bg-white">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white border shadow-lg z-50">
-                        {TYPE_FILTERS.map((type) => (
-                          <SelectItem key={type} value={type}>
-                            {type}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground mb-2 block">Trier par</label>
-                    <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-                      <SelectTrigger className="h-12 bg-white">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white border shadow-lg z-50">
-                        <SelectItem value="name">Nom</SelectItem>
-                        <SelectItem value="events">Nombre d'événements</SelectItem>
-                        <SelectItem value="followers">Abonnés</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="flex items-end">
-                    <Button 
-                      variant="sport" 
-                      onClick={clearFilters}
-                      className="h-12 w-full"
-                    >
-                      Effacer les filtres
-                    </Button>
-                  </div>
-                </div>
+            {/* Location Filter */}
+            <div>
+              <h3 className="font-monument mb-3 text-sm">Lieu</h3>
+              <div className="flex flex-wrap gap-2">
+                {LOCATION_FILTERS.map((location) => (
+                  <button
+                    key={location}
+                    onClick={() => setSelectedLocation(location)}
+                    className={`filter-chip ${selectedLocation === location ? 'active' : ''}`}
+                  >
+                    {location}
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
+          </div>
+        )}
           </div>
 
           {/* Results Section */}
