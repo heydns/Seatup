@@ -32,6 +32,14 @@ export const Header = () => {
               Événements
             </Link>
             <Link 
+              to="/organizers" 
+              className={`font-medium transition-colors hover:text-primary ${
+                isActive('/organizers') ? 'text-primary' : 'text-foreground'
+              }`}
+            >
+              Organisateurs
+            </Link>
+            <Link 
               to="/contact" 
               className={`font-medium transition-colors hover:text-primary ${
                 isActive('/contact') ? 'text-primary' : 'text-foreground'
@@ -66,6 +74,15 @@ export const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Événements
+              </Link>
+              <Link 
+                to="/organizers" 
+                className={`font-medium transition-colors hover:text-primary ${
+                  isActive('/organizers') ? 'text-primary' : 'text-foreground'
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Organisateurs
               </Link>
               <Link 
                 to="/contact" 
