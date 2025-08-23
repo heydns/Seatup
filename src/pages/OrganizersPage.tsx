@@ -15,23 +15,24 @@ interface Organizer {
   phone?: string;
   location?: string;
   founded?: string;
+  type: string;
   sports?: string[];
+  instagram?: string;
   stats?: {
     eventsCount: number;
     followersCount: string;
-    rating: number;
   };
 }
 
 const SPORT_FILTERS = [
-  { name: "Tous", key: "all" },
-  { name: "Football", key: "football" },
-  { name: "Basketball", key: "basketball" },
-  { name: "Tennis", key: "tennis" },
-  { name: "Rugby", key: "rugby" },
-  { name: "Handball", key: "handball" },
-  { name: "Volleyball", key: "volleyball" },
-  { name: "Course à pied", key: "course" },
+  { name: "Tous", icon: "", key: "all" },
+  { name: "Football", icon: "⚽", key: "football" },
+  { name: "Basketball", icon: "🏀", key: "basketball" },
+  { name: "Tennis", icon: "🎾", key: "tennis" },
+  { name: "Rugby", icon: "🏉", key: "rugby" },
+  { name: "Handball", icon: "🤾", key: "handball" },
+  { name: "Volleyball", icon: "🏐", key: "volleyball" },
+  { name: "Course à pied", icon: "🏃", key: "course" },
 ];
 
 const LOCATION_FILTERS = [
@@ -41,95 +42,109 @@ const LOCATION_FILTERS = [
   "Levallois-Perret"
 ];
 
+const TYPE_FILTERS = [
+  "Tous",
+  "Club",
+  "Marque",
+  "Fédération",
+  "Agence événementielle"
+];
+
 const ORGANIZERS_DATA: Organizer[] = [
   {
     name: "Paris Basketball",
     description: "Paris Basketball est un club de basketball professionnel français basé à Paris et évoluant en Jeep Élite, l'élite du basketball français.",
-    logo: "/lovable-uploads/2837c0cc-2ffb-4656-92c6-96c4f4dfd60f.png",
+    logo: "https://logos-world.net/wp-content/uploads/2021/05/Paris-Basketball-Logo.png",
     website: "https://parisbasketball.com",
     email: "contact@parisbasketball.com",
     location: "Paris, France",
     founded: "2018",
+    type: "Club",
     sports: ["Basketball"],
+    instagram: "https://instagram.com/parisbasketball",
     stats: {
       eventsCount: 25,
-      followersCount: "15K",
-      rating: 4.8
+      followersCount: "15K"
     }
   },
   {
     name: "Paris Saint-Germain",
     description: "Le Paris Saint-Germain Football Club est un club de football français fondé le 12 août 1970. Basé à Paris, le club évolue en Ligue 1.",
-    logo: "/lovable-uploads/147eb088-277c-4032-b6b4-e01dfed524d3.png",
+    logo: "https://logos-world.net/wp-content/uploads/2020/06/PSG-Logo.png",
     website: "https://psg.fr",
     email: "contact@psg.fr",
     location: "Paris, France",
     founded: "1970",
+    type: "Club",
     sports: ["Football"],
+    instagram: "https://instagram.com/psg",
     stats: {
       eventsCount: 45,
-      followersCount: "2.1M",
-      rating: 4.9
+      followersCount: "2.1M"
     }
   },
   {
     name: "PSG Handball",
     description: "Le Paris Saint-Germain Handball est la section handball du Paris Saint-Germain. Fondé en 1992, le club évolue en StarLigue.",
-    logo: "/lovable-uploads/585f742a-f198-48d5-aaff-54c375f30f55.png",
+    logo: "https://www.psg.fr/media/199952/psg-handball-logo.png",
     website: "https://psghandball.com",
     email: "contact@psghandball.com",
     location: "Paris, France",
     founded: "1992",
+    type: "Club",
     sports: ["Handball"],
+    instagram: "https://instagram.com/psghand",
     stats: {
       eventsCount: 30,
-      followersCount: "125K",
-      rating: 4.7
+      followersCount: "125K"
     }
   },
   {
     name: "Rolex Paris Masters",
     description: "Le Rolex Paris Masters est un tournoi de tennis masculin professionnel qui se déroule chaque année à Paris.",
-    logo: "/lovable-uploads/7809806e-e8e7-44e8-8cb6-4e9157c04ac5.png",
+    logo: "https://seeklogo.com/images/R/rolex-logo-FC562C4240-seeklogo.com.png",
     website: "https://rolexparismasters.com",
     email: "info@rolexparismasters.com",
     location: "Nanterre, France",
     founded: "1968",
+    type: "Marque",
     sports: ["Tennis"],
+    instagram: "https://instagram.com/rolexparismasters",
     stats: {
       eventsCount: 12,
-      followersCount: "89K",
-      rating: 4.8
+      followersCount: "89K"
     }
   },
   {
     name: "Hoka Running",
     description: "Hoka est une marque de chaussures de course française fondée en 2009. Elle organise plusieurs événements de course à pied en France.",
-    logo: "/lovable-uploads/56eb70ed-a5f5-4845-b859-1354756c82ff.png",
+    logo: "https://seeklogo.com/images/H/hoka-one-one-logo-9F0F3757A1-seeklogo.com.png",
     website: "https://hokaparis.com",
     email: "events@hoka.com",
     location: "Paris, France",
     founded: "2009",
+    type: "Marque",
     sports: ["Course à pied"],
+    instagram: "https://instagram.com/hokaoneone",
     stats: {
       eventsCount: 8,
-      followersCount: "45K",
-      rating: 4.6
+      followersCount: "45K"
     }
   },
   {
     name: "Les Mariannes 92",
     description: "Les Mariannes 92 est un club de volleyball féminin français basé à Levallois-Perret. Évoluant en Ligue A Féminine.",
-    logo: "/lovable-uploads/498f232f-981f-4bb2-ab0f-d9d08551a8fb.png",
+    logo: "https://www.lesmariannes92.com/images/logo-mariannes.png",
     website: "https://lesmariannes92.com",
     email: "contact@lesmariannes92.com",
     location: "Levallois-Perret, France",
     founded: "1986",
+    type: "Club",
     sports: ["Volleyball"],
+    instagram: "https://instagram.com/lesmariannes92",
     stats: {
       eventsCount: 18,
-      followersCount: "12K",
-      rating: 4.5
+      followersCount: "12K"
     }
   }
 ];
@@ -140,13 +155,14 @@ export const OrganizersPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSport, setSelectedSport] = useState("Tous");
   const [selectedLocation, setSelectedLocation] = useState("Toutes");
-  const [sortBy, setSortBy] = useState<"name" | "events" | "rating" | "followers">("name");
+  const [selectedType, setSelectedType] = useState("Tous");
+  const [sortBy, setSortBy] = useState<"name" | "events" | "followers">("name");
   const [showFilters, setShowFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     filterOrganizers();
-  }, [organizers, searchQuery, selectedSport, selectedLocation, sortBy]);
+  }, [organizers, searchQuery, selectedSport, selectedLocation, selectedType, sortBy]);
 
   const filterOrganizers = () => {
     let filtered = organizers;
@@ -175,13 +191,18 @@ export const OrganizersPage = () => {
       );
     }
 
+    // Type filter
+    if (selectedType !== "Tous") {
+      filtered = filtered.filter(organizer =>
+        organizer.type === selectedType
+      );
+    }
+
     // Sorting
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "events":
           return (b.stats?.eventsCount || 0) - (a.stats?.eventsCount || 0);
-        case "rating":
-          return (b.stats?.rating || 0) - (a.stats?.rating || 0);
         case "followers":
           const aFollowers = parseFloat(a.stats?.followersCount?.replace(/[KM]/, '') || '0');
           const bFollowers = parseFloat(b.stats?.followersCount?.replace(/[KM]/, '') || '0');
@@ -198,6 +219,7 @@ export const OrganizersPage = () => {
     setSearchQuery("");
     setSelectedSport("Tous");
     setSelectedLocation("Toutes");
+    setSelectedType("Tous");
     setSortBy("name");
   };
 
@@ -230,14 +252,32 @@ export const OrganizersPage = () => {
             </div>
 
             {/* Search Bar */}
-            <div className="relative mb-4">
+            <div className="relative mb-6">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
               <Input
                 placeholder="Rechercher un organisateur, sport, lieu..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-14 text-lg rounded-xl border-2 focus:border-primary"
+                className="pl-12 h-14 text-lg rounded-xl border-2 focus:border-primary bg-white shadow-sm"
               />
+            </div>
+
+            {/* Sports Filter Pills */}
+            <div className="mb-6">
+              <div className="flex flex-wrap gap-2">
+                {SPORT_FILTERS.map((sport) => (
+                  <Button
+                    key={sport.key}
+                    variant={selectedSport === sport.name ? "hero" : "sport"}
+                    size="sm"
+                    onClick={() => setSelectedSport(sport.name)}
+                    className="gap-2 h-10"
+                  >
+                    <span className="text-base">{sport.icon}</span>
+                    {sport.name}
+                  </Button>
+                ))}
+              </div>
             </div>
 
             {/* Filters */}
@@ -245,28 +285,12 @@ export const OrganizersPage = () => {
               <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
                 <div className="grid md:grid-cols-4 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground mb-2 block">Sport</label>
-                    <Select value={selectedSport} onValueChange={setSelectedSport}>
-                      <SelectTrigger className="h-12">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {SPORT_FILTERS.map((sport) => (
-                          <SelectItem key={sport.key} value={sport.name}>
-                            {sport.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
                     <label className="text-sm font-medium text-muted-foreground mb-2 block">Lieu</label>
                     <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-                      <SelectTrigger className="h-12">
+                      <SelectTrigger className="h-12 bg-white">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-white border shadow-lg z-50">
                         {LOCATION_FILTERS.map((location) => (
                           <SelectItem key={location} value={location}>
                             {location}
@@ -277,15 +301,30 @@ export const OrganizersPage = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground mb-2 block">Trier par</label>
-                    <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-                      <SelectTrigger className="h-12">
+                    <label className="text-sm font-medium text-muted-foreground mb-2 block">Type</label>
+                    <Select value={selectedType} onValueChange={setSelectedType}>
+                      <SelectTrigger className="h-12 bg-white">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-white border shadow-lg z-50">
+                        {TYPE_FILTERS.map((type) => (
+                          <SelectItem key={type} value={type}>
+                            {type}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground mb-2 block">Trier par</label>
+                    <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+                      <SelectTrigger className="h-12 bg-white">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border shadow-lg z-50">
                         <SelectItem value="name">Nom</SelectItem>
                         <SelectItem value="events">Nombre d'événements</SelectItem>
-                        <SelectItem value="rating">Note</SelectItem>
                         <SelectItem value="followers">Abonnés</SelectItem>
                       </SelectContent>
                     </Select>

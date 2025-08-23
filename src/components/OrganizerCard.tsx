@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin, Globe, Calendar, Users, Star, Heart } from "lucide-react";
+import { MapPin, Globe, Calendar, Users, Instagram, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
@@ -12,11 +12,12 @@ interface OrganizerCardProps {
     website?: string;
     location?: string;
     founded?: string;
+    type: string;
     sports?: string[];
+    instagram?: string;
     stats?: {
       eventsCount: number;
       followersCount: string;
-      rating: number;
     };
   };
 }
@@ -74,10 +75,18 @@ export const OrganizerCard = ({ organizer }: OrganizerCardProps) => {
                   <Users className="h-3 w-3" />
                   {organizer.stats.followersCount}
                 </span>
-                <span className="flex items-center gap-1">
-                  <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                  {organizer.stats.rating}
-                </span>
+                {organizer.instagram && (
+                  <a
+                    href={organizer.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 hover:text-primary transition-colors"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Instagram className="h-3 w-3" />
+                    {organizer.stats.followersCount}
+                  </a>
+                )}
               </div>
             )}
 
@@ -111,25 +120,29 @@ export const OrganizerCard = ({ organizer }: OrganizerCardProps) => {
           )}
         </div>
 
-        {/* Sports Tags */}
-        {organizer.sports && organizer.sports.length > 0 && (
-          <div className="px-6 pb-6">
-            <div className="flex flex-wrap gap-2">
-              {organizer.sports.map((sport) => (
-                <span 
-                  key={sport} 
-                  className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full font-medium"
-                >
-                  {sport}
-                </span>
-              ))}
-            </div>
+        {/* Sports & Type Tags */}
+        <div className="px-6 pb-6">
+          <div className="flex flex-wrap gap-2">
+            <span className="bg-accent/10 text-accent-foreground text-xs px-3 py-1 rounded-full font-semibold">
+              {organizer.type}
+            </span>
+            {organizer.sports && organizer.sports.map((sport) => (
+              <span 
+                key={sport} 
+                className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full font-medium"
+              >
+                {sport}
+              </span>
+            ))}
           </div>
-        )}
+        </div>
 
         {/* Action Buttons */}
         <div className="px-6 pb-6">
           <div className="flex gap-2">
+            <Button variant="sport" size="sm" className="h-9">
+              Voir profil
+            </Button>
             <Button 
               variant="hero" 
               size="sm" 
@@ -137,9 +150,6 @@ export const OrganizerCard = ({ organizer }: OrganizerCardProps) => {
               onClick={handleFollowClick}
             >
               {isFollowing ? 'Abonné' : 'S\'abonner'}
-            </Button>
-            <Button variant="sport" size="sm" className="h-9">
-              Voir profil
             </Button>
           </div>
         </div>
