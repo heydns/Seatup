@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin, Globe, Calendar, Users, Instagram, Heart } from "lucide-react";
+import { MapPin, Globe, Calendar, Instagram, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
@@ -96,10 +96,6 @@ export const OrganizerCard = ({ organizer }: OrganizerCardProps) => {
                 <span className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
                   {organizer.stats.eventsCount}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Users className="h-3 w-3" />
-                  {organizer.stats.followersCount}
                 </span>
                 {organizer.instagram && (
                   <a
