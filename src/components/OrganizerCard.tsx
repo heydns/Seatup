@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin, Globe, Calendar, Instagram, Heart } from "lucide-react";
+import { MapPin, Globe, Calendar, Instagram, Heart, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
@@ -15,6 +15,7 @@ interface OrganizerCardProps {
     type: string;
     sports?: string[];
     instagram?: string;
+    rating?: number;
     stats?: {
       eventsCount: number;
       followersCount: string;
@@ -90,6 +91,26 @@ export const OrganizerCard = ({ organizer }: OrganizerCardProps) => {
             <h3 className="font-monument text-lg mb-2 group-hover:text-primary transition-colors line-clamp-1">
               {organizer.name}
             </h3>
+            
+            {organizer.rating && (
+              <div className="flex items-center gap-1 mb-3">
+                <div className="flex items-center gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star 
+                      key={i} 
+                      className={`h-4 w-4 ${
+                        i < Math.floor(organizer.rating!) 
+                          ? 'text-amber-400 fill-current' 
+                          : 'text-gray-300'
+                      }`} 
+                    />
+                  ))}
+                </div>
+                <span className="text-sm text-muted-foreground font-medium">
+                  {organizer.rating.toFixed(1)}
+                </span>
+              </div>
+            )}
             
             {organizer.stats && (
               <div className="flex gap-4 text-sm text-muted-foreground mb-3">

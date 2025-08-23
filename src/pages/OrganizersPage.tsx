@@ -18,6 +18,7 @@ interface Organizer {
   type: string;
   sports?: string[];
   instagram?: string;
+  rating?: number;
   stats?: {
     eventsCount: number;
     followersCount: string;
@@ -62,6 +63,7 @@ const ORGANIZERS_DATA: Organizer[] = [
     type: "Club",
     sports: ["Basketball"],
     instagram: "https://instagram.com/parisbasketball",
+    rating: 4.3,
     stats: {
       eventsCount: 25,
       followersCount: "15K"
@@ -78,6 +80,7 @@ const ORGANIZERS_DATA: Organizer[] = [
     type: "Club",
     sports: ["Football"],
     instagram: "https://instagram.com/psg",
+    rating: 4.8,
     stats: {
       eventsCount: 45,
       followersCount: "2.1M"
@@ -94,6 +97,7 @@ const ORGANIZERS_DATA: Organizer[] = [
     type: "Club",
     sports: ["Handball"],
     instagram: "https://instagram.com/psghand",
+    rating: 4.2,
     stats: {
       eventsCount: 30,
       followersCount: "125K"
@@ -110,6 +114,7 @@ const ORGANIZERS_DATA: Organizer[] = [
     type: "Marque",
     sports: ["Tennis"],
     instagram: "https://instagram.com/rolexparismasters",
+    rating: 4.6,
     stats: {
       eventsCount: 12,
       followersCount: "89K"
@@ -126,6 +131,7 @@ const ORGANIZERS_DATA: Organizer[] = [
     type: "Marque",
     sports: ["Course à pied"],
     instagram: "https://instagram.com/hokaoneone",
+    rating: 4.1,
     stats: {
       eventsCount: 8,
       followersCount: "45K"
@@ -142,6 +148,7 @@ const ORGANIZERS_DATA: Organizer[] = [
     type: "Club",
     sports: ["Volleyball"],
     instagram: "https://instagram.com/lesmariannes92",
+    rating: 3.9,
     stats: {
       eventsCount: 18,
       followersCount: "12K"
