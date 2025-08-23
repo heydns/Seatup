@@ -134,7 +134,7 @@ const ORGANIZERS_DATA: Organizer[] = [
   {
     name: "Les Mariannes 92",
     description: "Les Mariannes 92 est un club de volleyball féminin français basé à Levallois-Perret. Évoluant en Ligue A Féminine.",
-    logo: "https://www.lesmariannes92.com/images/logo-mariannes.png",
+    logo: "/lovable-uploads/778a9033-e16f-49d0-8f4e-7ae11c48b1bb.png",
     website: "https://lesmariannes92.com",
     email: "contact@lesmariannes92.com",
     location: "Levallois-Perret, France",

@@ -124,7 +124,7 @@ export const OrganizerDetail = () => {
       "Les Mariannes 92": {
         name: "Les Mariannes 92",
         description: "Les Mariannes 92 est un club de volleyball féminin français basé à Levallois-Perret. Évoluant en Ligue A Féminine, l'élite du volleyball français, le club s'illustre régulièrement en championnat et en compétitions européennes.",
-        logo: "/lovable-uploads/498f232f-981f-4bb2-ab0f-d9d08551a8fb.png",
+        logo: "/lovable-uploads/778a9033-e16f-49d0-8f4e-7ae11c48b1bb.png",
         website: "https://lesmariannes92.com",
         email: "contact@lesmariannes92.com", 
         location: "Levallois-Perret, France",
