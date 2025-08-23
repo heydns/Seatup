@@ -82,7 +82,7 @@ export const OrganizerDetail = () => {
       "PSG Handball": {
         name: "PSG Handball",
         description: "Le Paris Saint-Germain Handball est la section handball du Paris Saint-Germain. Fondé en 1992, le club évolue en StarLigue, l'élite du handball français, et est l'un des clubs les plus titrés d'Europe avec de nombreux titres nationaux et européens.",
-        logo: "/lovable-uploads/585f742a-f198-48d5-aaff-54c375f30f55.png",
+        logo: "/lovable-uploads/c874bbe9-19a8-4e77-b649-aa0455bdc2c5.png",
         website: "https://psghandball.com",
         email: "contact@psghandball.com",
         location: "Paris, France",

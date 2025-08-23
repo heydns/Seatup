@@ -86,7 +86,7 @@ const ORGANIZERS_DATA: Organizer[] = [
   {
     name: "PSG Handball",
     description: "Le Paris Saint-Germain Handball est la section handball du Paris Saint-Germain. Fondé en 1992, le club évolue en StarLigue.",
-    logo: "https://www.psg.fr/media/199952/psg-handball-logo.png",
+    logo: "/lovable-uploads/c874bbe9-19a8-4e77-b649-aa0455bdc2c5.png",
     website: "https://psghandball.com",
     email: "contact@psghandball.com",
     location: "Paris, France",
