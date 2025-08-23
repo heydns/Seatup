@@ -101,6 +101,16 @@ export default {
 				'slide-right': {
 					'0%': { opacity: '0', transform: 'translateX(-20px)' },
 					'100%': { opacity: '1', transform: 'translateX(0)' }
+				},
+				'confetti': {
+					'0%': { 
+						opacity: '1',
+						transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(0px) scale(1)'
+					},
+					'100%': { 
+						opacity: '0',
+						transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(20px) scale(0.5)'
+					}
 				}
 			},
 			animation: {
@@ -109,7 +119,8 @@ export default {
 				'fade-in': 'fade-in 0.6s ease-out',
 				'fade-up': 'fade-up 0.6s ease-out',
 				'scale-in': 'scale-in 0.4s ease-out',
-				'slide-right': 'slide-right 0.5s ease-out'
+				'slide-right': 'slide-right 0.5s ease-out',
+				'confetti': 'confetti 0.6s ease-out forwards'
 			}
 		}
 	},

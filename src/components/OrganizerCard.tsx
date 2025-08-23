@@ -24,10 +24,18 @@ interface OrganizerCardProps {
 
 export const OrganizerCard = ({ organizer }: OrganizerCardProps) => {
   const [isFollowing, setIsFollowing] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const handleFollowClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    const wasFollowing = isFollowing;
     setIsFollowing(!isFollowing);
+    
+    // Trigger confetti animation when following (not unfollowing)
+    if (!wasFollowing) {
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 600);
+    }
   };
 
   return (
@@ -46,18 +54,36 @@ export const OrganizerCard = ({ organizer }: OrganizerCardProps) => {
               </div>
             </div>
             
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleFollowClick}
-              className={`rounded-full p-2 transition-colors ${
-                isFollowing 
-                  ? 'text-red-500 hover:text-red-600' 
-                  : 'text-gray-400 hover:text-red-500'
-              }`}
-            >
-              <Heart className={`h-5 w-5 ${isFollowing ? 'fill-current' : ''}`} />
-            </Button>
+            <div className="relative">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleFollowClick}
+                className={`rounded-full p-2 transition-colors ${
+                  isFollowing 
+                    ? 'text-red-500 hover:text-red-600' 
+                    : 'text-gray-400 hover:text-red-500'
+                }`}
+              >
+                <Heart className={`h-5 w-5 ${isFollowing ? 'fill-current' : ''} ${showConfetti ? 'animate-pulse' : ''}`} />
+              </Button>
+              
+              {/* Confetti Animation */}
+              {showConfetti && (
+                <div className="absolute inset-0 pointer-events-none">
+                  {[...Array(8)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute top-1/2 left-1/2 w-1 h-1 bg-red-500 rounded-full animate-confetti"
+                      style={{
+                        '--angle': `${(i * 45)}deg`,
+                        animationDelay: `${i * 50}ms`
+                      } as React.CSSProperties}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           <div>
