@@ -68,7 +68,7 @@ export const OrganizerDetail = () => {
       "Paris Saint-Germain": {
         name: "Paris Saint-Germain",
         description: "Le Paris Saint-Germain Football Club, couramment appelé Paris Saint-Germain ou PSG, est un club de football français fondé le 12 août 1970. Basé à Paris et Saint-Germain-en-Laye, le club évolue en Ligue 1 et est l'un des clubs les plus titrés de France.",
-        logo: "/lovable-uploads/147eb088-277c-4032-b6b4-e01dfed524d3.png",
+        logo: "/lovable-uploads/7a7acfde-0c35-4b64-a3ee-20842182476b.png",
         website: "https://psg.fr",
         email: "contact@psg.fr",
         location: "Paris, France", 
