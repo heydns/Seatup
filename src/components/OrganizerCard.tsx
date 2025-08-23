@@ -37,11 +37,11 @@ export const OrganizerCard = ({ organizer }: OrganizerCardProps) => {
         <div className="relative p-6 pb-4">
           <div className="flex items-start justify-between mb-4">
             <div className="flex-shrink-0">
-              <div className="w-16 h-16 rounded-xl overflow-hidden border border-gray-100">
+              <div className="w-16 h-16 rounded-xl overflow-hidden border border-gray-100 bg-white p-2">
                 <img 
                   src={organizer.logo} 
                   alt={organizer.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
             </div>

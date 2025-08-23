@@ -300,11 +300,11 @@ export const OrganizerDetail = () => {
             <div className="flex flex-col md:flex-row gap-8">
               {/* Logo */}
               <div className="flex-shrink-0">
-                <div className="w-32 h-32 rounded-xl overflow-hidden border-2 border-gray-100">
+                <div className="w-32 h-32 rounded-xl overflow-hidden border-2 border-gray-100 bg-white p-4">
                   <img 
                     src={organizer.logo} 
                     alt={organizer.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
               </div>
