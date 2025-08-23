@@ -251,15 +251,76 @@ export const OrganizersPage = () => {
               </div>
             </div>
 
-            {/* Search Bar */}
-            <div className="relative mb-6">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-              <Input
-                placeholder="Rechercher un organisateur, sport, lieu..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-14 text-lg rounded-xl border-2 focus:border-primary bg-white shadow-sm"
-              />
+            {/* Search Bar with Advanced Filters */}
+            <div className="bg-white rounded-xl border-2 focus-within:border-primary shadow-sm mb-6">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+                <Input
+                  placeholder="Rechercher un organisateur, sport, lieu..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 pr-4 h-14 text-lg border-0 rounded-xl bg-transparent focus-visible:ring-0"
+                />
+              </div>
+              
+              {/* Advanced Filters Row */}
+              <div className="border-t px-4 py-3">
+                <div className="flex flex-wrap gap-3 items-center">
+                  <span className="text-sm font-medium text-muted-foreground">Filtres:</span>
+                  
+                  {/* Type Filter */}
+                  <Select value={selectedType} onValueChange={setSelectedType}>
+                    <SelectTrigger className="w-auto h-8 px-3 text-sm border-0 bg-gray-100 hover:bg-gray-200 rounded-full">
+                      <SelectValue placeholder="Type" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border shadow-lg z-50">
+                      {TYPE_FILTERS.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  {/* Location Filter */}
+                  <Select value={selectedLocation} onValueChange={setSelectedLocation}>
+                    <SelectTrigger className="w-auto h-8 px-3 text-sm border-0 bg-gray-100 hover:bg-gray-200 rounded-full">
+                      <SelectValue placeholder="Ville" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border shadow-lg z-50">
+                      {LOCATION_FILTERS.map((location) => (
+                        <SelectItem key={location} value={location}>
+                          {location}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  {/* Sort Filter */}
+                  <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+                    <SelectTrigger className="w-auto h-8 px-3 text-sm border-0 bg-gray-100 hover:bg-gray-200 rounded-full">
+                      <SelectValue placeholder="Trier" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border shadow-lg z-50">
+                      <SelectItem value="name">Nom</SelectItem>
+                      <SelectItem value="events">Événements</SelectItem>
+                      <SelectItem value="followers">Abonnés</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  {/* Clear Filters Button */}
+                  {(selectedType !== "Tous" || selectedLocation !== "Toutes" || sortBy !== "name") && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={clearFilters}
+                      className="h-8 px-3 text-sm text-muted-foreground hover:text-foreground"
+                    >
+                      Effacer
+                    </Button>
+                  )}
+                </div>
+              </div>
             </div>
 
             {/* Sports Filter Pills */}
