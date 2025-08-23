@@ -110,7 +110,7 @@ export const OrganizerDetail = () => {
       "Hoka Running": {
         name: "Hoka Running",
         description: "Hoka est une marque de chaussures de course française fondée en 2009. Elle organise plusieurs événements de course à pied en France, notamment le semi-marathon de Paris, offrant aux coureurs une expérience unique au cœur de la capitale française.",
-        logo: "/lovable-uploads/56eb70ed-a5f5-4845-b859-1354756c82ff.png",
+        logo: "/lovable-uploads/88a89064-a2ce-45ba-b1d0-551b4be719d3.png",
         website: "https://hokaparis.com",
         email: "events@hoka.com",
         location: "Paris, France",

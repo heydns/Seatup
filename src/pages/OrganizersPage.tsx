@@ -118,7 +118,7 @@ const ORGANIZERS_DATA: Organizer[] = [
   {
     name: "Hoka Running",
     description: "Hoka est une marque de chaussures de course française fondée en 2009. Elle organise plusieurs événements de course à pied en France.",
-    logo: "https://seeklogo.com/images/H/hoka-one-one-logo-9F0F3757A1-seeklogo.com.png",
+    logo: "/lovable-uploads/88a89064-a2ce-45ba-b1d0-551b4be719d3.png",
     website: "https://hokaparis.com",
     email: "events@hoka.com",
     location: "Paris, France",
