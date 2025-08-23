@@ -54,7 +54,7 @@ export const OrganizerDetail = () => {
       "Paris Basketball": {
         name: "Paris Basketball",
         description: "Paris Basketball est un club de basketball professionnel français basé à Paris et évoluant en Jeep Élite, l'élite du basketball français. Fondé en 2018, le club s'est rapidement imposé comme une référence du basketball européen avec des ambitions internationales fortes.",
-        logo: "/lovable-uploads/2837c0cc-2ffb-4656-92c6-96c4f4dfd60f.png",
+        logo: "/lovable-uploads/b02cb022-8fbf-4d98-9493-bfd5d0a04866.png",
         website: "https://parisbasketball.com",
         email: "contact@parisbasketball.com",
         location: "Paris, France",

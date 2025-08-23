@@ -54,7 +54,7 @@ const ORGANIZERS_DATA: Organizer[] = [
   {
     name: "Paris Basketball",
     description: "Paris Basketball est un club de basketball professionnel français basé à Paris et évoluant en Jeep Élite, l'élite du basketball français.",
-    logo: "https://logos-world.net/wp-content/uploads/2021/05/Paris-Basketball-Logo.png",
+    logo: "/lovable-uploads/b02cb022-8fbf-4d98-9493-bfd5d0a04866.png",
     website: "https://parisbasketball.com",
     email: "contact@parisbasketball.com",
     location: "Paris, France",
