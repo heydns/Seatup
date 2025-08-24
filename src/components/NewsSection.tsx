@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ExternalLink, Clock, Rss } from 'lucide-react';
+import { ExternalLink, Rss } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -49,19 +49,17 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
-      const now = new Date();
-      const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-      
-      if (diffInHours < 1) return 'Il y a quelques minutes';
-      if (diffInHours < 24) return `Il y a ${diffInHours}h`;
-      if (diffInHours < 48) return 'Hier';
-      
       return date.toLocaleDateString('fr-FR', { 
-        day: 'numeric', 
-        month: 'short' 
+        day: '2-digit', 
+        month: '2-digit',
+        year: 'numeric'
       });
     } catch {
-      return 'Récemment';
+      return new Date().toLocaleDateString('fr-FR', { 
+        day: '2-digit', 
+        month: '2-digit',
+        year: 'numeric'
+      });
     }
   };
 
@@ -124,52 +122,48 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
             <p className="text-muted-foreground">Aucune actualité trouvée</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {news.map((item, index) => (
-              <div 
+              <article 
                 key={index} 
-                className="group pb-4 border-b border-gray-100 last:border-b-0 last:pb-0"
+                className="group pb-3 border-b border-gray-100 last:border-b-0 last:pb-0"
               >
-                <div className="flex items-start gap-2 mb-2">
-                  <Badge variant="secondary" className="text-xs">
+                <div className="flex items-center justify-between mb-2">
+                  <Badge variant="secondary" className="text-xs font-medium">
                     {item.source}
                   </Badge>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <Clock className="h-3 w-3" />
+                  <time className="text-xs text-muted-foreground font-medium">
                     {formatDate(item.pubDate)}
-                  </div>
+                  </time>
                 </div>
-                
-                <h4 className="font-medium text-sm leading-tight mb-2 group-hover:text-primary transition-colors">
-                  {item.title}
-                </h4>
-                
-                {item.description && (
-                  <p className="text-xs text-muted-foreground mb-2 leading-relaxed">
-                    {item.description}
-                  </p>
-                )}
                 
                 <a 
                   href={item.link} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                  className="block group-hover:bg-gray-50 p-2 -m-2 rounded transition-colors"
                 >
-                  Lire la suite
-                  <ExternalLink className="h-3 w-3" />
+                  <h4 className="font-medium text-sm leading-snug text-gray-900 group-hover:text-primary transition-colors line-clamp-2 mb-1">
+                    {item.title}
+                  </h4>
+                  
+                  {item.description && (
+                    <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                      {item.description.replace('...', '')}
+                    </p>
+                  )}
                 </a>
-              </div>
+              </article>
             ))}
             
-            <div className="pt-2">
+            <div className="pt-2 mt-3 border-t border-gray-100">
               <Button 
                 onClick={fetchNews} 
                 variant="sport" 
                 size="sm" 
-                className="w-full"
+                className="w-full h-8 text-xs"
               >
-                Actualiser
+                Actualiser les news
               </Button>
             </div>
           </div>

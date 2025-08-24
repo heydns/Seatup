@@ -106,8 +106,8 @@ serve(async (req) => {
       allNews.push(...fallbackNews);
     }
 
-    // Limit to 10 most recent articles
-    const limitedNews = allNews.slice(0, 10);
+    // Limit to 5 most recent articles
+    const limitedNews = allNews.slice(0, 5);
 
     console.log(`Returning ${limitedNews.length} articles`);
 
