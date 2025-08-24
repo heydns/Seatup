@@ -437,23 +437,6 @@ export const OrganizerDetail = () => {
             </div>
           </div>
 
-          {/* Teams Section */}
-          {teams.length > 0 && (
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-monument">
-                  Équipes ({teams.length})
-                </h2>
-              </div>
-
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                {teams.map((team) => (
-                  <TeamCard key={team.id} team={team} />
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Events Section */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-6">
@@ -488,6 +471,23 @@ export const OrganizerDetail = () => {
               </div>
             )}
           </div>
+
+          {/* Teams Section */}
+          {teams.length > 0 && (
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-monument">
+                  Équipes ({teams.length})
+                </h2>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                {teams.map((team) => (
+                  <TeamCard key={team.id} team={team} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>
