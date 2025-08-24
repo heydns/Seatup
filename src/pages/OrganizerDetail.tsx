@@ -379,16 +379,6 @@ export const OrganizerDetail = () => {
                       </div>
                     )}
                   </div>
-                  
-                  {/* Action Buttons */}
-                  <div className="flex gap-3">
-                    <Button variant="hero" size="sm">
-                      S'abonner
-                    </Button>
-                    <Button variant="sport" size="sm">
-                      Contacter
-                    </Button>
-                  </div>
                 </div>
 
                 <div className="grid lg:grid-cols-2 gap-8">
@@ -399,7 +389,7 @@ export const OrganizerDetail = () => {
                     </p>
 
                     {/* Details Grid */}
-                    <div className="grid gap-4">
+                    <div className="grid gap-4 mb-6">
                       {organizer.location && (
                         <div className="flex items-center gap-2 text-sm">
                           <MapPin className="h-4 w-4 text-primary" />
@@ -436,6 +426,16 @@ export const OrganizerDetail = () => {
                           </a>
                         </div>
                       )}
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-3">
+                      <Button variant="hero" size="sm">
+                        S'abonner
+                      </Button>
+                      <Button variant="sport" size="sm">
+                        Contacter
+                      </Button>
                     </div>
                   </div>
 
