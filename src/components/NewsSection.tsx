@@ -146,7 +146,7 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
                 className="group py-3 px-2 hover:bg-gray-50 rounded-lg transition-all duration-200 border-b border-gray-100 last:border-b-0"
               >
                 <a 
-                  href={`https://news.google.com/search?q=${encodeURIComponent(item.title)}&hl=fr&gl=FR&ceid=FR%3Afr`}
+                  href={item.link} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="block"

@@ -103,14 +103,24 @@ function parseRSS(xmlText: string): NewsItem[] {
       // Extract title - handle both regular title and encoded content
       let title = extractXMLContent(itemXml, 'title');
       
-      // Extract link
+      // Extract link - try to get original URL from description first
       let link = extractXMLContent(itemXml, 'link');
+      
+      // Try to extract the original article URL from the description
+      const descriptionContent = extractXMLContent(itemXml, 'description');
+      if (descriptionContent) {
+        // Look for URL patterns in the description that aren't Google News redirects
+        const urlMatch = descriptionContent.match(/https?:\/\/[^\s"<>]+/);
+        if (urlMatch && !urlMatch[0].includes('news.google.com')) {
+          link = urlMatch[0];
+        }
+      }
       
       // Extract publication date
       let pubDate = extractXMLContent(itemXml, 'pubDate');
       
-      // Extract description
-      let description = extractXMLContent(itemXml, 'description');
+      // Extract description (use the same content we got earlier)
+      let description = descriptionContent;
       if (!description) {
         description = extractXMLContent(itemXml, 'content:encoded');
       }
