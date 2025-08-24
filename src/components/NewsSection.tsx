@@ -61,21 +61,25 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString('fr-FR', { 
-        day: '2-digit', 
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      
+      const articleDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      
+      if (articleDate.getTime() === today.getTime()) {
+        return 'aujourd\'hui';
+      } else if (articleDate.getTime() === yesterday.getTime()) {
+        return 'hier';
+      } else {
+        return date.toLocaleDateString('fr-FR', { 
+          day: 'numeric', 
+          month: 'long'
+        });
+      }
     } catch {
-      return new Date().toLocaleDateString('fr-FR', { 
-        day: '2-digit', 
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
+      return 'aujourd\'hui';
     }
   };
 
@@ -165,22 +169,12 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
               ))
             })()}
             
-            <div className="pt-3 mt-2 border-t border-gray-200 space-y-2">
+            <div className="pt-3 mt-2 border-t border-gray-200">
               <Button 
-                onClick={fetchNews} 
+                asChild
                 variant="ghost" 
                 size="sm" 
                 className="w-full text-xs text-gray-600 hover:text-primary hover:bg-gray-50"
-              >
-                <Rss className="h-3 w-3 mr-2" />
-                Actualiser
-              </Button>
-              
-              <Button 
-                asChild
-                variant="outline" 
-                size="sm" 
-                className="w-full text-xs"
               >
                 <a 
                   href="https://news.google.com/search?q=PSG&hl=fr&gl=FR&ceid=FR%3Afr" 
