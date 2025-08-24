@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import { EventCard } from "@/components/EventCard";
 import { TeamCard } from "@/components/TeamCard";
+import { NewsSection } from "@/components/NewsSection";
 
 interface Event {
   ID_event: number;
@@ -390,48 +391,58 @@ export const OrganizerDetail = () => {
                   </div>
                 </div>
 
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  {organizer.description}
-                </p>
+                <div className="grid lg:grid-cols-3 gap-6">
+                  {/* Description */}
+                  <div className="lg:col-span-2">
+                    <p className="text-muted-foreground leading-relaxed mb-6">
+                      {organizer.description}
+                    </p>
 
-                {/* Details Grid */}
-                <div className="grid md:grid-cols-2 gap-4">
-                  {organizer.location && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <MapPin className="h-4 w-4 text-primary" />
-                      <span>{organizer.location}</span>
+                    {/* Details Grid */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {organizer.location && (
+                        <div className="flex items-center gap-2 text-sm">
+                          <MapPin className="h-4 w-4 text-primary" />
+                          <span>{organizer.location}</span>
+                        </div>
+                      )}
+                      {organizer.founded && (
+                        <div className="flex items-center gap-2 text-sm">
+                          <Calendar className="h-4 w-4 text-primary" />
+                          <span>Fondé en {organizer.founded}</span>
+                        </div>
+                      )}
+                      {organizer.website && (
+                        <div className="flex items-center gap-2 text-sm">
+                          <Globe className="h-4 w-4 text-primary" />
+                          <a 
+                            href={organizer.website} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-primary hover:underline"
+                          >
+                            Site officiel
+                          </a>
+                        </div>
+                      )}
+                      {organizer.email && (
+                        <div className="flex items-center gap-2 text-sm">
+                          <Mail className="h-4 w-4 text-primary" />
+                          <a 
+                            href={`mailto:${organizer.email}`}
+                            className="text-primary hover:underline"
+                          >
+                            {organizer.email}
+                          </a>
+                        </div>
+                      )}
                     </div>
-                  )}
-                  {organizer.founded && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <Calendar className="h-4 w-4 text-primary" />
-                      <span>Fondé en {organizer.founded}</span>
-                    </div>
-                  )}
-                  {organizer.website && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <Globe className="h-4 w-4 text-primary" />
-                      <a 
-                        href={organizer.website} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-primary hover:underline"
-                      >
-                        Site officiel
-                      </a>
-                    </div>
-                  )}
-                  {organizer.email && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <Mail className="h-4 w-4 text-primary" />
-                      <a 
-                        href={`mailto:${organizer.email}`}
-                        className="text-primary hover:underline"
-                      >
-                        {organizer.email}
-                      </a>
-                    </div>
-                  )}
+                  </div>
+
+                  {/* News Section */}
+                  <div className="lg:col-span-1">
+                    <NewsSection query={organizer.name} />
+                  </div>
                 </div>
               </div>
             </div>
