@@ -30,6 +30,8 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
     try {
       setLoading(true);
       setError(null);
+      
+      console.log('Fetching news for:', query);
 
       const { data, error } = await supabase.functions.invoke('fetch-news', {
         body: { query }
@@ -37,6 +39,7 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
 
       if (error) throw error;
 
+      console.log('News data received:', data);
       setNews(data.news || []);
     } catch (err) {
       console.error('Error fetching news:', err);
@@ -123,7 +126,9 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
           </div>
         ) : (
           <div className="space-y-3">
-            {news.map((item, index) => (
+            {(() => {
+              console.log('Rendering', news.length, 'news items');
+              return news.slice(0, 5).map((item, index) => (
               <article 
                 key={index} 
                 className="group pb-3 border-b border-gray-100 last:border-b-0 last:pb-0"
@@ -154,7 +159,8 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
                   )}
                 </a>
               </article>
-            ))}
+              ))
+            })()}
             
             <div className="pt-2 mt-3 border-t border-gray-100">
               <Button 
