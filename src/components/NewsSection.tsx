@@ -151,7 +151,7 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
                 className="group py-3 px-2 hover:bg-gray-50 rounded-lg transition-all duration-200 border-b border-gray-100 last:border-b-0"
               >
                 <a 
-                  href={item.link} 
+                  href={`https://www.google.com/search?q=${encodeURIComponent(item.title)} site:${item.source.toLowerCase().replace(/\s+/g, '')}.com OR site:foot01.fr OR site:footmercato.net OR site:lequipe.fr OR site:rmcsport.bfmtv.com OR site:dailymercato.com`}
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="block"
