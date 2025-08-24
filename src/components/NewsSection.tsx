@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Rss } from 'lucide-react';
+import { ExternalLink, Rss } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -150,10 +150,15 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
                 key={index} 
                 className="group py-3 px-2 hover:bg-gray-50 rounded-lg transition-all duration-200 border-b border-gray-100 last:border-b-0"
               >
-                <div className="block">
+                <a 
+                  href={item.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="block"
+                >
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-sm text-gray-900 line-clamp-1 leading-relaxed">
+                      <h4 className="font-medium text-sm text-gray-900 group-hover:text-primary transition-colors duration-200 line-clamp-1 leading-relaxed">
                         {item.title}
                       </h4>
                     </div>
@@ -161,17 +166,30 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
                       <time className="text-xs text-gray-500">
                         {formatDate(item.pubDate)}
                       </time>
+                      <ExternalLink className="h-3 w-3 text-gray-400 group-hover:text-primary transition-colors" />
                     </div>
                   </div>
-                </div>
+                </a>
               </article>
               ))
             })()}
             
-            <div className="pt-3 mt-2 border-t border-gray-200 text-center">
-              <p className="text-xs text-gray-500">
-                Actualités récupérées via Google News
-              </p>
+            <div className="pt-3 mt-2 border-t border-gray-200">
+              <Button 
+                asChild
+                variant="ghost" 
+                size="sm" 
+                className="w-full text-xs text-gray-600 hover:text-primary hover:bg-gray-50"
+              >
+                <a 
+                  href="https://news.google.com/search?q=PSG&hl=fr&gl=FR&ceid=FR%3Afr" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="h-3 w-3 mr-2" />
+                  Toutes les actualités
+                </a>
+              </Button>
             </div>
           </div>
         )}
