@@ -125,53 +125,32 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
             <p className="text-muted-foreground">Aucune actualité trouvée</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {(() => {
               console.log('Rendering', news.length, 'news items');
               return news.slice(0, 5).map((item, index) => (
               <article 
                 key={index} 
-                className="group pb-3 border-b border-gray-100 last:border-b-0 last:pb-0"
+                className="group pb-2 border-b border-gray-100 last:border-b-0 last:pb-0"
               >
-                <div className="flex items-center justify-between mb-2">
-                  <Badge variant="secondary" className="text-xs font-medium">
-                    {item.source}
-                  </Badge>
-                  <time className="text-xs text-muted-foreground font-medium">
-                    {formatDate(item.pubDate)}
-                  </time>
-                </div>
-                
                 <a 
                   href={item.link} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="block group-hover:bg-gray-50 p-2 -m-2 rounded transition-colors"
                 >
-                  <h4 className="font-medium text-sm leading-snug text-gray-900 group-hover:text-primary transition-colors line-clamp-2 mb-1">
-                    {item.title}
-                  </h4>
-                  
-                  {item.description && (
-                    <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
-                      {item.description.replace('...', '')}
-                    </p>
-                  )}
+                  <div className="flex items-start justify-between gap-3">
+                    <h4 className="font-medium text-sm leading-snug text-gray-900 group-hover:text-primary transition-colors line-clamp-2 flex-1">
+                      {item.title}
+                    </h4>
+                    <time className="text-xs text-muted-foreground font-medium flex-shrink-0">
+                      {formatDate(item.pubDate)}
+                    </time>
+                  </div>
                 </a>
               </article>
               ))
             })()}
-            
-            <div className="pt-2 mt-3 border-t border-gray-100">
-              <Button 
-                onClick={fetchNews} 
-                variant="sport" 
-                size="sm" 
-                className="w-full h-8 text-xs"
-              >
-                Actualiser les news
-              </Button>
-            </div>
           </div>
         )}
       </CardContent>
