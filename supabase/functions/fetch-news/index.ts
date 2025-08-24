@@ -1,3 +1,4 @@
+
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 
 const corsHeaders = {
@@ -34,59 +35,47 @@ serve(async (req) => {
 
     console.log(`Fetching news for query: ${query}`);
 
-    // Fetch news from Google News RSS
-    // Use only Google News as the single source - no filtering, trust Google's results
-    const newsSources = [
-      {
-        name: 'Google News PSG',
-        url: `https://news.google.com/rss/search?q=PSG&hl=fr&gl=FR&ceid=FR:fr`,
-        source: 'Google News'
-      }
-    ];
+    // Use Google News RSS feed directly for PSG
+    const googleNewsUrl = `https://news.google.com/rss/search?q=PSG&hl=fr&gl=FR&ceid=FR:fr`;
 
-    const allNews: NewsItem[] = [];
-
-    for (const source of newsSources) {
-      try {
-        console.log(`Fetching from ${source.name}: ${source.url}`);
-        
-        const response = await fetch(source.url, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (compatible; NewsBot/1.0)'
-          }
-        });
-        if (!response.ok) {
-          console.warn(`Failed to fetch from ${source.name}: ${response.status}`);
-          continue;
+    try {
+      console.log(`Fetching from Google News: ${googleNewsUrl}`);
+      
+      const response = await fetch(googleNewsUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; NewsBot/1.0)'
         }
-        
-        const xmlText = await response.text();
-        
-        // Parse RSS XML
-        const items = parseRSS(xmlText, source.source, query.toLowerCase());
-        allNews.push(...items);
-        
-        console.log(`Found ${items.length} relevant articles from ${source.name}`);
-      } catch (error) {
-        console.error(`Error fetching from ${source.name}:`, error);
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      
+      const xmlText = await response.text();
+      console.log(`Received XML length: ${xmlText.length}`);
+      
+      // Parse RSS XML
+      const items = parseRSS(xmlText);
+      
+      console.log(`Parsed ${items.length} articles from Google News`);
+
+      // Sort by date (most recent first) and limit to 5
+      items.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+      const limitedNews = items.slice(0, 5);
+
+      console.log(`Returning ${limitedNews.length} articles`);
+
+      return new Response(
+        JSON.stringify({ news: limitedNews }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
+
+    } catch (error) {
+      console.error('Error fetching from Google News:', error);
+      throw error;
     }
-
-    // Sort by date (most recent first)
-    allNews.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
-
-    // Return exactly what Google News returns - no fallback
-    // We want the exact same results as Google News, including if empty
-    const limitedNews = allNews.slice(0, 5);
-
-    console.log(`Returning ${limitedNews.length} articles from Google News`);
-
-    return new Response(
-      JSON.stringify({ news: limitedNews }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      }
-    );
 
   } catch (error) {
     console.error('Error fetching news:', error);
@@ -100,71 +89,88 @@ serve(async (req) => {
   }
 });
 
-function parseRSS(xmlText: string, source: string, query: string): NewsItem[] {
+function parseRSS(xmlText: string): NewsItem[] {
   const items: NewsItem[] = [];
   
   try {
-    // Simple XML parsing for RSS items
-    const itemMatches = xmlText.match(/<item[^>]*>([\s\S]*?)<\/item>/gi);
+    // Find all <item> elements in the RSS feed
+    const itemRegex = /<item[^>]*>([\s\S]*?)<\/item>/gi;
+    let match;
     
-    if (!itemMatches) {
-      console.log(`No items found in RSS from ${source}`);
-      return items;
-    }
-
-    console.log(`Found ${itemMatches.length} items in RSS from ${source}`);
-
-    for (const itemMatch of itemMatches) {
-      try {
-        const title = extractXMLContent(itemMatch, 'title');
-        const link = extractXMLContent(itemMatch, 'link');
-        const pubDate = extractXMLContent(itemMatch, 'pubDate');
-        let description = extractXMLContent(itemMatch, 'description');
+    while ((match = itemRegex.exec(xmlText)) !== null) {
+      const itemXml = match[1];
+      
+      // Extract title - handle both regular title and encoded content
+      let title = extractXMLContent(itemXml, 'title');
+      
+      // Extract link
+      let link = extractXMLContent(itemXml, 'link');
+      
+      // Extract publication date
+      let pubDate = extractXMLContent(itemXml, 'pubDate');
+      
+      // Extract description
+      let description = extractXMLContent(itemXml, 'description');
+      if (!description) {
+        description = extractXMLContent(itemXml, 'content:encoded');
+      }
+      
+      console.log(`Extracted - Title: "${title}", Link: "${link.substring(0, 50)}..."`);
+      
+      // Only add items that have both title and link
+      if (title && title.trim().length > 0 && link && link.trim().length > 0) {
+        const cleanTitle = cleanText(title);
+        const cleanDescription = cleanText(description);
+        const cleanLink = cleanText(link);
         
-        // If no description, try content:encoded or summary
-        if (!description) {
-          description = extractXMLContent(itemMatch, 'content:encoded') || 
-                      extractXMLContent(itemMatch, 'summary') ||
-                      extractXMLContent(itemMatch, 'content');
+        // Ensure we have a valid date
+        let validPubDate = pubDate;
+        if (!validPubDate || validPubDate.trim().length === 0) {
+          validPubDate = new Date().toISOString();
         }
-
-        console.log(`Processing article: "${title.substring(0, 50)}..."`);
-
-        // Accept ALL articles from Google News without any filtering
-        // Google has already done the search filtering, so we trust their results 100%
-        if (title && title.length > 5) {
-          const cleanTitle = cleanText(title);
-          const cleanDescription = cleanText(description);
-          
-          items.push({
-            title: cleanTitle,
-            link: cleanText(link),
-            pubDate: pubDate || new Date().toISOString(),
-            description: cleanDescription ? cleanDescription.substring(0, 150) + '...' : 'Cliquez pour lire l\'article complet',
-            source: 'Google News'
-          });
-          
-          console.log(`Added article: "${cleanTitle.substring(0, 30)}..."`);
-        }
-      } catch (error) {
-        console.error('Error parsing RSS item:', error);
+        
+        items.push({
+          title: cleanTitle,
+          link: cleanLink,
+          pubDate: validPubDate,
+          description: cleanDescription ? cleanDescription.substring(0, 150) + '...' : 'Cliquez pour lire l\'article complet',
+          source: 'Google News'
+        });
+        
+        console.log(`Added article: "${cleanTitle.substring(0, 50)}..."`);
+      } else {
+        console.log(`Skipped article - missing title or link`);
       }
     }
   } catch (error) {
-    console.error(`Error parsing RSS from ${source}:`, error);
+    console.error('Error parsing RSS:', error);
   }
   
-  console.log(`Returning ${items.length} items from ${source}`);
+  console.log(`Successfully parsed ${items.length} items`);
   return items;
 }
 
 function extractXMLContent(xml: string, tag: string): string {
-  const regex = new RegExp(`<${tag}[^>]*>([\s\S]*?)<\/${tag}>`, 'i');
-  const match = xml.match(regex);
-  return match ? match[1].trim() : '';
+  // Try different patterns to extract content
+  const patterns = [
+    new RegExp(`<${tag}[^>]*><\\!\\[CDATA\\[(.*?)\\]\\]><\\/${tag}>`, 'is'),
+    new RegExp(`<${tag}[^>]*>(.*?)<\\/${tag}>`, 'is'),
+    new RegExp(`<${tag}[^>]*><\\!\\[CDATA\\[(.*?)\\]\\]>`, 'is')
+  ];
+  
+  for (const pattern of patterns) {
+    const match = xml.match(pattern);
+    if (match && match[1]) {
+      return match[1].trim();
+    }
+  }
+  
+  return '';
 }
 
 function cleanText(text: string): string {
+  if (!text) return '';
+  
   // Remove HTML tags and decode HTML entities
   return text
     .replace(/<[^>]*>/g, '')
@@ -173,6 +179,7 @@ function cleanText(text: string): string {
     .replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
     .replace(/&nbsp;/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
