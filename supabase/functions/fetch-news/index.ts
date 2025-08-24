@@ -35,16 +35,12 @@ serve(async (req) => {
     console.log(`Fetching news for query: ${query}`);
 
     // Fetch news from Google News RSS
+    // Use only Google News as the single source - no filtering, trust Google's results
     const newsSources = [
       {
-        name: 'Google News',
-        url: `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=fr&gl=FR&ceid=FR:fr`,
+        name: 'Google News PSG',
+        url: `https://news.google.com/rss/search?q=PSG&hl=fr&gl=FR&ceid=FR:fr`,
         source: 'Google News'
-      },
-      {
-        name: 'L\'Équipe Football',
-        url: `https://dwh.lequipe.fr/api/edito/rss?path=/Football/`,
-        source: 'L\'Équipe'
       }
     ];
 
@@ -79,53 +75,11 @@ serve(async (req) => {
     // Sort by date (most recent first)
     allNews.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
 
-    // If no news found from RSS, create some mock news as fallback
-    if (allNews.length === 0) {
-      console.log('No news found from RSS sources, creating fallback content');
-      const fallbackNews: NewsItem[] = [
-        {
-          title: `Mercato PSG : Les dernières rumeurs de transferts`,
-          link: `https://www.google.com/search?q=${encodeURIComponent(query + ' mercato transferts actualités')}`,
-          pubDate: new Date().toISOString(),
-          description: `Suivez toutes les actualités mercato et transferts concernant ${query}.`,
-          source: 'Recherche'
-        },
-        {
-          title: `${query} : Résultats et classements`,
-          link: `https://www.google.com/search?q=${encodeURIComponent(query + ' résultats matchs calendrier')}`,
-          pubDate: new Date(Date.now() - 3600000).toISOString(),
-          description: 'Consultez les derniers résultats et le calendrier des matchs.',
-          source: 'Sports'
-        },
-        {
-          title: `Actualités ${query} - Site officiel`,
-          link: 'https://www.psg.fr/actualites',
-          pubDate: new Date(Date.now() - 7200000).toISOString(),
-          description: 'Retrouvez toutes les actualités officielles du club sur le site web.',
-          source: 'PSG Officiel'
-        },
-        {
-          title: `${query} : Interviews et déclarations`,
-          link: `https://www.google.com/search?q=${encodeURIComponent(query + ' interviews déclarations')}`,
-          pubDate: new Date(Date.now() - 10800000).toISOString(),
-          description: 'Les dernières interviews des joueurs et du staff technique.',
-          source: 'Médias'
-        },
-        {
-          title: `Ligue 1 : Classement et statistiques PSG`,
-          link: `https://www.google.com/search?q=${encodeURIComponent('PSG Ligue 1 classement statistiques')}`,
-          pubDate: new Date(Date.now() - 14400000).toISOString(),
-          description: 'Position au classement, statistiques et performances en Ligue 1.',
-          source: 'Ligue 1'
-        }
-      ];
-      allNews.push(...fallbackNews);
-    }
-
-    // Limit to 5 most recent articles
+    // Return exactly what Google News returns - no fallback
+    // We want the exact same results as Google News, including if empty
     const limitedNews = allNews.slice(0, 5);
 
-    console.log(`Returning ${limitedNews.length} articles`);
+    console.log(`Returning ${limitedNews.length} articles from Google News`);
 
     return new Response(
       JSON.stringify({ news: limitedNews }),
@@ -176,34 +130,9 @@ function parseRSS(xmlText: string, source: string, query: string): NewsItem[] {
 
         console.log(`Processing article: "${title.substring(0, 50)}..."`);
 
-        // For Google News search results, trust the search query filtering
-        // since Google already filtered by the search term
-        const isGoogleNews = source.includes('Google News');
-        
-        let matchesQuery = false;
-        
-        if (isGoogleNews) {
-          // For Google News, be more lenient since results are already filtered by search
-          matchesQuery = title && title.length > 5;
-        } else {
-          // For other sources like L'Équipe, apply stricter filtering
-          const titleLower = title.toLowerCase();
-          const descriptionLower = description.toLowerCase();
-          
-          matchesQuery = 
-            titleLower.includes('psg') || 
-            titleLower.includes('paris saint-germain') ||
-            titleLower.includes('paris saint germain') ||
-            titleLower.includes('paris sg') ||
-            titleLower.includes('parc des princes') ||
-            titleLower.includes('luis enrique') ||
-            titleLower.includes('marquinhos') ||
-            descriptionLower.includes('psg') || 
-            descriptionLower.includes('paris saint-germain') ||
-            descriptionLower.includes('paris saint germain');
-        }
-        
-        if (matchesQuery && title && title.length > 5) {
+        // Accept ALL articles from Google News without any filtering
+        // Google has already done the search filtering, so we trust their results 100%
+        if (title && title.length > 5) {
           const cleanTitle = cleanText(title);
           const cleanDescription = cleanText(description);
           
@@ -212,7 +141,7 @@ function parseRSS(xmlText: string, source: string, query: string): NewsItem[] {
             link: cleanText(link),
             pubDate: pubDate || new Date().toISOString(),
             description: cleanDescription ? cleanDescription.substring(0, 150) + '...' : 'Cliquez pour lire l\'article complet',
-            source: source.replace(' Sports', '').replace(' France', '') // Simplify source name
+            source: 'Google News'
           });
           
           console.log(`Added article: "${cleanTitle.substring(0, 30)}..."`);
