@@ -26,6 +26,15 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
     fetchNews();
   }, [query]);
 
+  // Auto refresh every 5 minutes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchNews();
+    }, 5 * 60 * 1000); // 5 minutes
+
+    return () => clearInterval(interval);
+  }, [query]);
+
   const fetchNews = async () => {
     try {
       setLoading(true);
@@ -55,13 +64,17 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
       return date.toLocaleDateString('fr-FR', { 
         day: '2-digit', 
         month: '2-digit',
-        year: 'numeric'
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
       });
     } catch {
       return new Date().toLocaleDateString('fr-FR', { 
         day: '2-digit', 
         month: '2-digit',
-        year: 'numeric'
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
       });
     }
   };
@@ -152,7 +165,7 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
               ))
             })()}
             
-            <div className="pt-3 mt-2 border-t border-gray-200">
+            <div className="pt-3 mt-2 border-t border-gray-200 space-y-2">
               <Button 
                 onClick={fetchNews} 
                 variant="ghost" 
@@ -161,6 +174,22 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
               >
                 <Rss className="h-3 w-3 mr-2" />
                 Actualiser
+              </Button>
+              
+              <Button 
+                asChild
+                variant="outline" 
+                size="sm" 
+                className="w-full text-xs"
+              >
+                <a 
+                  href="https://news.google.com/search?q=PSG&hl=fr&gl=FR&ceid=FR%3Afr" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="h-3 w-3 mr-2" />
+                  Toutes les actualités
+                </a>
               </Button>
             </div>
           </div>
