@@ -89,18 +89,39 @@ serve(async (req) => {
       console.log('No news found from RSS sources, creating fallback content');
       const fallbackNews: NewsItem[] = [
         {
-          title: `Actualités ${query} - Informations récentes`,
-          link: `https://www.google.com/search?q=${encodeURIComponent(query + ' actualités')}`,
+          title: `Mercato PSG : Les dernières rumeurs de transferts`,
+          link: `https://www.google.com/search?q=${encodeURIComponent(query + ' mercato transferts actualités')}`,
           pubDate: new Date().toISOString(),
-          description: `Recherchez les dernières actualités concernant ${query} sur Google.`,
+          description: `Suivez toutes les actualités mercato et transferts concernant ${query}.`,
           source: 'Recherche'
         },
         {
-          title: `${query} - Site officiel`,
+          title: `${query} : Résultats et classements`,
+          link: `https://www.google.com/search?q=${encodeURIComponent(query + ' résultats matchs calendrier')}`,
+          pubDate: new Date(Date.now() - 3600000).toISOString(),
+          description: 'Consultez les derniers résultats et le calendrier des matchs.',
+          source: 'Sports'
+        },
+        {
+          title: `Actualités ${query} - Site officiel`,
           link: 'https://www.psg.fr/actualites',
-          pubDate: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
-          description: 'Consultez le site officiel pour les dernières informations.',
-          source: 'Site officiel'
+          pubDate: new Date(Date.now() - 7200000).toISOString(),
+          description: 'Retrouvez toutes les actualités officielles du club sur le site web.',
+          source: 'PSG Officiel'
+        },
+        {
+          title: `${query} : Interviews et déclarations`,
+          link: `https://www.google.com/search?q=${encodeURIComponent(query + ' interviews déclarations')}`,
+          pubDate: new Date(Date.now() - 10800000).toISOString(),
+          description: 'Les dernières interviews des joueurs et du staff technique.',
+          source: 'Médias'
+        },
+        {
+          title: `Ligue 1 : Classement et statistiques PSG`,
+          link: `https://www.google.com/search?q=${encodeURIComponent('PSG Ligue 1 classement statistiques')}`,
+          pubDate: new Date(Date.now() - 14400000).toISOString(),
+          description: 'Position au classement, statistiques et performances en Ligue 1.',
+          source: 'Ligue 1'
         }
       ];
       allNews.push(...fallbackNews);
@@ -142,12 +163,23 @@ function parseRSS(xmlText: string, source: string, query: string): NewsItem[] {
       return items;
     }
 
+    console.log(`Found ${itemMatches.length} items in RSS from ${source}`);
+
     for (const itemMatch of itemMatches) {
       try {
         const title = extractXMLContent(itemMatch, 'title');
         const link = extractXMLContent(itemMatch, 'link');
         const pubDate = extractXMLContent(itemMatch, 'pubDate');
-        const description = extractXMLContent(itemMatch, 'description');
+        let description = extractXMLContent(itemMatch, 'description');
+        
+        // If no description, try content:encoded or summary
+        if (!description) {
+          description = extractXMLContent(itemMatch, 'content:encoded') || 
+                      extractXMLContent(itemMatch, 'summary') ||
+                      extractXMLContent(itemMatch, 'content');
+        }
+
+        console.log(`Processing article: "${title.substring(0, 50)}..."`);
 
         // For Google News, be more lenient with filtering since the search is already targeted
         const titleLower = title.toLowerCase();
@@ -163,14 +195,19 @@ function parseRSS(xmlText: string, source: string, query: string): NewsItem[] {
           titleLower.includes('paris saint-germain') ||
           titleLower.includes('paris saint germain');
         
-        if (matchesQuery) {
+        if (matchesQuery && title && title.length > 5) {
+          const cleanTitle = cleanText(title);
+          const cleanDescription = cleanText(description);
+          
           items.push({
-            title: cleanText(title),
+            title: cleanTitle,
             link: cleanText(link),
             pubDate: pubDate || new Date().toISOString(),
-            description: cleanText(description).substring(0, 200) + '...',
-            source
+            description: cleanDescription ? cleanDescription.substring(0, 150) + '...' : 'Cliquez pour lire l\'article complet',
+            source: source.replace(' Sports', '').replace(' France', '') // Simplify source name
           });
+          
+          console.log(`Added article: "${cleanTitle.substring(0, 30)}..."`);
         }
       } catch (error) {
         console.error('Error parsing RSS item:', error);
@@ -180,6 +217,7 @@ function parseRSS(xmlText: string, source: string, query: string): NewsItem[] {
     console.error(`Error parsing RSS from ${source}:`, error);
   }
   
+  console.log(`Returning ${items.length} items from ${source}`);
   return items;
 }
 
