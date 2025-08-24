@@ -5,6 +5,7 @@ import { ArrowLeft, MapPin, Globe, Users, Calendar, Mail, Phone } from "lucide-r
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import { EventCard } from "@/components/EventCard";
+import { TeamCard } from "@/components/TeamCard";
 
 interface Event {
   ID_event: number;
@@ -35,10 +36,42 @@ interface Organizer {
   };
 }
 
+interface Team {
+  id: string;
+  name: string;
+  organizer_name: string;
+  category: string;
+  description: string;
+  logo_url?: string;
+  colors?: {
+    primary: string;
+    secondary: string;
+  };
+  founded?: number;
+  stadium?: string;
+  coach?: string;
+  captain?: string;
+  league?: string;
+  achievements?: string[];
+  stats?: {
+    wins: number;
+    losses: number;
+    titles: number;
+    players_count: number;
+  };
+  social_media?: {
+    instagram?: string;
+    twitter?: string;
+    youtube?: string;
+    twitch?: string;
+  };
+}
+
 export const OrganizerDetail = () => {
   const { name } = useParams<{ name: string }>();
   const [organizer, setOrganizer] = useState<Organizer | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -231,14 +264,37 @@ export const OrganizerDetail = () => {
         if (organizerData[decodedName]) {
           setOrganizer(organizerData[decodedName]);
           setEvents(organizerEvents[decodedName] || []);
+
+          // Fetch teams from Supabase
+          const { data: teamsData, error: teamsError } = await supabase
+            .from('teams')
+            .select('*')
+            .eq('organizer_name', decodedName)
+            .order('name');
+
+          if (teamsError) {
+            console.error('Error fetching teams:', teamsError);
+            setTeams([]);
+          } else {
+            // Map the Supabase data to our Team interface
+            const mappedTeams: Team[] = (teamsData || []).map(teamData => ({
+              ...teamData,
+              colors: teamData.colors as { primary: string; secondary: string } | undefined,
+              stats: teamData.stats as { wins: number; losses: number; titles: number; players_count: number } | undefined,
+              social_media: teamData.social_media as { instagram?: string; twitter?: string; youtube?: string; twitch?: string } | undefined
+            }));
+            setTeams(mappedTeams);
+          }
         } else {
           setOrganizer(null);
           setEvents([]);
+          setTeams([]);
         }
       } catch (error) {
         console.error('Error fetching organizer data:', error);
         setOrganizer(null);
         setEvents([]);
+        setTeams([]);
       } finally {
         setIsLoading(false);
       }
@@ -380,6 +436,23 @@ export const OrganizerDetail = () => {
               </div>
             </div>
           </div>
+
+          {/* Teams Section */}
+          {teams.length > 0 && (
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-monument">
+                  Équipes ({teams.length})
+                </h2>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                {teams.map((team) => (
+                  <TeamCard key={team.id} team={team} />
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Events Section */}
           <div className="mb-8">
