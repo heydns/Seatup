@@ -68,14 +68,14 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
 
   if (loading) {
     return (
-      <Card className="h-fit">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-2 text-lg">
+      <div className="w-full">
+        <div className="pb-4">
+          <h3 className="flex items-center gap-2 text-lg font-semibold">
             <Rss className="h-5 w-5 text-primary" />
             Actualités
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </h3>
+        </div>
+        <div>
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
               <div key={i} className="animate-pulse">
@@ -85,41 +85,41 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Card className="h-fit">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-2 text-lg">
+      <div className="w-full">
+        <div className="pb-4">
+          <h3 className="flex items-center gap-2 text-lg font-semibold">
             <Rss className="h-5 w-5 text-primary" />
             Actualités
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          </h3>
+        </div>
+        <div>
           <div className="text-center py-4">
             <p className="text-muted-foreground mb-4">{error}</p>
             <Button onClick={fetchNews} variant="sport" size="sm">
               Réessayer
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className="h-fit">
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-2 text-lg">
+    <div className="w-full">
+      <div className="pb-4">
+        <h3 className="flex items-center gap-2 text-lg font-semibold">
           <Rss className="h-5 w-5 text-primary" />
           Actualités
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+        </h3>
+      </div>
+      <div>
         {news.length === 0 ? (
           <div className="text-center py-4">
             <p className="text-muted-foreground">Aucune actualité trouvée</p>
@@ -153,7 +153,7 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
             })()}
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
