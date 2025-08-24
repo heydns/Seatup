@@ -37,14 +37,9 @@ serve(async (req) => {
     // Fetch news from Google News RSS
     const newsSources = [
       {
-        name: 'Google News France',
+        name: 'Google News',
         url: `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=fr&gl=FR&ceid=FR:fr`,
         source: 'Google News'
-      },
-      {
-        name: 'Google News Sports',
-        url: `https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFp1ZEdvU0FtWnlHZ0pHVWlnQVAB?hl=fr&gl=FR&ceid=FR:fr`,
-        source: 'Google News Sports'
       },
       {
         name: 'L\'Équipe Football',
