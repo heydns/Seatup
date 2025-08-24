@@ -176,22 +176,32 @@ function parseRSS(xmlText: string, source: string, query: string): NewsItem[] {
 
         console.log(`Processing article: "${title.substring(0, 50)}..."`);
 
-        // Strict filtering for PSG-related content only
-        const titleLower = title.toLowerCase();
-        const descriptionLower = description.toLowerCase();
+        // For Google News search results, trust the search query filtering
+        // since Google already filtered by the search term
+        const isGoogleNews = source.includes('Google News');
         
-        // Check if content is specifically about PSG
-        const isPSGRelated = 
-          titleLower.includes('psg') || 
-          titleLower.includes('paris saint-germain') ||
-          titleLower.includes('paris saint germain') ||
-          titleLower.includes('paris sg') ||
-          descriptionLower.includes('psg') || 
-          descriptionLower.includes('paris saint-germain') ||
-          descriptionLower.includes('paris saint germain') ||
-          descriptionLower.includes('paris sg');
+        let matchesQuery = false;
         
-        const matchesQuery = isPSGRelated;
+        if (isGoogleNews) {
+          // For Google News, be more lenient since results are already filtered by search
+          matchesQuery = title && title.length > 5;
+        } else {
+          // For other sources like L'Équipe, apply stricter filtering
+          const titleLower = title.toLowerCase();
+          const descriptionLower = description.toLowerCase();
+          
+          matchesQuery = 
+            titleLower.includes('psg') || 
+            titleLower.includes('paris saint-germain') ||
+            titleLower.includes('paris saint germain') ||
+            titleLower.includes('paris sg') ||
+            titleLower.includes('parc des princes') ||
+            titleLower.includes('luis enrique') ||
+            titleLower.includes('marquinhos') ||
+            descriptionLower.includes('psg') || 
+            descriptionLower.includes('paris saint-germain') ||
+            descriptionLower.includes('paris saint germain');
+        }
         
         if (matchesQuery && title && title.length > 5) {
           const cleanTitle = cleanText(title);
