@@ -15,9 +15,23 @@ interface NewsItem {
 
 interface NewsSectionProps {
   query: string;
+  organizerType?: string;
 }
 
-export const NewsSection = ({ query }: NewsSectionProps) => {
+// Mapping des organisateurs vers leurs thématiques d'actualités
+const NEWS_THEMES_MAP: { [key: string]: string } = {
+  "Paris Saint-Germain": "PSG Paris Saint-Germain",
+  "Paris Basketball": "Paris Basket Paris Basketball", 
+  "PSG Handball": "PSG Hand PSG Handball",
+  "Les Mariannes 92": "Les Mariannes 92 Les Mariannes Levallois",
+  "Fédération Française de Tennis": "FFT Fédération Française Tennis Roland Garros"
+};
+
+export const NewsSection = ({ query, organizerType }: NewsSectionProps) => {
+  // Afficher uniquement pour les clubs et fédérations
+  if (organizerType && !['Club', 'Fédération'].includes(organizerType)) {
+    return null;
+  }
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,10 +54,12 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
       setLoading(true);
       setError(null);
       
-      console.log('Fetching news for:', query);
+      // Utiliser le thème spécialisé s'il existe, sinon le nom de l'organisateur
+      const newsQuery = NEWS_THEMES_MAP[query] || query;
+      console.log('Fetching news for:', newsQuery);
 
       const { data, error } = await supabase.functions.invoke('fetch-news', {
-        body: { query }
+        body: { query: newsQuery }
       });
 
       if (error) throw error;

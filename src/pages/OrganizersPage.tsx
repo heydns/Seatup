@@ -46,9 +46,8 @@ const LOCATION_FILTERS = [
 const TYPE_FILTERS = [
   "Tous",
   "Club",
-  "Marque",
-  "Fédération",
-  "Agence événementielle"
+  "Fédération", 
+  "Agence"
 ];
 
 const ORGANIZERS_DATA: Organizer[] = [
@@ -104,16 +103,16 @@ const ORGANIZERS_DATA: Organizer[] = [
     }
   },
   {
-    name: "Rolex Paris Masters",
-    description: "Le Rolex Paris Masters est un tournoi de tennis masculin professionnel qui se déroule chaque année à Paris.",
+    name: "Fédération Française de Tennis",
+    description: "La Fédération Française de Tennis (FFT) est l'instance dirigeante du tennis en France. Elle organise notamment le tournoi de Roland-Garros et supervise le développement du tennis français.",
     logo: "/lovable-uploads/b379a728-71d8-4301-8d46-73d92d4aa0ba.png",
-    website: "https://rolexparismasters.com",
-    email: "info@rolexparismasters.com",
+    website: "https://fft.fr",
+    email: "info@fft.fr",
     location: "Nanterre, France",
-    founded: "1968",
-    type: "Marque",
+    founded: "1920",
+    type: "Fédération",
     sports: ["Tennis"],
-    instagram: "https://instagram.com/rolexparismasters",
+    instagram: "https://instagram.com/fftenis",
     rating: 4.6,
     stats: {
       eventsCount: 12,
@@ -121,16 +120,16 @@ const ORGANIZERS_DATA: Organizer[] = [
     }
   },
   {
-    name: "Hoka Running",
-    description: "Hoka est une marque de chaussures de course française fondée en 2009. Elle organise plusieurs événements de course à pied en France.",
+    name: "Amaury Sport Organisation (ASO)",
+    description: "Amaury Sport Organisation est une agence événementielle française spécialisée dans l'organisation d'événements sportifs majeurs, notamment le Tour de France et le Marathon de Paris.",
     logo: "/lovable-uploads/88a89064-a2ce-45ba-b1d0-551b4be719d3.png",
-    website: "https://hokaparis.com",
-    email: "events@hoka.com",
+    website: "https://aso.fr",
+    email: "events@aso.fr",
     location: "Paris, France",
-    founded: "2009",
-    type: "Marque",
+    founded: "1992",
+    type: "Agence",
     sports: ["Course à pied"],
-    instagram: "https://instagram.com/hokaoneone",
+    instagram: "https://instagram.com/aso_official",
     rating: 4.1,
     stats: {
       eventsCount: 8,

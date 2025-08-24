@@ -30,6 +30,7 @@ interface Organizer {
   phone?: string;
   location?: string;
   founded?: string;
+  type?: string;
   stats?: {
     eventsCount: number;
     followersCount: string;
@@ -93,6 +94,7 @@ export const OrganizerDetail = () => {
         email: "contact@parisbasketball.com",
         location: "Paris, France",
         founded: "2018",
+        type: "Club",
         stats: {
           eventsCount: 25,
           followersCount: "15K",
@@ -107,6 +109,7 @@ export const OrganizerDetail = () => {
         email: "contact@psg.fr",
         location: "Paris, France", 
         founded: "1970",
+        type: "Club",
         stats: {
           eventsCount: 45,
           followersCount: "2.1M",
@@ -121,34 +124,37 @@ export const OrganizerDetail = () => {
         email: "contact@psghandball.com",
         location: "Paris, France",
         founded: "1992",
+        type: "Club",
         stats: {
           eventsCount: 30,
           followersCount: "125K",
           rating: 4.7
         }
       },
-      "Rolex Paris Masters": {
-        name: "Rolex Paris Masters",
-        description: "Le Rolex Paris Masters est un tournoi de tennis masculin professionnel qui se déroule chaque année à Paris. Faisant partie de la série ATP Masters 1000, c'est l'un des neuf tournois les plus prestigieux du circuit masculin après les tournois du Grand Chelem.",
+      "Fédération Française de Tennis": {
+        name: "Fédération Française de Tennis",
+        description: "La Fédération Française de Tennis (FFT) est l'instance dirigeante du tennis en France. Elle organise notamment le tournoi de Roland-Garros et supervise le développement du tennis français à tous les niveaux.",
         logo: "/lovable-uploads/b379a728-71d8-4301-8d46-73d92d4aa0ba.png", 
-        website: "https://rolexparismasters.com",
-        email: "info@rolexparismasters.com",
+        website: "https://fft.fr",
+        email: "info@fft.fr",
         location: "Nanterre, France",
-        founded: "1968",
+        founded: "1920",
+        type: "Fédération",
         stats: {
           eventsCount: 12,
           followersCount: "89K",
           rating: 4.8
         }
       },
-      "Hoka Running": {
-        name: "Hoka Running",
-        description: "Hoka est une marque de chaussures de course française fondée en 2009. Elle organise plusieurs événements de course à pied en France, notamment le semi-marathon de Paris, offrant aux coureurs une expérience unique au cœur de la capitale française.",
+      "Amaury Sport Organisation (ASO)": {
+        name: "Amaury Sport Organisation (ASO)",
+        description: "Amaury Sport Organisation est une agence événementielle française spécialisée dans l'organisation d'événements sportifs majeurs, notamment le Tour de France et le Marathon de Paris.",
         logo: "/lovable-uploads/88a89064-a2ce-45ba-b1d0-551b4be719d3.png",
-        website: "https://hokaparis.com",
-        email: "events@hoka.com",
+        website: "https://aso.fr",
+        email: "events@aso.fr",
         location: "Paris, France",
-        founded: "2009",
+        founded: "1992",
+        type: "Agence",
         stats: {
           eventsCount: 8,
           followersCount: "45K",
@@ -163,6 +169,7 @@ export const OrganizerDetail = () => {
         email: "contact@lesmariannes92.com", 
         location: "Levallois-Perret, France",
         founded: "1986",
+        type: "Club",
         stats: {
           eventsCount: 18,
           followersCount: "12K",
@@ -215,32 +222,32 @@ export const OrganizerDetail = () => {
           Link: "https://psghandball.com"
         }
       ],
-      "Rolex Paris Masters": [
+      "Fédération Française de Tennis": [
         {
           ID_event: 13,
-          Event: "Rolex Paris Master 2025",
-          Date: "2025-07-28",
-          Organization: "Rolex Paris Masters",
+          Event: "Roland-Garros 2025",
+          Date: "2025-05-28",
+          Organization: "Fédération Française de Tennis",
           Sport: "Tennis",
-          Competition: "ATP Masters 1000",
-          Location: "La Défense U Arena",
-          Adress: "La Défense U Arena, Nanterre",
+          Competition: "Grand Chelem",
+          Location: "Stade Roland Garros",
+          Adress: "Stade Roland Garros, Paris",
           Access: "Ticketing",
-          Link: "https://rolexparismasters.com"
+          Link: "https://fft.fr"
         }
       ],
-      "Hoka Running": [
+      "Amaury Sport Organisation (ASO)": [
         {
           ID_event: 14,
-          Event: "Hoka Semi Marathon Paris 2025",
-          Date: "2025-07-29",
-          Organization: "Hoka Running",
+          Event: "Marathon de Paris 2025",
+          Date: "2025-04-06",
+          Organization: "Amaury Sport Organisation (ASO)",
           Sport: "Course à pied",
-          Competition: "Semi Marathon",
+          Competition: "Marathon",
           Location: "Ville de Paris",
           Adress: "Paris, France",
           Access: "Inscription",
-          Link: "https://hokaparis.com"
+          Link: "https://aso.fr"
         }
       ],
       "Les Mariannes 92": [
@@ -440,7 +447,7 @@ export const OrganizerDetail = () => {
 
           {/* News Section */}
           <div className="bg-white rounded-2xl p-8 mb-8 shadow-sm">
-            <NewsSection query={organizer.name} />
+            <NewsSection query={organizer.name} organizerType={organizer.type} />
           </div>
 
           {/* Events Section */}
