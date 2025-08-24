@@ -176,19 +176,22 @@ function parseRSS(xmlText: string, source: string, query: string): NewsItem[] {
 
         console.log(`Processing article: "${title.substring(0, 50)}..."`);
 
-        // For Google News, be more lenient with filtering since the search is already targeted
+        // Strict filtering for PSG-related content only
         const titleLower = title.toLowerCase();
         const descriptionLower = description.toLowerCase();
-        const queryLower = query.toLowerCase();
         
-        // Include more results for Google News since they're already filtered by search
-        const isGoogleNews = source.includes('Google News');
-        const matchesQuery = isGoogleNews || 
-          titleLower.includes(queryLower) || 
-          descriptionLower.includes(queryLower) ||
+        // Check if content is specifically about PSG
+        const isPSGRelated = 
           titleLower.includes('psg') || 
           titleLower.includes('paris saint-germain') ||
-          titleLower.includes('paris saint germain');
+          titleLower.includes('paris saint germain') ||
+          titleLower.includes('paris sg') ||
+          descriptionLower.includes('psg') || 
+          descriptionLower.includes('paris saint-germain') ||
+          descriptionLower.includes('paris saint germain') ||
+          descriptionLower.includes('paris sg');
+        
+        const matchesQuery = isPSGRelated;
         
         if (matchesQuery && title && title.length > 5) {
           const cleanTitle = cleanText(title);
