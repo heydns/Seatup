@@ -120,13 +120,13 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
             <p className="text-gray-600">Aucune actualité trouvée</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-1">
             {(() => {
               console.log('Rendering', news.length, 'news items');
               return news.slice(0, 5).map((item, index) => (
               <article 
                 key={index} 
-                className="group bg-white border border-gray-100 rounded-xl p-4 hover:shadow-md hover:border-primary/20 transition-all duration-200"
+                className="group py-3 px-2 hover:bg-gray-50 rounded-lg transition-all duration-200 border-b border-gray-100 last:border-b-0"
               >
                 <a 
                   href={item.link} 
@@ -134,20 +134,17 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
                   rel="noopener noreferrer"
                   className="block"
                 >
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-center justify-between gap-3">
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-gray-900 group-hover:text-primary transition-colors duration-200 line-clamp-2 mb-2 leading-snug">
+                      <h4 className="font-medium text-sm text-gray-900 group-hover:text-primary transition-colors duration-200 line-clamp-1 leading-relaxed">
                         {item.title}
                       </h4>
-                      <div className="flex items-center gap-2">
-                        <ExternalLink className="h-3 w-3 text-primary opacity-60" />
-                        <span className="text-xs text-gray-500 font-medium">Lire l'article</span>
-                      </div>
                     </div>
-                    <div className="flex-shrink-0 text-right">
-                      <time className="text-xs text-gray-500 font-medium bg-gray-50 px-2 py-1 rounded-md">
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <time className="text-xs text-gray-500">
                         {formatDate(item.pubDate)}
                       </time>
+                      <ExternalLink className="h-3 w-3 text-gray-400 group-hover:text-primary transition-colors" />
                     </div>
                   </div>
                 </a>
@@ -155,15 +152,15 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
               ))
             })()}
             
-            <div className="pt-2">
+            <div className="pt-3 mt-2 border-t border-gray-200">
               <Button 
                 onClick={fetchNews} 
-                variant="sport" 
+                variant="ghost" 
                 size="sm" 
-                className="w-full bg-gray-50 text-gray-700 border border-gray-200 hover:bg-primary hover:text-white transition-colors duration-200"
+                className="w-full text-xs text-gray-600 hover:text-primary hover:bg-gray-50"
               >
                 <Rss className="h-3 w-3 mr-2" />
-                Actualiser les actualités
+                Actualiser
               </Button>
             </div>
           </div>
