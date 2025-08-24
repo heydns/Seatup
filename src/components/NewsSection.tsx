@@ -68,10 +68,15 @@ export const NewsSection = ({ query }: NewsSectionProps) => {
       
       const articleDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
       
+      const timeString = date.toLocaleTimeString('fr-FR', { 
+        hour: '2-digit', 
+        minute: '2-digit'
+      });
+      
       if (articleDate.getTime() === today.getTime()) {
-        return 'aujourd\'hui';
+        return `aujourd'hui ${timeString}`;
       } else if (articleDate.getTime() === yesterday.getTime()) {
-        return 'hier';
+        return `hier ${timeString}`;
       } else {
         return date.toLocaleDateString('fr-FR', { 
           day: 'numeric', 
