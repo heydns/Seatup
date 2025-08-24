@@ -34,22 +34,22 @@ serve(async (req) => {
 
     console.log(`Fetching news for query: ${query}`);
 
-    // Fetch news from multiple sources
+    // Fetch news from Google News RSS
     const newsSources = [
+      {
+        name: 'Google News France',
+        url: `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=fr&gl=FR&ceid=FR:fr`,
+        source: 'Google News'
+      },
+      {
+        name: 'Google News Sports',
+        url: `https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFp1ZEdvU0FtWnlHZ0pHVWlnQVAB?hl=fr&gl=FR&ceid=FR:fr`,
+        source: 'Google News Sports'
+      },
       {
         name: 'L\'Équipe Football',
         url: `https://dwh.lequipe.fr/api/edito/rss?path=/Football/`,
         source: 'L\'Équipe'
-      },
-      {
-        name: 'L\'Équipe Général',
-        url: `https://dwh.lequipe.fr/api/edito/rss?path=/`,
-        source: 'L\'Équipe'
-      },
-      {
-        name: 'France Info Sports',
-        url: `https://www.francetvinfo.fr/sports.rss`,
-        source: 'France Info'
       }
     ];
 
@@ -149,11 +149,21 @@ function parseRSS(xmlText: string, source: string, query: string): NewsItem[] {
         const pubDate = extractXMLContent(itemMatch, 'pubDate');
         const description = extractXMLContent(itemMatch, 'description');
 
-        // Check if the article mentions the query (case insensitive)
+        // For Google News, be more lenient with filtering since the search is already targeted
         const titleLower = title.toLowerCase();
         const descriptionLower = description.toLowerCase();
+        const queryLower = query.toLowerCase();
         
-        if (titleLower.includes(query) || descriptionLower.includes(query)) {
+        // Include more results for Google News since they're already filtered by search
+        const isGoogleNews = source.includes('Google News');
+        const matchesQuery = isGoogleNews || 
+          titleLower.includes(queryLower) || 
+          descriptionLower.includes(queryLower) ||
+          titleLower.includes('psg') || 
+          titleLower.includes('paris saint-germain') ||
+          titleLower.includes('paris saint germain');
+        
+        if (matchesQuery) {
           items.push({
             title: cleanText(title),
             link: cleanText(link),
