@@ -105,7 +105,7 @@ const ORGANIZERS_DATA: Organizer[] = [
   {
     name: "Fédération Française de Tennis",
     description: "La Fédération Française de Tennis (FFT) est l'instance dirigeante du tennis en France. Elle organise notamment le tournoi de Roland-Garros et supervise le développement du tennis français.",
-    logo: "/lovable-uploads/b379a728-71d8-4301-8d46-73d92d4aa0ba.png",
+    logo: "/lovable-uploads/c082062f-abcd-4b03-b240-f36ec71b9293.png",
     website: "https://fft.fr",
     email: "info@fft.fr",
     location: "Nanterre, France",
