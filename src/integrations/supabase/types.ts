@@ -7,10 +7,10 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+    PostgrestVersion: "13.0.4"
   }
   public: {
     Tables: {
@@ -107,6 +107,66 @@ export type Database = {
           Original_Price?: string | null
           Our_Price?: string | null
           Sport?: string | null
+        }
+        Relationships: []
+      }
+      teams: {
+        Row: {
+          achievements: string[] | null
+          captain: string | null
+          category: string
+          coach: string | null
+          colors: Json | null
+          created_at: string
+          description: string | null
+          founded: number | null
+          id: string
+          league: string | null
+          logo_url: string | null
+          name: string
+          organizer_name: string
+          social_media: Json | null
+          stadium: string | null
+          stats: Json | null
+          updated_at: string
+        }
+        Insert: {
+          achievements?: string[] | null
+          captain?: string | null
+          category: string
+          coach?: string | null
+          colors?: Json | null
+          created_at?: string
+          description?: string | null
+          founded?: number | null
+          id?: string
+          league?: string | null
+          logo_url?: string | null
+          name: string
+          organizer_name: string
+          social_media?: Json | null
+          stadium?: string | null
+          stats?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          achievements?: string[] | null
+          captain?: string | null
+          category?: string
+          coach?: string | null
+          colors?: Json | null
+          created_at?: string
+          description?: string | null
+          founded?: number | null
+          id?: string
+          league?: string | null
+          logo_url?: string | null
+          name?: string
+          organizer_name?: string
+          social_media?: Json | null
+          stadium?: string | null
+          stats?: Json | null
+          updated_at?: string
         }
         Relationships: []
       }
