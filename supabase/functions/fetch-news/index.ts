@@ -35,8 +35,9 @@ serve(async (req) => {
 
     console.log(`Fetching news for query: ${query}`);
 
-    // Use Google News RSS feed directly for PSG
-    const googleNewsUrl = `https://news.google.com/rss/search?q=PSG&hl=fr&gl=FR&ceid=FR:fr`;
+    // Use Google News RSS feed with the provided query
+    const encodedQuery = encodeURIComponent(query);
+    const googleNewsUrl = `https://news.google.com/rss/search?q=${encodedQuery}&hl=fr&gl=FR&ceid=FR:fr`;
 
     try {
       console.log(`Fetching from Google News: ${googleNewsUrl}`);

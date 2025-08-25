@@ -198,7 +198,7 @@ export const NewsSection = ({ query, organizerType }: NewsSectionProps) => {
                 className="w-full text-xs text-gray-600 hover:text-primary hover:bg-gray-50"
               >
                 <a 
-                  href="https://news.google.com/search?q=PSG&hl=fr&gl=FR&ceid=FR%3Afr" 
+                  href={`https://news.google.com/search?q=${encodeURIComponent(NEWS_THEMES_MAP[query] || query)}&hl=fr&gl=FR&ceid=FR%3Afr`} 
                   target="_blank" 
                   rel="noopener noreferrer"
                 >
