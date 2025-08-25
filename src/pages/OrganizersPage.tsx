@@ -122,7 +122,7 @@ const ORGANIZERS_DATA: Organizer[] = [
   {
     name: "Amaury Sport Organisation (ASO)",
     description: "Amaury Sport Organisation est une agence événementielle française spécialisée dans l'organisation d'événements sportifs majeurs, notamment le Tour de France et le Marathon de Paris.",
-    logo: "/lovable-uploads/8c1f9d33-efff-439d-b7c0-d19a0fe3d4fe.png",
+    logo: "/lovable-uploads/88273c8f-69d9-4957-b593-cefa551f7914.png",
     website: "https://aso.fr",
     email: "events@aso.fr",
     location: "Paris, France",
