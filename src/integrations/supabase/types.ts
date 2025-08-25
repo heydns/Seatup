@@ -29,6 +29,7 @@ export type Database = {
           original_price: string | null
           our_price: string | null
           sport: string | null
+          stadium_id: string | null
           updated_at: string | null
         }
         Insert: {
@@ -45,6 +46,7 @@ export type Database = {
           original_price?: string | null
           our_price?: string | null
           sport?: string | null
+          stadium_id?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -61,9 +63,18 @@ export type Database = {
           original_price?: string | null
           our_price?: string | null
           sport?: string | null
+          stadium_id?: string | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "event_stadium_id_fkey"
+            columns: ["stadium_id"]
+            isOneToOne: false
+            referencedRelation: "stadiums"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       Event: {
         Row: {
@@ -110,6 +121,57 @@ export type Database = {
         }
         Relationships: []
       }
+      stadiums: {
+        Row: {
+          address: string | null
+          amenities: string[] | null
+          capacity: number | null
+          city: string
+          contact_info: Json | null
+          coordinates: Json | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          name: string
+          opened_year: number | null
+          surface_type: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          amenities?: string[] | null
+          capacity?: number | null
+          city: string
+          contact_info?: Json | null
+          coordinates?: Json | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          opened_year?: number | null
+          surface_type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          amenities?: string[] | null
+          capacity?: number | null
+          city?: string
+          contact_info?: Json | null
+          coordinates?: Json | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          opened_year?: number | null
+          surface_type?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       teams: {
         Row: {
           achievements: string[] | null
@@ -127,6 +189,7 @@ export type Database = {
           organizer_name: string
           social_media: Json | null
           stadium: string | null
+          stadium_id: string | null
           stats: Json | null
           updated_at: string
         }
@@ -146,6 +209,7 @@ export type Database = {
           organizer_name: string
           social_media?: Json | null
           stadium?: string | null
+          stadium_id?: string | null
           stats?: Json | null
           updated_at?: string
         }
@@ -165,10 +229,19 @@ export type Database = {
           organizer_name?: string
           social_media?: Json | null
           stadium?: string | null
+          stadium_id?: string | null
           stats?: Json | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "teams_stadium_id_fkey"
+            columns: ["stadium_id"]
+            isOneToOne: false
+            referencedRelation: "stadiums"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

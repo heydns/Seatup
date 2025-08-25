@@ -8,6 +8,8 @@ import { EventsPage } from "@/components/EventsPage";
 import { EventDetail } from "@/pages/EventDetail";
 import { OrganizerDetail } from "@/pages/OrganizerDetail";
 import { OrganizersPage } from "@/pages/OrganizersPage";
+import { StadiumsPage } from "@/pages/StadiumsPage";
+import { StadiumDetail } from "@/pages/StadiumDetail";
 import { TeamDetail } from "@/pages/TeamDetail";
 import Index from "./pages/Index";
 import Contact from "./pages/Contact";
@@ -25,8 +27,10 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/organizers" element={<OrganizersPage />} />
+          <Route path="/stadiums" element={<StadiumsPage />} />
           <Route path="/event/:id" element={<EventDetail />} />
           <Route path="/organizer/:name" element={<OrganizerDetail />} />
+          <Route path="/stadium/:id" element={<StadiumDetail />} />
           <Route path="/team/:id" element={<TeamDetail />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/auth" element={<AuthPage />} />
