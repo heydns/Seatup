@@ -237,7 +237,9 @@ export const StadiumDetail = () => {
           {stadium.image_url ? (
             <div className="h-64 md:h-96 relative">
               <img
-                src={`${stadium.image_url}?v=${Date.now()}`}
+                src={stadium.image_url.startsWith('/lovable-uploads/') ? 
+                  `https://id-preview--5affb644-50cf-4eab-bd5a-214a9bf11afd.lovable.app${stadium.image_url}` : 
+                  stadium.image_url}
                 alt={stadium.name}
                 className="w-full h-full object-cover"
                 onLoad={() => console.log('Image loaded successfully:', stadium.image_url)}

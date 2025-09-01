@@ -28,14 +28,16 @@ export const StadiumCard = ({ stadium }: StadiumCardProps) => {
     <Card className="h-full hover:shadow-lg transition-all duration-300 group overflow-hidden">
       <div className="relative h-48 overflow-hidden">
         {stadium.image_url ? (
-          <img
-            src={stadium.image_url}
-            alt={stadium.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            onError={(e) => {
-              e.currentTarget.src = "/placeholder.svg";
-            }}
-          />
+            <img 
+              src={stadium.image_url.startsWith('/lovable-uploads/') ? 
+                `https://id-preview--5affb644-50cf-4eab-bd5a-214a9bf11afd.lovable.app${stadium.image_url}` : 
+                stadium.image_url} 
+              alt={stadium.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              onError={(e) => {
+                e.currentTarget.src = "/placeholder.svg";
+              }}
+            />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
             <MapPin className="h-16 w-16 text-primary/40" />
