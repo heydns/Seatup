@@ -237,8 +237,8 @@ export const StadiumDetail = () => {
           {stadium.image_url ? (
             <div className="h-64 md:h-96 relative">
               <img
-                src={stadium.image_url.startsWith('/lovable-uploads/') ? 
-                  `https://id-preview--5affb644-50cf-4eab-bd5a-214a9bf11afd.lovable.app${stadium.image_url}` : 
+                src={stadium.image_url === '/lovable-uploads/2a65224f-97c7-457b-a5e7-697fb6fb61f3.png' ? 
+                  '/lovable-uploads/2a65224f-97c7-457b-a5e7-697fb6fb61f3.png' : 
                   stadium.image_url}
                 alt={stadium.name}
                 className="w-full h-full object-cover"
