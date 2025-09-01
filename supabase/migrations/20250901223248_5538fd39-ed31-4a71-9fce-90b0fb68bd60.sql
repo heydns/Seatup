@@ -1,0 +1,3 @@
+-- Ajouter l'Adidas Arena avec l'image fournie
+INSERT INTO stadiums (name, city, type, description, image_url, capacity) VALUES 
+('Adidas Arena', 'Paris', 'Salle polyvalente', 'Salle polyvalente moderne située à Paris La Défense, inaugurée en 2024. Cette arène ultramoderne accueille des événements sportifs et culturels de grande envergure.', '/lovable-uploads/8814dfec-d49c-4840-8f6e-4a9c91a34336.png', 8000);
