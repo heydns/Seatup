@@ -83,6 +83,7 @@ export const StadiumDetail = () => {
 
   useEffect(() => {
     if (id) {
+      console.log('Fetching stadium data for ID:', id);
       fetchStadiumData();
     }
   }, [id]);
@@ -99,6 +100,7 @@ export const StadiumDetail = () => {
         .single();
 
       if (stadiumError) throw stadiumError;
+      console.log('Stadium data loaded:', stadiumData);
       setStadium(stadiumData);
 
       // Fetch events at this stadium
@@ -235,10 +237,12 @@ export const StadiumDetail = () => {
           {stadium.image_url ? (
             <div className="h-64 md:h-96 relative">
               <img
-                src={stadium.image_url}
+                src={`${stadium.image_url}?v=${Date.now()}`}
                 alt={stadium.name}
                 className="w-full h-full object-cover"
+                onLoad={() => console.log('Image loaded successfully:', stadium.image_url)}
                 onError={(e) => {
+                  console.error('Image failed to load:', stadium.image_url);
                   e.currentTarget.src = "/placeholder.svg";
                 }}
               />
