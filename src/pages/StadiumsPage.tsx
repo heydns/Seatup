@@ -168,7 +168,7 @@ export const StadiumsPage = () => {
             Stades
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Découvrez les stades mythiques où se déroulent les plus grands événements sportifs
+            Découvrez les stades mythiques où se déroulent nos événements
           </p>
         </div>
 
