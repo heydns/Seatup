@@ -68,7 +68,7 @@ export const StadiumCard = ({ stadium }: StadiumCardProps) => {
             )}
           </div>
           {stadium.surface_type && (
-            <Badge variant="secondary" className="text-xs">
+            <Badge variant="default" className="text-xs bg-primary text-primary-foreground">
               {stadium.surface_type === 'grass' ? 'Pelouse naturelle' : 
                stadium.surface_type === 'artificial' ? 'Pelouse synthétique' : 
                stadium.surface_type === 'hybrid' ? 'Pelouse hybride' : 
@@ -90,12 +90,12 @@ export const StadiumCard = ({ stadium }: StadiumCardProps) => {
             <h4 className="text-sm font-medium">Équipements</h4>
             <div className="flex flex-wrap gap-1">
               {stadium.amenities.slice(0, 4).map((amenity) => (
-                <Badge key={amenity} variant="outline" className="text-xs">
+                <Badge key={amenity} variant="outline" className="text-xs border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground">
                   {amenity}
                 </Badge>
               ))}
               {stadium.amenities.length > 4 && (
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="outline" className="text-xs border-secondary/30 text-secondary hover:bg-secondary hover:text-secondary-foreground">
                   +{stadium.amenities.length - 4}
                 </Badge>
               )}
@@ -106,13 +106,13 @@ export const StadiumCard = ({ stadium }: StadiumCardProps) => {
         {stadium.contact_info && (
           <div className="flex gap-2 pt-2">
             {stadium.contact_info.phone && (
-              <Button size="sm" variant="outline" className="flex-1">
+              <Button size="sm" variant="outline" className="flex-1 border-success/50 text-success hover:bg-success hover:text-success-foreground">
                 <Phone className="h-4 w-4 mr-1" />
                 <span className="text-xs">Appeler</span>
               </Button>
             )}
             {stadium.contact_info.website && (
-              <Button size="sm" variant="outline" asChild className="flex-1">
+              <Button size="sm" variant="outline" asChild className="flex-1 border-secondary/50 text-secondary hover:bg-secondary hover:text-secondary-foreground">
                 <a 
                   href={stadium.contact_info.website} 
                   target="_blank" 
@@ -127,7 +127,7 @@ export const StadiumCard = ({ stadium }: StadiumCardProps) => {
         )}
 
         <div className="pt-2">
-          <Button asChild className="w-full" variant="outline">
+          <Button asChild className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
             <Link to={`/stadium/${stadium.id}`}>
               <ExternalLink className="h-4 w-4 mr-2" />
               Voir les détails
