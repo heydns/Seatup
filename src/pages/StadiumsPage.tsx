@@ -30,7 +30,7 @@ const TYPE_FILTERS = [
   { label: "Tous les types", value: "all" },
   { label: "Salle polyvalente", value: "Salle polyvalente" },
   { label: "Stade", value: "Stade" },
-  { label: "Gymnase", value: "Gymnase" },
+  { label: "Salle omnisports", value: "Salle omnisports" },
 ];
 
 const CAPACITY_FILTERS = [
