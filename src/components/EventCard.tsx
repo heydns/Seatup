@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Tag, ExternalLink, Globe } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Event {
   ID_event: number;
@@ -21,6 +23,39 @@ interface EventCardProps {
 
 export const EventCard = ({ event }: EventCardProps) => {
   const navigate = useNavigate();
+  const [stadiumMapping, setStadiumMapping] = useState<{[key: string]: string}>({});
+
+  useEffect(() => {
+    const fetchStadiums = async () => {
+      const { data } = await supabase.from('stadiums').select('id, name');
+      if (data) {
+        const mapping = data.reduce((acc, stadium) => {
+          acc[stadium.name] = stadium.id;
+          return acc;
+        }, {} as {[key: string]: string});
+        setStadiumMapping(mapping);
+      }
+    };
+    fetchStadiums();
+  }, []);
+
+  const getStadiumLink = (location: string) => {
+    // Vérifier si la location correspond à un stade connu
+    const stadiumId = stadiumMapping[location];
+    if (stadiumId) {
+      return `/stadium/${stadiumId}`;
+    }
+    
+    // Vérifications alternatives pour les variations de noms
+    const locationLower = location.toLowerCase();
+    for (const [stadiumName, id] of Object.entries(stadiumMapping)) {
+      if (locationLower.includes(stadiumName.toLowerCase())) {
+        return `/stadium/${id}`;
+      }
+    }
+    
+    return null;
+  };
   
   const formatDate = (dateString: string) => {
     if (!dateString) return "Date à confirmer";
@@ -123,7 +158,16 @@ export const EventCard = ({ event }: EventCardProps) => {
           {event.Location && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <MapPin className="h-4 w-4" />
-              <span>{event.Location}</span>
+              {getStadiumLink(event.Location) ? (
+                <Link 
+                  to={getStadiumLink(event.Location)!} 
+                  className="hover:text-primary transition-colors cursor-pointer"
+                >
+                  {event.Location}
+                </Link>
+              ) : (
+                <span>{event.Location}</span>
+              )}
             </div>
           )}
         </div>

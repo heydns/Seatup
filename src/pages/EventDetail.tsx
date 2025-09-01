@@ -25,10 +25,24 @@ export const EventDetail = () => {
   const [event, setEvent] = useState<Event | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [stadiumMapping, setStadiumMapping] = useState<{[key: string]: string}>({});
 
   console.log('EventDetail component loaded, ID:', id);
 
   useEffect(() => {
+    // Charger les stades
+    const fetchStadiums = async () => {
+      const { data } = await supabase.from('stadiums').select('id, name');
+      if (data) {
+        const mapping = data.reduce((acc, stadium) => {
+          acc[stadium.name] = stadium.id;
+          return acc;
+        }, {} as {[key: string]: string});
+        setStadiumMapping(mapping);
+      }
+    };
+    fetchStadiums();
+
     if (!id) {
       console.log('No ID provided');
       setIsLoading(false);
@@ -281,6 +295,24 @@ export const EventDetail = () => {
     });
   };
 
+  const getStadiumLink = (location: string) => {
+    // Vérifier si la location correspond à un stade connu
+    const stadiumId = stadiumMapping[location];
+    if (stadiumId) {
+      return `/stadium/${stadiumId}`;
+    }
+    
+    // Vérifications alternatives pour les variations de noms
+    const locationLower = location.toLowerCase();
+    for (const [stadiumName, id] of Object.entries(stadiumMapping)) {
+      if (locationLower.includes(stadiumName.toLowerCase())) {
+        return `/stadium/${id}`;
+      }
+    }
+    
+    return null;
+  };
+
   if (isLoading) {
     return (
       <>
@@ -399,7 +431,16 @@ export const EventDetail = () => {
                       <MapPin className="h-5 w-5 text-primary mt-1" />
                       <div>
                         <h3 className="font-semibold">Lieu</h3>
-                        <p className="text-muted-foreground">{event.Location}</p>
+                        {getStadiumLink(event.Location) ? (
+                          <Link 
+                            to={getStadiumLink(event.Location)!}
+                            className="text-primary hover:underline cursor-pointer"
+                          >
+                            {event.Location}
+                          </Link>
+                        ) : (
+                          <p className="text-muted-foreground">{event.Location}</p>
+                        )}
                         {event.Adress && (
                           <p className="text-sm text-muted-foreground">{event.Adress}</p>
                         )}
