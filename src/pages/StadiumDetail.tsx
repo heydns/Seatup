@@ -18,7 +18,7 @@ interface Stadium {
   city: string;
   address?: string | null;
   capacity?: number | null;
-  surface_type?: string | null;
+  type?: string | null;
   opened_year?: number | null;
   description?: string | null;
   image_url?: string | null;
@@ -351,16 +351,13 @@ export const StadiumDetail = () => {
                   </div>
                 )}
 
-                {stadium.surface_type && (
+                {stadium.type && (
                   <div className="flex items-center gap-3">
                     <Building className="h-5 w-5 text-muted-foreground" />
                     <div>
-                      <p className="font-medium">Surface</p>
+                      <p className="font-medium">Type</p>
                       <Badge variant="secondary">
-                        {stadium.surface_type === 'grass' ? 'Pelouse naturelle' : 
-                         stadium.surface_type === 'artificial' ? 'Pelouse synthétique' : 
-                         stadium.surface_type === 'hybrid' ? 'Pelouse hybride' : 
-                         stadium.surface_type}
+                        {stadium.type}
                       </Badge>
                     </div>
                   </div>

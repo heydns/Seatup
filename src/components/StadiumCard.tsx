@@ -10,7 +10,7 @@ interface Stadium {
   city: string;
   address?: string | null;
   capacity?: number | null;
-  surface_type?: string | null;
+  type?: string | null;
   opened_year?: number | null;
   description?: string | null;
   image_url?: string | null;
@@ -69,12 +69,9 @@ export const StadiumCard = ({ stadium }: StadiumCardProps) => {
               </div>
             )}
           </div>
-          {stadium.surface_type && (
+          {stadium.type && (
             <Badge variant="default" className="text-xs bg-primary text-primary-foreground">
-              {stadium.surface_type === 'grass' ? 'Pelouse naturelle' : 
-               stadium.surface_type === 'artificial' ? 'Pelouse synthétique' : 
-               stadium.surface_type === 'hybrid' ? 'Pelouse hybride' : 
-               stadium.surface_type}
+              {stadium.type}
             </Badge>
           )}
         </div>

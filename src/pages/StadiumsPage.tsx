@@ -17,7 +17,7 @@ interface Stadium {
   city: string;
   address?: string | null;
   capacity?: number | null;
-  surface_type?: string | null;
+  type?: string | null;
   opened_year?: number | null;
   description?: string | null;
   image_url?: string | null;
@@ -26,11 +26,11 @@ interface Stadium {
   contact_info?: any;
 }
 
-const SURFACE_TYPE_FILTERS = [
+const TYPE_FILTERS = [
   { label: "Tous les types", value: "all" },
-  { label: "Pelouse naturelle", value: "grass" },
-  { label: "Pelouse synthétique", value: "artificial" },
-  { label: "Pelouse hybride", value: "hybrid" },
+  { label: "Salle polyvalente", value: "Salle polyvalente" },
+  { label: "Stade", value: "Stade" },
+  { label: "Gymnase", value: "Gymnase" },
 ];
 
 const CAPACITY_FILTERS = [
@@ -56,7 +56,7 @@ export const StadiumsPage = () => {
   const [filteredStadiums, setFilteredStadiums] = useState<Stadium[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [surfaceTypeFilter, setSurfaceTypeFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState("all");
   const [capacityFilter, setCapacityFilter] = useState("all");
   const [cityFilter, setCityFilter] = useState("Toutes les villes");
   const [sortBy, setSortBy] = useState("name");
@@ -69,7 +69,7 @@ export const StadiumsPage = () => {
 
   useEffect(() => {
     filterStadiums();
-  }, [stadiums, searchQuery, surfaceTypeFilter, capacityFilter, cityFilter, sortBy]);
+  }, [stadiums, searchQuery, typeFilter, capacityFilter, cityFilter, sortBy]);
 
   const fetchStadiums = async () => {
     try {
@@ -105,9 +105,9 @@ export const StadiumsPage = () => {
       );
     }
 
-    // Surface type filter
-    if (surfaceTypeFilter !== "all") {
-      filtered = filtered.filter(stadium => stadium.surface_type === surfaceTypeFilter);
+    // Type filter
+    if (typeFilter !== "all") {
+      filtered = filtered.filter(stadium => stadium.type === typeFilter);
     }
 
     // Capacity filter
@@ -150,7 +150,7 @@ export const StadiumsPage = () => {
 
   const clearFilters = () => {
     setSearchQuery("");
-    setSurfaceTypeFilter("all");
+    setTypeFilter("all");
     setCapacityFilter("all");
     setCityFilter("Toutes les villes");
     setSortBy("name");
@@ -185,14 +185,14 @@ export const StadiumsPage = () => {
             />
           </div>
 
-          {/* Surface Type Filter Chips */}
+          {/* Type Filter Chips */}
           <div className="flex flex-wrap justify-center gap-2">
-            {SURFACE_TYPE_FILTERS.map((filter) => (
+            {TYPE_FILTERS.map((filter) => (
               <Badge
                 key={filter.value}
-                variant={surfaceTypeFilter === filter.value ? "default" : "outline"}
+                variant={typeFilter === filter.value ? "default" : "outline"}
                 className="cursor-pointer hover:bg-primary/20 transition-colors"
-                onClick={() => setSurfaceTypeFilter(filter.value)}
+                onClick={() => setTypeFilter(filter.value)}
               >
                 {filter.label}
               </Badge>

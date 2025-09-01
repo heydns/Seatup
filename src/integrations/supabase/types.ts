@@ -135,7 +135,7 @@ export type Database = {
           image_url: string | null
           name: string
           opened_year: number | null
-          surface_type: string | null
+          type: string | null
           updated_at: string
         }
         Insert: {
@@ -151,7 +151,7 @@ export type Database = {
           image_url?: string | null
           name: string
           opened_year?: number | null
-          surface_type?: string | null
+          type?: string | null
           updated_at?: string
         }
         Update: {
@@ -167,7 +167,7 @@ export type Database = {
           image_url?: string | null
           name?: string
           opened_year?: number | null
-          surface_type?: string | null
+          type?: string | null
           updated_at?: string
         }
         Relationships: []
