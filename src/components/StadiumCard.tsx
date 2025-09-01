@@ -29,9 +29,7 @@ export const StadiumCard = ({ stadium }: StadiumCardProps) => {
       <div className="relative h-48 overflow-hidden">
         {stadium.image_url ? (
             <img 
-              src={stadium.image_url === '/lovable-uploads/2a65224f-97c7-457b-a5e7-697fb6fb61f3.png' ? 
-                '/lovable-uploads/2a65224f-97c7-457b-a5e7-697fb6fb61f3.png' : 
-                stadium.image_url} 
+              src={stadium.image_url} 
               alt={stadium.name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               onError={(e) => {
