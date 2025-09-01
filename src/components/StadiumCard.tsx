@@ -106,13 +106,13 @@ export const StadiumCard = ({ stadium }: StadiumCardProps) => {
         {stadium.contact_info && (
           <div className="flex gap-2 pt-2">
             {stadium.contact_info.phone && (
-              <Button size="sm" variant="outline" className="flex-1 border-success/50 text-success hover:bg-success hover:text-success-foreground">
+              <Button size="sm" variant="sport" className="flex-1">
                 <Phone className="h-4 w-4 mr-1" />
                 <span className="text-xs">Appeler</span>
               </Button>
             )}
             {stadium.contact_info.website && (
-              <Button size="sm" variant="outline" asChild className="flex-1 border-secondary/50 text-secondary hover:bg-secondary hover:text-secondary-foreground">
+              <Button size="sm" variant="hero" asChild className="flex-1">
                 <a 
                   href={stadium.contact_info.website} 
                   target="_blank" 
