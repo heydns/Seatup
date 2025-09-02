@@ -242,10 +242,31 @@ export const StadiumDetail = () => {
               className="w-full h-full object-cover"
               onLoad={() => console.log('Image loaded successfully:', stadium.image_url)}
               onError={(e) => {
-                console.error('Image failed to load:', stadium.image_url);
-                e.currentTarget.src = "/placeholder.svg";
+                console.error('Image failed to load, using fallback');
+                // Utiliser une image générée par défaut comme fallback
+                const fallbackUrl = "/lovable-uploads/parc-des-princes-night-default.jpg";
+                if (e.currentTarget.src !== fallbackUrl) {
+                  e.currentTarget.src = fallbackUrl;
+                } else {
+                  // Si même le fallback échoue, afficher un placeholder coloré
+                  e.currentTarget.style.display = 'none';
+                  const placeholder = e.currentTarget.nextElementSibling as HTMLElement;
+                  if (placeholder) placeholder.style.display = 'flex';
+                }
               }}
             />
+            <div 
+              className="absolute inset-0 bg-gradient-to-br from-primary/30 to-secondary/30 flex items-center justify-center text-white"
+              style={{ display: 'none' }}
+            >
+              <div className="text-center">
+                <h1 className="text-4xl md:text-5xl font-bold mb-2">{stadium.name}</h1>
+                <div className="flex items-center gap-2 text-lg justify-center">
+                  <MapPin className="h-5 w-5" />
+                  <span>{stadium.city}</span>
+                </div>
+              </div>
+            </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
             <div className="absolute bottom-8 left-8 text-white">
               <h1 className="text-4xl md:text-5xl font-bold mb-2">{stadium.name}</h1>

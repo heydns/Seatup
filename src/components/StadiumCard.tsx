@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { getStadiumImageUrl } from "@/lib/stadium-images";
 
 interface Stadium {
@@ -25,19 +26,33 @@ interface StadiumCardProps {
 }
 
 export const StadiumCard = ({ stadium }: StadiumCardProps) => {
+  const [imageError, setImageError] = useState(false);
   const imageUrl = getStadiumImageUrl(stadium.image_url, stadium.type, stadium.name);
   
   return (
     <Card className="h-full hover:shadow-lg transition-all duration-300 group overflow-hidden">
       <div className="relative h-48 overflow-hidden">
-        <img 
-          src={imageUrl} 
-          alt={stadium.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          onError={(e) => {
-            e.currentTarget.src = "/placeholder.svg";
-          }}
-        />
+        {!imageError ? (
+          <img 
+            src={imageUrl} 
+            alt={stadium.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            onError={() => {
+              console.warn(`Image failed to load for ${stadium.name}:`, imageUrl);
+              setImageError(true);
+            }}
+            onLoad={() => {
+              console.log(`Image loaded successfully for ${stadium.name}:`, imageUrl);
+            }}
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+            <div className="text-center">
+              <MapPin className="h-12 w-12 text-primary/40 mx-auto mb-2" />
+              <p className="text-xs text-primary/60 font-medium">{stadium.name}</p>
+            </div>
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         <div className="absolute bottom-4 left-4 text-white">
           <h3 className="text-xl font-bold mb-1">{stadium.name}</h3>
