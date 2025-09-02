@@ -11,6 +11,7 @@ import { EventCard } from "@/components/EventCard";
 import { TeamCard } from "@/components/TeamCard";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { getStadiumImageUrl } from "@/lib/stadium-images";
 
 interface Stadium {
   id: string;
@@ -234,39 +235,26 @@ export const StadiumDetail = () => {
 
         {/* Hero Section */}
         <div className="relative mb-8 rounded-xl overflow-hidden">
-          {stadium.image_url ? (
-            <div className="h-64 md:h-96 relative">
-              <img
-                src={stadium.image_url}
-                alt={stadium.name}
-                className="w-full h-full object-cover"
-                onLoad={() => console.log('Image loaded successfully:', stadium.image_url)}
-                onError={(e) => {
-                  console.error('Image failed to load:', stadium.image_url);
-                  e.currentTarget.src = "/placeholder.svg";
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-              <div className="absolute bottom-8 left-8 text-white">
-                <h1 className="text-4xl md:text-5xl font-bold mb-2">{stadium.name}</h1>
-                <div className="flex items-center gap-2 text-lg">
-                  <MapPin className="h-5 w-5" />
-                  <span>{stadium.city}</span>
-                </div>
+          <div className="h-64 md:h-96 relative">
+            <img
+              src={getStadiumImageUrl(stadium.image_url, stadium.type, stadium.name)}
+              alt={stadium.name}
+              className="w-full h-full object-cover"
+              onLoad={() => console.log('Image loaded successfully:', stadium.image_url)}
+              onError={(e) => {
+                console.error('Image failed to load:', stadium.image_url);
+                e.currentTarget.src = "/placeholder.svg";
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+            <div className="absolute bottom-8 left-8 text-white">
+              <h1 className="text-4xl md:text-5xl font-bold mb-2">{stadium.name}</h1>
+              <div className="flex items-center gap-2 text-lg">
+                <MapPin className="h-5 w-5" />
+                <span>{stadium.city}</span>
               </div>
             </div>
-          ) : (
-            <div className="h-64 md:h-96 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-              <div className="text-center">
-                <Building className="h-16 w-16 text-primary/40 mx-auto mb-4" />
-                <h1 className="text-4xl md:text-5xl font-bold mb-2">{stadium.name}</h1>
-                <div className="flex items-center gap-2 text-lg justify-center">
-                  <MapPin className="h-5 w-5" />
-                  <span>{stadium.city}</span>
-                </div>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

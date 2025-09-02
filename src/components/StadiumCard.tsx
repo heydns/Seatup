@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { getStadiumImageUrl } from "@/lib/stadium-images";
 
 interface Stadium {
   id: string;
@@ -24,23 +25,19 @@ interface StadiumCardProps {
 }
 
 export const StadiumCard = ({ stadium }: StadiumCardProps) => {
+  const imageUrl = getStadiumImageUrl(stadium.image_url, stadium.type, stadium.name);
+  
   return (
     <Card className="h-full hover:shadow-lg transition-all duration-300 group overflow-hidden">
       <div className="relative h-48 overflow-hidden">
-        {stadium.image_url ? (
-            <img 
-              src={stadium.image_url} 
-              alt={stadium.name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              onError={(e) => {
-                e.currentTarget.src = "/placeholder.svg";
-              }}
-            />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-            <MapPin className="h-16 w-16 text-primary/40" />
-          </div>
-        )}
+        <img 
+          src={imageUrl} 
+          alt={stadium.name}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          onError={(e) => {
+            e.currentTarget.src = "/placeholder.svg";
+          }}
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         <div className="absolute bottom-4 left-4 text-white">
           <h3 className="text-xl font-bold mb-1">{stadium.name}</h3>
