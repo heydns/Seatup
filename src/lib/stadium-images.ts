@@ -49,8 +49,8 @@ export const getStadiumImageUrl = (
     "U Arena": "/lovable-uploads/u-arena-official.jpg",
     "Palais des Sports Marcel Cerdan": "/lovable-uploads/levallois-perret-real.jpg",
     "Stade Pierre de Coubertin": "/lovable-uploads/pierre-coubertin-real.jpg",
-    "Roland-Garros": "/lovable-uploads/roland-garros.jpg",
-    "Stade Roland-Garros": "/lovable-uploads/roland-garros.jpg"
+    "Roland-Garros": "/lovable-uploads/roland-garros-real.jpg",
+    "Stade Roland-Garros": "/lovable-uploads/roland-garros-real.jpg"
   };
   
   if (stadiumName && stadiumSpecific[stadiumName as keyof typeof stadiumSpecific]) {
@@ -180,6 +180,8 @@ export const AVAILABLE_STADIUM_IMAGES = [
   { name: "Parc des Princes (Réel)", url: "/lovable-uploads/parc-des-princes-real.jpg" },
   { name: "U Arena (Réel)", url: "/lovable-uploads/u-arena-official.jpg" },
   { name: "Palais des Sports Marcel Cerdan (Réel)", url: "/lovable-uploads/levallois-perret-real.jpg" },
+  { name: "Roland-Garros (Réel)", url: "/lovable-uploads/roland-garros-real.jpg" },
+  { name: "Pierre de Coubertin (Réel)", url: "/lovable-uploads/pierre-coubertin-real.jpg" },
   { name: "Parc des Princes (Jour)", url: "/lovable-uploads/parc-des-princes.jpg" },
   { name: "Adidas Arena", url: "/lovable-uploads/adidas-arena.jpg" },
   { name: "Accor Arena", url: "/lovable-uploads/2a65224f-97c7-457b-a5e7-697fb6fb61f3.png" },
