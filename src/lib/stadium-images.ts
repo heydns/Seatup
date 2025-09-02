@@ -45,8 +45,8 @@ export const getStadiumImageUrl = (
   // Images spécifiques par nom de stade
   const stadiumSpecific = {
     "Parc des Princes": "/lovable-uploads/parc-des-princes-real.jpg",
-    "La Défense U Arena": "/lovable-uploads/u-arena-real.jpg",
-    "U Arena": "/lovable-uploads/u-arena-real.jpg",
+    "La Défense U Arena": "/lovable-uploads/u-arena-official.jpg",
+    "U Arena": "/lovable-uploads/u-arena-official.jpg",
     "Roland-Garros": "/lovable-uploads/roland-garros.jpg",
     "Stade Roland-Garros": "/lovable-uploads/roland-garros.jpg"
   };
