@@ -48,6 +48,7 @@ export const getStadiumImageUrl = (
     "La Défense U Arena": "/lovable-uploads/u-arena-official.jpg",
     "U Arena": "/lovable-uploads/u-arena-official.jpg",
     "Palais des Sports Marcel Cerdan": "/lovable-uploads/levallois-perret-real.jpg",
+    "Stade Pierre de Coubertin": "/lovable-uploads/pierre-coubertin-real.jpg",
     "Roland-Garros": "/lovable-uploads/roland-garros.jpg",
     "Stade Roland-Garros": "/lovable-uploads/roland-garros.jpg"
   };
