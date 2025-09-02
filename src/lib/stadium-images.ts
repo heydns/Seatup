@@ -32,9 +32,25 @@ export const getStadiumImageUrl = (
   stadiumType?: string | null,
   stadiumName?: string | null
 ): string => {
-  // Si une image est définie, l'utiliser
+  // Si une image est définie, l'utiliser mais avec validation
   if (imageUrl) {
+    // Si l'image est dans le système lovable-uploads, vérifier qu'elle existe
+    if (imageUrl.includes('lovable-uploads')) {
+      // Pour l'instant, utiliser l'image telle quelle et laisser le fallback HTML gérer les erreurs
+      return imageUrl;
+    }
     return imageUrl;
+  }
+  
+  // Images spécifiques par nom de stade
+  const stadiumSpecific = {
+    "Parc des Princes": "/lovable-uploads/parc-des-princes-night-default.jpg",
+    "Roland-Garros": "/lovable-uploads/roland-garros.jpg",
+    "Stade Roland-Garros": "/lovable-uploads/roland-garros.jpg"
+  };
+  
+  if (stadiumName && stadiumSpecific[stadiumName as keyof typeof stadiumSpecific]) {
+    return stadiumSpecific[stadiumName as keyof typeof stadiumSpecific];
   }
   
   // Sinon, utiliser l'image par défaut selon le type exact
