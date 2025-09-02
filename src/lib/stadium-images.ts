@@ -47,6 +47,7 @@ export const getStadiumImageUrl = (
     "Parc des Princes": "/lovable-uploads/parc-des-princes-real.jpg",
     "La Défense U Arena": "/lovable-uploads/u-arena-official.jpg",
     "U Arena": "/lovable-uploads/u-arena-official.jpg",
+    "Palais des Sports Marcel Cerdan": "/lovable-uploads/levallois-perret-real.jpg",
     "Roland-Garros": "/lovable-uploads/roland-garros.jpg",
     "Stade Roland-Garros": "/lovable-uploads/roland-garros.jpg"
   };
@@ -176,7 +177,8 @@ export const assignDefaultImagesToStadiums = async () => {
  */
 export const AVAILABLE_STADIUM_IMAGES = [
   { name: "Parc des Princes (Réel)", url: "/lovable-uploads/parc-des-princes-real.jpg" },
-  { name: "U Arena (Réel)", url: "/lovable-uploads/u-arena-real.jpg" },
+  { name: "U Arena (Réel)", url: "/lovable-uploads/u-arena-official.jpg" },
+  { name: "Palais des Sports Marcel Cerdan (Réel)", url: "/lovable-uploads/levallois-perret-real.jpg" },
   { name: "Parc des Princes (Jour)", url: "/lovable-uploads/parc-des-princes.jpg" },
   { name: "Adidas Arena", url: "/lovable-uploads/adidas-arena.jpg" },
   { name: "Accor Arena", url: "/lovable-uploads/2a65224f-97c7-457b-a5e7-697fb6fb61f3.png" },
