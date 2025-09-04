@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "@/components/AuthProvider";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -53,7 +55,9 @@ export const Header = () => {
               Contact
             </Link>
             <Button variant="hero" asChild>
-              <Link to="/auth">Se connecter</Link>
+              <Link to={user ? "/home" : "/auth"}>
+                {user ? "Mon compte" : "Se connecter"}
+              </Link>
             </Button>
           </nav>
 
@@ -108,7 +112,9 @@ export const Header = () => {
                 Contact
               </Link>
               <Button variant="hero" asChild className="w-fit">
-                <Link to="/auth" onClick={() => setIsMenuOpen(false)}>Se connecter</Link>
+                <Link to={user ? "/home" : "/auth"} onClick={() => setIsMenuOpen(false)}>
+                  {user ? "Mon compte" : "Se connecter"}
+                </Link>
               </Button>
             </nav>
           </div>
