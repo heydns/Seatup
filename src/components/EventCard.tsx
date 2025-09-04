@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPin, Globe, Calendar, Tag } from "lucide-react";
+import { Calendar, MapPin, Tag, ExternalLink, Globe } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -115,45 +113,44 @@ export const EventCard = ({ event }: EventCardProps) => {
   const { originalPrice, subsidizedPrice } = getEventPricing();
 
   return (
-    <Card className="h-full hover:shadow-lg transition-all duration-300 group overflow-hidden">
-      {/* Event image */}
-      <div className="relative h-48 overflow-hidden">
+    <div className="card-sport group hover:scale-[1.02] transition-all duration-300">
+      {/* Event image with click navigation */}
+      <div className="aspect-[4/3] overflow-hidden rounded-t-lg mb-4 cursor-pointer" onClick={() => navigate(`/event/${event.ID_event}`)}>
         <img 
           src={getEventImage()} 
           alt={event.Event} 
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer" 
-          onClick={() => navigate(`/event/${event.ID_event}`)}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        {event.Competition && (
-          <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground">
-            {event.Competition}
-          </Badge>
-        )}
       </div>
       
-      <CardHeader className="pb-3">
-        <div className="space-y-2">
-          <CardTitle 
-            className="text-lg line-clamp-2 group-hover:text-primary transition-colors cursor-pointer" 
-            onClick={() => navigate(`/event/${event.ID_event}`)}
-          >
-            {event.Event}
-          </CardTitle>
-          
-          {event.Organization && (
-            <p className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              <Link to={`/organizer/${encodeURIComponent(event.Organization)}`}>
-                {event.Organization}
-              </Link>
-            </p>
-          )}
-        </div>
-      </CardHeader>
-
-      <CardContent className="space-y-4 flex-1">
+      {/* Event info */}
+      <div className="space-y-3">
+        {/* Competition badge */}
+        {event.Competition && (
+          <span className="inline-block bg-primary text-white px-2 py-1 rounded text-xs font-medium">
+            {event.Competition}
+          </span>
+        )}
+        
+        {/* Event title with click navigation */}
+        <h3 
+          className="text-lg font-monument font-semibold line-clamp-2 group-hover:text-primary transition-colors cursor-pointer" 
+          onClick={() => navigate(`/event/${event.ID_event}`)}
+        >
+          {event.Event}
+        </h3>
+        
+        {/* Organization */}
+        {event.Organization && (
+          <p className="text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer">
+            <Link to={`/organizer/${encodeURIComponent(event.Organization)}`}>
+              {event.Organization}
+            </Link>
+          </p>
+        )}
+        
         {/* Date and Location */}
-        <div className="space-y-2">
+        <div className="space-y-1">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Calendar className="h-4 w-4" />
             <span>{formatDate(event.Date)}</span>
@@ -164,49 +161,46 @@ export const EventCard = ({ event }: EventCardProps) => {
               {getStadiumLink(event.Location) ? (
                 <Link 
                   to={getStadiumLink(event.Location)!} 
-                  className="hover:text-primary transition-colors cursor-pointer line-clamp-1"
+                  className="hover:text-primary transition-colors cursor-pointer"
                 >
                   {event.Location}
                 </Link>
               ) : (
-                <span className="line-clamp-1">{event.Location}</span>
+                <span>{event.Location}</span>
               )}
             </div>
           )}
         </div>
         
         {/* Sport */}
-        {event.Sport && (
-          <div className="flex items-center gap-2 text-sm">
-            <Tag className="h-4 w-4" />
-            <span className="font-medium text-primary">{event.Sport}</span>
-          </div>
-        )}
+        <div className="flex items-center gap-2 text-sm">
+          <span className="font-medium text-primary">{event.Sport}</span>
+        </div>
         
         {/* Pricing */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-bold text-primary">
-              {subsidizedPrice}€
-            </span>
-            <span className="text-sm text-muted-foreground line-through">
-              {originalPrice}€
-            </span>
+        <div className="flex items-center justify-between pt-2">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-bold text-primary">
+                {subsidizedPrice}€
+              </span>
+              <span className="text-sm text-muted-foreground line-through">
+                {originalPrice}€
+              </span>
+            </div>
+            <p className="text-xs text-green-600">
+              Économisez {originalPrice - subsidizedPrice}€
+            </p>
           </div>
-          <p className="text-xs text-green-600">
-            Économisez {originalPrice - subsidizedPrice}€
-          </p>
         </div>
-      </CardContent>
-      
-      {/* Actions */}
-      <div className="p-6 pt-0">
-        <div className="flex gap-2">
-          <Button variant="default" size="sm" className="flex-1">
+        
+        {/* Actions */}
+        <div className="flex gap-2 pt-2">
+          <Button variant="hero" size="sm" className="flex-1">
             Réserver
           </Button>
           {event.Link && (
-            <Button variant="outline" size="sm" asChild>
+            <Button variant="sport" size="sm" asChild>
               <a href={event.Link} target="_blank" rel="noopener noreferrer">
                 <Globe className="h-4 w-4" />
               </a>
@@ -214,6 +208,6 @@ export const EventCard = ({ event }: EventCardProps) => {
           )}
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
