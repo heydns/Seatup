@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -16,16 +16,78 @@ import {
   Trophy,
   User,
   Ticket,
-  ArrowRight
+  ArrowRight,
+  Building2,
+  BarChart3
 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
+import { supabase } from '@/integrations/supabase/client';
 import marvinAvatar from '@/assets/marvin-avatar.jpg';
+import orusLogo from '@/assets/orus-logo.png';
 
 const BeneficiaryHome = () => {
   const { userProfile, signOut } = useAuth();
+  const [beneficiaryData, setBeneficiaryData] = useState(null);
+  const [companyData, setCompanyData] = useState(null);
+  const [fullUserProfile, setFullUserProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchBeneficiaryData = async () => {
+      if (!userProfile?.user_id) return;
+      
+      try {
+        // Récupérer le profil complet avec status_badge
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', userProfile.user_id)
+          .single();
+
+        if (profileError) {
+          console.error('Error fetching profile:', profileError);
+        } else {
+          setFullUserProfile(profile);
+        }
+
+        // Récupérer les données du bénéficiaire
+        const { data: beneficiary, error: beneficiaryError } = await supabase
+          .from('beneficiaries')
+          .select('*')
+          .eq('user_id', userProfile.user_id)
+          .single();
+
+        if (beneficiaryError) {
+          console.error('Error fetching beneficiary:', beneficiaryError);
+          return;
+        }
+
+        setBeneficiaryData(beneficiary);
+
+        // Récupérer les données de l'entreprise CSE
+        if (beneficiary?.cse_company_id) {
+          const { data: company, error: companyError } = await supabase
+            .from('cse_companies')
+            .select('*')
+            .eq('id', beneficiary.cse_company_id)
+            .single();
+
+          if (companyError) {
+            console.error('Error fetching company:', companyError);
+            return;
+          }
+
+          setCompanyData(company);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchBeneficiaryData();
+  }, [userProfile]);
 
   const handleSignOut = async () => {
     const { error } = await signOut();
@@ -139,35 +201,36 @@ const BeneficiaryHome = () => {
                         {userInfo.firstName.charAt(0)}{userInfo.lastName.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
-                    <div>
-                      <h3 className="text-xl font-monument font-semibold">
-                        {userInfo.firstName} {userInfo.lastName}
-                      </h3>
-                      <p className="text-muted-foreground">{userProfile?.email}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="text-center p-4 bg-gradient-primary/10 rounded-lg">
-                      <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-2">
-                        <Star className="h-6 w-6 text-white" />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="text-xl font-monument font-semibold">
+                          {userInfo.firstName} {userInfo.lastName}
+                        </h3>
+                         <Badge variant="secondary" className="bg-gradient-primary/10 text-brand border-primary/20">
+                           {fullUserProfile?.status_badge || 'Fans 🏟️'}
+                         </Badge>
                       </div>
-                      <div className="text-2xl font-bold text-brand">{userInfo.reviewsCount}</div>
-                      <p className="text-sm text-muted-foreground">Avis</p>
-                    </div>
-                    <div className="text-center p-4 bg-gradient-primary/10 rounded-lg">
-                      <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-2">
-                        <Heart className="h-6 w-6 text-white" />
-                      </div>
-                      <div className="text-2xl font-bold text-brand">{userInfo.favoritesCount}</div>
-                      <p className="text-sm text-muted-foreground">Favoris</p>
-                    </div>
-                    <div className="text-center p-4 bg-gradient-primary/10 rounded-lg">
-                      <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-2">
-                        <Ticket className="h-6 w-6 text-white" />
-                      </div>
-                      <div className="text-2xl font-bold text-brand">{userInfo.purchasesCount}</div>
-                      <p className="text-sm text-muted-foreground">Achats</p>
+                      <p className="text-muted-foreground mb-3">{userProfile?.email}</p>
+                      
+                      {/* Mon entreprise */}
+                      {companyData && (
+                        <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center border-2 border-primary/20">
+                            <img 
+                              src={orusLogo} 
+                              alt="Logo Orus" 
+                              className="w-8 h-8 object-contain"
+                            />
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <Building2 className="h-4 w-4 text-muted-foreground" />
+                              <span className="font-medium text-sm">Mon entreprise</span>
+                            </div>
+                            <p className="font-semibold text-brand">{companyData.name}</p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -211,6 +274,59 @@ const BeneficiaryHome = () => {
                       {Math.round((walletData.usedBudget / walletData.totalBudget) * 100)}% utilisé
                     </p>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Mes Stats */}
+        <section>
+          <div className="max-w-7xl rounded-3xl shadow-lg border border-border/30 p-8 mx-auto bg-white/95 backdrop-blur-sm">
+            <div className="mb-6">
+              <h2 className="text-xl md:text-2xl font-monument text-brand mb-2">
+                <BarChart3 className="inline-block mr-3 h-6 w-6" />
+                Mes Stats
+              </h2>
+              <p className="text-muted-foreground">
+                Votre activité sur Seatup
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="card-sport animate-fade-up">
+                <div className="text-center p-6">
+                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Star className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="text-3xl font-monument font-bold text-brand mb-2">
+                    {userInfo.reviewsCount}
+                  </div>
+                  <p className="text-muted-foreground">Avis donnés</p>
+                </div>
+              </div>
+
+              <div className="card-sport animate-fade-up" style={{ animationDelay: '0.1s' }}>
+                <div className="text-center p-6">
+                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Heart className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="text-3xl font-monument font-bold text-brand mb-2">
+                    {userInfo.favoritesCount}
+                  </div>
+                  <p className="text-muted-foreground">Événements favoris</p>
+                </div>
+              </div>
+
+              <div className="card-sport animate-fade-up" style={{ animationDelay: '0.2s' }}>
+                <div className="text-center p-6">
+                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Ticket className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="text-3xl font-monument font-bold text-brand mb-2">
+                    {userInfo.purchasesCount}
+                  </div>
+                  <p className="text-muted-foreground">Billets achetés</p>
                 </div>
               </div>
             </div>
