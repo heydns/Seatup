@@ -19,13 +19,15 @@ import {
   ArrowRight,
   Building2,
   BarChart3,
-  Users
+  Users,
+  Clock
 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { supabase } from '@/integrations/supabase/client';
+import { differenceInDays } from 'date-fns';
 import marvinAvatar from '@/assets/marvin-avatar.jpg';
 import orusLogo from '@/assets/orus-logo-new.png';
 
@@ -104,6 +106,11 @@ const BeneficiaryHome = () => {
       toast.error('Erreur lors de la déconnexion');
     }
   };
+
+  // Calculate days remaining until December 31, 2025
+  const endDate = new Date(2025, 11, 31); // December 31, 2025
+  const today = new Date();
+  const daysRemaining = differenceInDays(endDate, today);
 
   // Mock data
   const userInfo = {
@@ -282,14 +289,25 @@ const BeneficiaryHome = () => {
                   <div className="mb-6">
                     <div className="balance-badge inline-flex items-center gap-2 mb-4">
                       <Wallet className="h-5 w-5" />
-                      <span>Budget disponible</span>
+                      <span>Subvention disponible</span>
                     </div>
                     <div className="text-4xl font-monument font-bold text-brand mb-2">
                       {walletData.remainingBudget}€
                     </div>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground mb-3">
                       sur {walletData.totalBudget}€ alloués
                     </p>
+                    
+                    {/* Date information */}
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/30 rounded-lg p-3">
+                      <Clock className="h-4 w-4" />
+                      <span>
+                        Jusqu'au 31 Décembre 2025
+                        <span className="ml-2 font-semibold text-foreground">
+                          ({daysRemaining} jours restants)
+                        </span>
+                      </span>
+                    </div>
                   </div>
 
                   <div className="space-y-3">
