@@ -18,7 +18,8 @@ import {
   Ticket,
   ArrowRight,
   Building2,
-  BarChart3
+  BarChart3,
+  Users
 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { toast } from 'sonner';
@@ -33,16 +34,22 @@ const BeneficiaryHome = () => {
   const [beneficiaryData, setBeneficiaryData] = useState(null);
   const [companyData, setCompanyData] = useState(null);
   const [fullUserProfile, setFullUserProfile] = useState(null);
+  const [favoriteStadium, setFavoriteStadium] = useState(null);
+  const [favoriteTeam, setFavoriteTeam] = useState(null);
 
   useEffect(() => {
     const fetchBeneficiaryData = async () => {
       if (!userProfile?.user_id) return;
       
       try {
-        // Récupérer le profil complet avec status_badge
+        // Récupérer le profil complet avec status_badge et les relations stade/équipe
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
-          .select('*')
+          .select(`
+            *,
+            favorite_stadium:stadiums!profiles_favorite_stadium_id_fkey(id, name),
+            favorite_team:teams!profiles_favorite_team_id_fkey(id, name)
+          `)
           .eq('user_id', userProfile.user_id)
           .single();
 
@@ -50,6 +57,8 @@ const BeneficiaryHome = () => {
           console.error('Error fetching profile:', profileError);
         } else {
           setFullUserProfile(profile);
+          setFavoriteStadium(profile?.favorite_stadium);
+          setFavoriteTeam(profile?.favorite_team);
         }
 
         // Récupérer les données du bénéficiaire
@@ -234,6 +243,32 @@ const BeneficiaryHome = () => {
                         <p className="text-sm">
                           {fullUserProfile?.city} {fullUserProfile?.postal_code}
                         </p>
+                      </div>
+                    )}
+                    
+                    {favoriteStadium && (
+                      <div>
+                        <div className="text-sm font-medium text-muted-foreground mb-1">Mon stade préféré</div>
+                        <Link 
+                          to={`/stadium/${favoriteStadium.id}`}
+                          className="text-sm text-primary hover:underline flex items-center gap-1"
+                        >
+                          <MapPin className="h-3 w-3" />
+                          {favoriteStadium.name}
+                        </Link>
+                      </div>
+                    )}
+                    
+                    {favoriteTeam && (
+                      <div>
+                        <div className="text-sm font-medium text-muted-foreground mb-1">Mon équipe préférée</div>
+                        <Link 
+                          to={`/organizers`}
+                          className="text-sm text-primary hover:underline flex items-center gap-1"
+                        >
+                          <Users className="h-3 w-3" />
+                          {favoriteTeam.name}
+                        </Link>
                       </div>
                     )}
                   </div>

@@ -288,6 +288,8 @@ export type Database = {
           country: string | null
           created_at: string
           email: string
+          favorite_stadium_id: string | null
+          favorite_team_id: string | null
           first_name: string | null
           id: string
           last_name: string | null
@@ -305,6 +307,8 @@ export type Database = {
           country?: string | null
           created_at?: string
           email: string
+          favorite_stadium_id?: string | null
+          favorite_team_id?: string | null
           first_name?: string | null
           id?: string
           last_name?: string | null
@@ -322,6 +326,8 @@ export type Database = {
           country?: string | null
           created_at?: string
           email?: string
+          favorite_stadium_id?: string | null
+          favorite_team_id?: string | null
           first_name?: string | null
           id?: string
           last_name?: string | null
@@ -332,7 +338,22 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_favorite_stadium_id_fkey"
+            columns: ["favorite_stadium_id"]
+            isOneToOne: false
+            referencedRelation: "stadiums"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profiles_favorite_team_id_fkey"
+            columns: ["favorite_team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       purchases: {
         Row: {
