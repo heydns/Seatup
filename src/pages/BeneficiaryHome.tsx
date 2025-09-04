@@ -225,6 +225,30 @@ const BeneficiaryHome = () => {
                       </div>
                     </div>
                   </div>
+                  
+                  {/* Informations détaillées */}
+                  <div className="space-y-4 pt-4 border-t border-border/20">
+                    <div>
+                      <div className="text-sm font-medium text-muted-foreground mb-1">Prénom</div>
+                      <p className="text-sm">{fullUserProfile?.first_name || 'Non renseigné'}</p>
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-muted-foreground mb-1">Nom</div>
+                      <p className="text-sm">{fullUserProfile?.last_name || 'Non renseigné'}</p>
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-muted-foreground mb-1">Email</div>
+                      <p className="text-sm">{fullUserProfile?.email}</p>
+                    </div>
+                    {(fullUserProfile?.city || fullUserProfile?.postal_code) && (
+                      <div>
+                        <div className="text-sm font-medium text-muted-foreground mb-1">Ville</div>
+                        <p className="text-sm">
+                          {fullUserProfile?.city} {fullUserProfile?.postal_code}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
