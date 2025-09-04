@@ -263,7 +263,7 @@ const BeneficiaryHome = () => {
                       <div>
                         <div className="text-sm font-medium text-muted-foreground mb-1">Mon équipe préférée</div>
                         <Link 
-                          to={`/team/${favoriteTeam.id}`}
+                          to={`/organizer/${favoriteTeam.organizer_name}`}
                           className="text-sm text-primary hover:underline flex items-center gap-1"
                         >
                           <Users className="h-3 w-3" />
