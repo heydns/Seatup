@@ -221,14 +221,7 @@ const BeneficiaryHome = () => {
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Building2 className="h-4 w-4" />
                         <span>Entreprise:</span>
-                        <div className="flex items-center gap-2">
-                          <img 
-                            src="/lovable-uploads/f8a730f2-9639-4a17-be31-6e2bd04a8a11.png" 
-                            alt="Logo Orus" 
-                            className="w-5 h-5 object-contain"
-                          />
-                          <span className="font-medium text-foreground">{companyData?.name || 'Orus'}</span>
-                        </div>
+                        <span className="font-medium text-foreground">{companyData?.name || 'Orus'}</span>
                       </div>
                     </div>
                   </div>
