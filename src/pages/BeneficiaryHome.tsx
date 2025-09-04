@@ -202,40 +202,40 @@ const BeneficiaryHome = () => {
       <div className="container mx-auto px-4 py-8 pt-28 space-y-8">
         {/* Mes Informations + Wallet */}
         <section>
-          <div className="max-w-7xl rounded-3xl shadow-lg border border-border/30 p-8 mx-auto bg-white/95 backdrop-blur-sm">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div className="max-w-6xl rounded-2xl shadow-lg border border-border/30 p-6 mx-auto bg-white/95 backdrop-blur-sm">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
               {/* Mes Informations */}
-              <div className="space-y-6 h-full">
-                <h2 className="text-xl md:text-2xl font-monument text-brand mb-4">
+              <div className="space-y-4 h-full">
+                <h2 className="text-lg md:text-xl font-monument text-brand mb-3">
                   Mes Informations
                 </h2>
-                <div className="card-sport h-full flex flex-col">
-                  <div className="flex items-center gap-4 mb-6">
-                    <Avatar className="h-20 w-20 border-4 border-primary/20">
+                <div className="card-sport h-full flex flex-col p-5">
+                  <div className="flex items-center gap-3 mb-5">
+                    <Avatar className="h-16 w-16 border-3 border-primary/20">
                       <AvatarImage src={userInfo.avatar} />
-                      <AvatarFallback className="bg-gradient-primary text-white text-xl">
+                      <AvatarFallback className="bg-gradient-primary text-white text-lg">
                         {userInfo.firstName.charAt(0)}{userInfo.lastName.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-monument font-semibold">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h3 className="text-lg font-monument font-semibold truncate">
                           {userInfo.firstName} {userInfo.lastName}
                         </h3>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="secondary" className="bg-gradient-primary/10 text-brand border-primary/20">
+                        <div className="flex items-center gap-1 flex-shrink-0">
+                          <Badge variant="secondary" className="bg-gradient-primary/10 text-brand border-primary/20 text-xs">
                             {fullUserProfile?.status_badge || 'Fans 🏟️'}
                           </Badge>
-                          <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 font-semibold">
+                          <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 font-semibold text-xs">
                             4200 pts
                           </Badge>
                         </div>
                       </div>
-                      <p className="text-muted-foreground mb-3">{userProfile?.email}</p>
+                      <p className="text-sm text-muted-foreground mb-2 truncate">{userProfile?.email}</p>
                       
                       {/* Mon entreprise */}
-                      <div className="flex items-center gap-1 text-muted-foreground mb-3">
-                        <Building2 className="h-4 w-4" />
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <Building2 className="h-3 w-3" />
                         <span>Entreprise:</span>
                         <span className="font-medium text-foreground">{companyData?.name || 'Orus'}</span>
                       </div>
@@ -243,22 +243,22 @@ const BeneficiaryHome = () => {
                   </div>
                   
                   {/* Informations détaillées */}
-                  <div className="space-y-4 pt-4 border-t border-border/20 flex-1">
+                  <div className="space-y-3 pt-3 border-t border-border/20 flex-1">
                     {(fullUserProfile?.city || fullUserProfile?.postal_code) && (
-                      <div className="flex items-center gap-2 text-muted-foreground">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         🏙️ <span>Ma ville:</span>
-                        <span className="font-medium text-foreground">
+                        <span className="font-medium text-foreground truncate">
                           {fullUserProfile?.city} {fullUserProfile?.postal_code}
                         </span>
                       </div>
                     )}
                     
                     {favoriteStadium && (
-                      <div className="flex items-center gap-2 text-muted-foreground">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         🏟️ <span>Mon stade:</span>
                         <Link 
                           to={`/stadium/${favoriteStadium.id}`}
-                          className="font-medium text-foreground hover:text-primary hover:underline"
+                          className="font-medium text-foreground hover:text-primary hover:underline truncate"
                         >
                           {favoriteStadium.name}
                         </Link>
@@ -266,11 +266,11 @@ const BeneficiaryHome = () => {
                     )}
                     
                     {favoriteTeam && (
-                      <div className="flex items-center gap-2 text-muted-foreground">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         ⚽ <span>Mon équipe:</span>
                         <Link 
                           to={`/organizer/${favoriteTeam.organizer_name}`}
-                          className="font-medium text-foreground hover:text-primary hover:underline"
+                          className="font-medium text-foreground hover:text-primary hover:underline truncate"
                         >
                           {favoriteTeam.organizer_name}
                         </Link>
@@ -281,26 +281,26 @@ const BeneficiaryHome = () => {
               </div>
 
               {/* Wallet */}
-              <div className="space-y-6 h-full">
-                <h2 className="text-xl md:text-2xl font-monument text-brand mb-4">
+              <div className="space-y-4 h-full">
+                <h2 className="text-lg md:text-xl font-monument text-brand mb-3">
                   Mon Wallet
                 </h2>
-                <div className="card-sport h-full flex flex-col">
-                  <div className="mb-6">
-                    <div className="balance-badge inline-flex items-center gap-2 mb-4">
-                      <Wallet className="h-5 w-5" />
-                      <span>Subvention disponible</span>
+                <div className="card-sport h-full flex flex-col p-5">
+                  <div className="mb-5">
+                    <div className="balance-badge inline-flex items-center gap-2 mb-3">
+                      <Wallet className="h-4 w-4" />
+                      <span className="text-sm">Subvention disponible</span>
                     </div>
-                    <div className="text-4xl font-monument font-bold text-brand mb-2">
+                    <div className="text-3xl font-monument font-bold text-brand mb-2">
                       {walletData.remainingBudget}€
                     </div>
-                    <p className="text-muted-foreground mb-3">
+                    <p className="text-sm text-muted-foreground mb-3">
                       sur {walletData.totalBudget}€ alloués
                     </p>
                     
                     {/* Date information */}
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/30 rounded-lg p-3">
-                      <Clock className="h-4 w-4" />
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted/30 rounded-lg p-2">
+                      <Clock className="h-3 w-3" />
                       <span>
                         Jusqu'au 31 Décembre 2025
                         <span className="ml-2 font-semibold text-foreground">
@@ -310,7 +310,7 @@ const BeneficiaryHome = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-3 flex-1">
+                  <div className="space-y-2 flex-1">
                     <div className="flex justify-between text-sm">
                       <span>Budget total</span>
                       <span className="font-semibold">{walletData.totalBudget}€</span>
@@ -319,9 +319,9 @@ const BeneficiaryHome = () => {
                       <span>Déjà utilisé</span>
                       <span className="font-semibold text-secondary">{walletData.usedBudget}€</span>
                     </div>
-                    <div className="w-full bg-muted rounded-full h-3">
+                    <div className="w-full bg-muted rounded-full h-2">
                       <div 
-                        className="bg-gradient-primary h-3 rounded-full transition-all duration-500" 
+                        className="bg-gradient-primary h-2 rounded-full transition-all duration-500" 
                         style={{ width: `${(walletData.usedBudget / walletData.totalBudget) * 100}%` }}
                       ></div>
                     </div>
