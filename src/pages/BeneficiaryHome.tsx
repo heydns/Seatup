@@ -48,7 +48,7 @@ const BeneficiaryHome = () => {
           .select(`
             *,
             favorite_stadium:stadiums!profiles_favorite_stadium_id_fkey(id, name),
-            favorite_team:teams!profiles_favorite_team_id_fkey(id, name)
+            favorite_team:teams!profiles_favorite_team_id_fkey(id, name, organizer_name)
           `)
           .eq('user_id', userProfile.user_id)
           .single();
@@ -239,7 +239,7 @@ const BeneficiaryHome = () => {
                   <div className="space-y-4 pt-4 border-t border-border/20">
                     {(fullUserProfile?.city || fullUserProfile?.postal_code) && (
                       <div>
-                        <div className="text-sm font-medium text-muted-foreground mb-1">Ville</div>
+                        <div className="text-sm font-medium text-muted-foreground mb-1">Ma ville</div>
                         <p className="text-sm">
                           {fullUserProfile?.city} {fullUserProfile?.postal_code}
                         </p>
@@ -263,11 +263,11 @@ const BeneficiaryHome = () => {
                       <div>
                         <div className="text-sm font-medium text-muted-foreground mb-1">Mon équipe préférée</div>
                         <Link 
-                          to={`/organizers`}
+                          to={`/team/${favoriteTeam.id}`}
                           className="text-sm text-primary hover:underline flex items-center gap-1"
                         >
                           <Users className="h-3 w-3" />
-                          {favoriteTeam.name}
+                          {favoriteTeam.organizer_name}
                         </Link>
                       </div>
                     )}
