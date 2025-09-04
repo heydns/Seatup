@@ -38,13 +38,18 @@ const Auth = () => {
       if (isLogin) {
         const { error } = await signIn(formData.email, formData.password);
         if (error) {
-          toast.error(error.message);
+          console.error('Login error:', error);
+          if (error.message.includes('Invalid login credentials')) {
+            toast.error('Email ou mot de passe incorrect');
+          } else {
+            toast.error(`Erreur de connexion: ${error.message}`);
+          }
         } else {
           toast.success('Connexion réussie !');
           navigate('/dashboard');
         }
       } else {
-        const { error } = await signUp(
+        const { error, data } = await signUp(
           formData.email, 
           formData.password, 
           formData.firstName, 
@@ -53,13 +58,25 @@ const Auth = () => {
           formData.companyName
         );
         if (error) {
-          toast.error(error.message);
+          console.error('Signup error:', error);
+          if (error.message.includes('User already registered')) {
+            toast.error('Un compte existe déjà avec cette adresse email');
+          } else if (error.message.includes('Password should be at least')) {
+            toast.error('Le mot de passe doit contenir au moins 6 caractères');
+          } else {
+            toast.error(`Erreur d'inscription: ${error.message}`);
+          }
         } else {
-          toast.success('Inscription réussie ! Vérifiez votre email.');
+          if (data?.user?.email_confirmed_at) {
+            toast.success('Inscription réussie ! Connexion en cours...');
+          } else {
+            toast.success('Inscription réussie ! Vérifiez votre email pour confirmer votre compte.');
+          }
         }
       }
     } catch (error) {
-      toast.error('Une erreur est survenue');
+      console.error('Auth error:', error);
+      toast.error('Une erreur technique est survenue. Veuillez réessayer.');
     } finally {
       setIsLoading(false);
     }

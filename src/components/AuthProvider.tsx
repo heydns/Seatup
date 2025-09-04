@@ -7,7 +7,7 @@ interface AuthContextType {
   session: Session | null;
   userProfile: UserProfile | null;
   loading: boolean;
-  signUp: (email: string, password: string, firstName: string, lastName: string, role: string, companyName?: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, firstName: string, lastName: string, role: string, companyName?: string) => Promise<{ error: any; data?: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<{ error: any }>;
 }
@@ -43,20 +43,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Fetch user profile
+          // Fetch user profile - using setTimeout(0) to avoid deadlock
           setTimeout(async () => {
-            const { data: profile } = await supabase
-              .from('profiles')
-              .select('*')
-              .eq('user_id', session.user.id)
-              .single();
-            setUserProfile(profile as UserProfile);
-            setLoading(false);
+            try {
+              const { data: profile, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('user_id', session.user.id)
+                .maybeSingle();
+              
+              if (error) {
+                console.error('Error fetching profile:', error);
+              } else {
+                setUserProfile(profile as UserProfile);
+              }
+            } catch (error) {
+              console.error('Profile fetch error:', error);
+            } finally {
+              setLoading(false);
+            }
           }, 0);
         } else {
           setUserProfile(null);
@@ -80,7 +90,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signUp = async (email: string, password: string, firstName: string, lastName: string, role: string, companyName?: string) => {
     const redirectUrl = `${window.location.origin}/`;
     
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -88,31 +98,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         data: {
           first_name: firstName,
           last_name: lastName,
-          role,
-          company_name: companyName
+          role: role as 'beneficiary' | 'cse_admin' | 'organizer_admin',
+          company_name: companyName || null
         }
       }
     });
 
-    if (!error) {
-      // Update the profile with additional data after signup
-      setTimeout(async () => {
-        const { data: session } = await supabase.auth.getSession();
-        if (session.session?.user) {
-          await supabase
-            .from('profiles')
-            .update({
-              first_name: firstName,
-              last_name: lastName,
-              role,
-              company_name: companyName
-            })
-            .eq('user_id', session.session.user.id);
-        }
-      }, 1000);
-    }
-
-    return { error };
+    // The profile is now automatically created by the database trigger
+    // No need for manual profile creation or setTimeout
+    
+    return { error, data };
   };
 
   const signIn = async (email: string, password: string) => {
