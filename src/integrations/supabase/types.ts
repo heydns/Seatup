@@ -290,6 +290,7 @@ export type Database = {
           id: string
           last_name: string | null
           role: string
+          status_badge: string | null
           updated_at: string
           user_id: string
         }
@@ -302,6 +303,7 @@ export type Database = {
           id?: string
           last_name?: string | null
           role: string
+          status_badge?: string | null
           updated_at?: string
           user_id: string
         }
@@ -314,6 +316,7 @@ export type Database = {
           id?: string
           last_name?: string | null
           role?: string
+          status_badge?: string | null
           updated_at?: string
           user_id?: string
         }
