@@ -273,10 +273,10 @@ export const StadiumsPage = () => {
 
         {/* Stadiums Grid */}
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, i) => (
               <div key={i} className="space-y-4">
-                <Skeleton className="h-48 w-full rounded-lg" />
+                <Skeleton className="h-64 w-full rounded-lg" />
                 <Skeleton className="h-4 w-3/4" />
                 <Skeleton className="h-4 w-1/2" />
               </div>
@@ -294,7 +294,7 @@ export const StadiumsPage = () => {
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredStadiums.map((stadium) => (
               <StadiumCard key={stadium.id} stadium={stadium} />
             ))}
