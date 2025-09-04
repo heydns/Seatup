@@ -117,6 +117,9 @@ export const StadiumCard = ({ stadium }: StadiumCardProps) => {
           </div>
         )}
         
+        {/* Spacer to match event card height */}
+        <div className="pt-8"></div>
+        
         {/* Actions */}
         <div className="flex gap-2 pt-2">
           <Button variant="hero" size="sm" className="flex-1" asChild>
