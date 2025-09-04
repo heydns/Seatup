@@ -239,38 +239,44 @@ const BeneficiaryHome = () => {
                   <div className="space-y-4 pt-4 border-t border-border/20">
                     {(fullUserProfile?.city || fullUserProfile?.postal_code) && (
                       <div>
-                        <div className="text-sm font-medium text-muted-foreground mb-1">Ma ville</div>
-                        <p className="text-sm">
-                          {fullUserProfile?.city} {fullUserProfile?.postal_code}
-                        </p>
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          🏙️ <span>Ma ville:</span>
+                          <span className="font-medium text-foreground">
+                            {fullUserProfile?.city} {fullUserProfile?.postal_code}
+                          </span>
+                        </div>
                       </div>
                     )}
                     
-                    {favoriteStadium && (
-                      <div>
-                        <div className="text-sm font-medium text-muted-foreground mb-1">Mon stade préféré</div>
-                        <Link 
-                          to={`/stadium/${favoriteStadium.id}`}
-                          className="text-sm text-primary hover:underline flex items-center gap-1"
-                        >
-                          <MapPin className="h-3 w-3" />
-                          {favoriteStadium.name}
-                        </Link>
-                      </div>
-                    )}
-                    
-                    {favoriteTeam && (
-                      <div>
-                        <div className="text-sm font-medium text-muted-foreground mb-1">Mon équipe préférée</div>
-                        <Link 
-                          to={`/organizer/${favoriteTeam.organizer_name}`}
-                          className="text-sm text-primary hover:underline flex items-center gap-1"
-                        >
-                          <Users className="h-3 w-3" />
-                          {favoriteTeam.organizer_name}
-                        </Link>
-                      </div>
-                    )}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {favoriteStadium && (
+                        <div>
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            🏟️ <span>Mon stade préféré:</span>
+                            <Link 
+                              to={`/stadium/${favoriteStadium.id}`}
+                              className="font-medium text-foreground hover:text-primary hover:underline"
+                            >
+                              {favoriteStadium.name}
+                            </Link>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {favoriteTeam && (
+                        <div>
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            ⚽ <span>Mon équipe préférée:</span>
+                            <Link 
+                              to={`/organizer/${favoriteTeam.organizer_name}`}
+                              className="font-medium text-foreground hover:text-primary hover:underline"
+                            >
+                              {favoriteTeam.organizer_name}
+                            </Link>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
