@@ -335,59 +335,6 @@ const BeneficiaryHome = () => {
           </div>
         </section>
 
-        {/* Mes Stats */}
-        <section>
-          <div className="max-w-7xl rounded-3xl shadow-lg border border-border/30 p-8 mx-auto bg-white/95 backdrop-blur-sm">
-            <div className="mb-6">
-              <h2 className="text-xl md:text-2xl font-monument text-brand mb-2">
-                <BarChart3 className="inline-block mr-3 h-6 w-6" />
-                Mes Stats
-              </h2>
-              <p className="text-muted-foreground">
-                Votre activité sur Seatup
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="card-sport animate-fade-up">
-                <div className="text-center p-6">
-                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Star className="h-8 w-8 text-white" />
-                  </div>
-                  <div className="text-3xl font-monument font-bold text-brand mb-2">
-                    {userInfo.reviewsCount}
-                  </div>
-                  <p className="text-muted-foreground">Avis donnés</p>
-                </div>
-              </div>
-
-              <div className="card-sport animate-fade-up" style={{ animationDelay: '0.1s' }}>
-                <div className="text-center p-6">
-                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Heart className="h-8 w-8 text-white" />
-                  </div>
-                  <div className="text-3xl font-monument font-bold text-brand mb-2">
-                    {userInfo.favoritesCount}
-                  </div>
-                  <p className="text-muted-foreground">Événements favoris</p>
-                </div>
-              </div>
-
-              <div className="card-sport animate-fade-up" style={{ animationDelay: '0.2s' }}>
-                <div className="text-center p-6">
-                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Ticket className="h-8 w-8 text-white" />
-                  </div>
-                  <div className="text-3xl font-monument font-bold text-brand mb-2">
-                    {userInfo.purchasesCount}
-                  </div>
-                  <p className="text-muted-foreground">Billets achetés</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Mes Événements */}
         <section>
           <div className="max-w-7xl rounded-3xl shadow-lg border border-border/30 p-8 mx-auto bg-white/95 backdrop-blur-sm">
@@ -448,6 +395,59 @@ const BeneficiaryHome = () => {
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Mes Stats */}
+        <section>
+          <div className="max-w-7xl rounded-3xl shadow-lg border border-border/30 p-8 mx-auto bg-white/95 backdrop-blur-sm">
+            <div className="mb-6">
+              <h2 className="text-xl md:text-2xl font-monument text-brand mb-2">
+                <BarChart3 className="inline-block mr-3 h-6 w-6" />
+                Mes Stats
+              </h2>
+              <p className="text-muted-foreground">
+                Votre activité sur Seatup
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="card-sport animate-fade-up">
+                <div className="text-center p-6">
+                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Star className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="text-3xl font-monument font-bold text-brand mb-2">
+                    {userInfo.reviewsCount}
+                  </div>
+                  <p className="text-muted-foreground">Avis donnés</p>
+                </div>
+              </div>
+
+              <div className="card-sport animate-fade-up" style={{ animationDelay: '0.1s' }}>
+                <div className="text-center p-6">
+                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Heart className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="text-3xl font-monument font-bold text-brand mb-2">
+                    {userInfo.favoritesCount}
+                  </div>
+                  <p className="text-muted-foreground">Événements favoris</p>
+                </div>
+              </div>
+
+              <div className="card-sport animate-fade-up" style={{ animationDelay: '0.2s' }}>
+                <div className="text-center p-6">
+                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Ticket className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="text-3xl font-monument font-bold text-brand mb-2">
+                    {userInfo.purchasesCount}
+                  </div>
+                  <p className="text-muted-foreground">Billets achetés</p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
