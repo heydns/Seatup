@@ -30,97 +30,102 @@ export const StadiumCard = ({ stadium }: StadiumCardProps) => {
   const imageUrl = getStadiumImageUrl(stadium.image_url, stadium.type, stadium.name);
   
   return (
-    <Card className="h-full hover:shadow-lg transition-all duration-300 group overflow-hidden">
-      <div className="relative h-48 overflow-hidden">
-        {!imageError ? (
-          <img 
-            src={imageUrl} 
-            alt={stadium.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            onError={() => {
-              console.warn(`Image failed to load for ${stadium.name}:`, imageUrl);
-              setImageError(true);
-            }}
-            onLoad={() => {
-              console.log(`Image loaded successfully for ${stadium.name}:`, imageUrl);
-            }}
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-            <div className="text-center">
-              <MapPin className="h-12 w-12 text-primary/40 mx-auto mb-2" />
-              <p className="text-xs text-primary/60 font-medium">{stadium.name}</p>
+    <div className="card-sport group hover:scale-[1.02] transition-all duration-300">
+      {/* Stadium image with click navigation */}
+      <div className="aspect-[4/3] overflow-hidden rounded-t-lg mb-4 cursor-pointer">
+        <Link to={`/stadium/${stadium.id}`}>
+          {!imageError ? (
+            <img 
+              src={imageUrl} 
+              alt={stadium.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              onError={() => {
+                console.warn(`Image failed to load for ${stadium.name}:`, imageUrl);
+                setImageError(true);
+              }}
+              onLoad={() => {
+                console.log(`Image loaded successfully for ${stadium.name}:`, imageUrl);
+              }}
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+              <div className="text-center">
+                <MapPin className="h-12 w-12 text-primary/40 mx-auto mb-2" />
+                <p className="text-xs text-primary/60 font-medium">{stadium.name}</p>
+              </div>
             </div>
-          </div>
+          )}
+        </Link>
+      </div>
+      
+      {/* Stadium info */}
+      <div className="space-y-3">
+        {/* Type badge */}
+        {stadium.type && (
+          <span className="inline-block bg-primary text-white px-2 py-1 rounded text-xs font-medium">
+            {stadium.type}
+          </span>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        <div className="absolute bottom-4 left-4 text-white">
-          <h3 className="text-xl font-bold mb-1">{stadium.name}</h3>
-          <div className="flex items-center gap-1 text-sm">
+        
+        {/* Stadium title with click navigation */}
+        <h3 className="text-lg font-monument font-semibold line-clamp-2 group-hover:text-primary transition-colors cursor-pointer">
+          <Link to={`/stadium/${stadium.id}`}>
+            {stadium.name}
+          </Link>
+        </h3>
+        
+        {/* City and Capacity */}
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4" />
             <span>{stadium.city}</span>
           </div>
-        </div>
-      </div>
-
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between">
-          <div className="space-y-2">
-            {stadium.capacity && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Users className="h-4 w-4" />
-                <span>{stadium.capacity.toLocaleString()} places</span>
-              </div>
-            )}
-            {stadium.opened_year && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Calendar className="h-4 w-4" />
-                <span>Inauguré en {stadium.opened_year}</span>
-              </div>
-            )}
-          </div>
-          {stadium.type && (
-            <Badge variant="default" className="text-xs bg-primary text-primary-foreground">
-              {stadium.type}
-            </Badge>
+          {stadium.capacity && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Users className="h-4 w-4" />
+              <span>{stadium.capacity.toLocaleString()} places</span>
+            </div>
+          )}
+          {stadium.opened_year && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Calendar className="h-4 w-4" />
+              <span>Inauguré en {stadium.opened_year}</span>
+            </div>
           )}
         </div>
-      </CardHeader>
-
-      <CardContent className="space-y-4">
+        
+        {/* Description */}
         {stadium.description && (
-          <p className="text-sm text-muted-foreground line-clamp-3">
+          <p className="text-sm text-muted-foreground line-clamp-2">
             {stadium.description}
           </p>
         )}
-
+        
+        {/* Amenities */}
         {stadium.amenities && stadium.amenities.length > 0 && (
-          <div className="space-y-2">
-            <h4 className="text-sm font-medium">Équipements</h4>
-            <div className="flex flex-wrap gap-1">
-              {stadium.amenities.slice(0, 4).map((amenity) => (
-                <Badge key={amenity} variant="outline" className="text-xs border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground">
-                  {amenity}
-                </Badge>
-              ))}
-              {stadium.amenities.length > 4 && (
-                <Badge variant="outline" className="text-xs border-secondary/30 text-secondary hover:bg-secondary hover:text-secondary-foreground">
-                  +{stadium.amenities.length - 4}
-                </Badge>
-              )}
-            </div>
+          <div className="flex flex-wrap gap-1">
+            {stadium.amenities.slice(0, 3).map((amenity) => (
+              <Badge key={amenity} variant="outline" className="text-xs border-primary/30 text-primary">
+                {amenity}
+              </Badge>
+            ))}
+            {stadium.amenities.length > 3 && (
+              <Badge variant="outline" className="text-xs border-secondary/30 text-secondary">
+                +{stadium.amenities.length - 3}
+              </Badge>
+            )}
           </div>
         )}
-
-        <div className="pt-2">
-          <Button asChild className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+        
+        {/* Actions */}
+        <div className="flex gap-2 pt-2">
+          <Button variant="hero" size="sm" className="flex-1" asChild>
             <Link to={`/stadium/${stadium.id}`}>
-              <ExternalLink className="h-4 w-4 mr-2" />
               Voir les détails
             </Link>
           </Button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };

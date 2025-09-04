@@ -172,16 +172,16 @@ export const StadiumsPage = () => {
           </p>
         </div>
 
-        {/* Search and Filters */}
-        <div className="mb-8 space-y-4">
-          {/* Search Bar */}
+        {/* Search Bar - Events Style */}
+        <div className="mb-8 space-y-6">
+          {/* Main Search Bar */}
           <div className="relative max-w-md mx-auto">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Rechercher un stade..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
+              className="pl-10 h-12 text-base rounded-xl border-2 focus:border-primary transition-colors"
             />
           </div>
 
@@ -191,7 +191,7 @@ export const StadiumsPage = () => {
               <Badge
                 key={filter.value}
                 variant={typeFilter === filter.value ? "default" : "outline"}
-                className="cursor-pointer hover:bg-primary/20 transition-colors"
+                className="cursor-pointer hover:bg-primary/20 transition-colors px-4 py-2 text-sm"
                 onClick={() => setTypeFilter(filter.value)}
               >
                 {filter.label}
@@ -204,7 +204,7 @@ export const StadiumsPage = () => {
             <Button
               variant="ghost"
               onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-              className="gap-2"
+              className="gap-2 h-10 px-4 rounded-xl"
             >
               <Filter className="h-4 w-4" />
               Filtres avancés
@@ -213,9 +213,9 @@ export const StadiumsPage = () => {
 
           {/* Advanced Filters */}
           {showAdvancedFilters && (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-muted/50 rounded-lg">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-6 bg-muted/30 rounded-xl border">
               <Select value={capacityFilter} onValueChange={setCapacityFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="h-10 rounded-lg">
                   <SelectValue placeholder="Capacité" />
                 </SelectTrigger>
                 <SelectContent>
@@ -228,7 +228,7 @@ export const StadiumsPage = () => {
               </Select>
 
               <Select value={cityFilter} onValueChange={setCityFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="h-10 rounded-lg">
                   <SelectValue placeholder="Ville" />
                 </SelectTrigger>
                 <SelectContent>
@@ -241,7 +241,7 @@ export const StadiumsPage = () => {
               </Select>
 
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger>
+                <SelectTrigger className="h-10 rounded-lg">
                   <SelectValue placeholder="Trier par" />
                 </SelectTrigger>
                 <SelectContent>
@@ -252,7 +252,7 @@ export const StadiumsPage = () => {
                 </SelectContent>
               </Select>
 
-              <Button onClick={clearFilters} variant="outline" className="gap-2">
+              <Button onClick={clearFilters} variant="outline" className="gap-2 h-10 rounded-lg">
                 <RotateCcw className="h-4 w-4" />
                 Effacer
               </Button>
