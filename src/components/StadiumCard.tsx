@@ -103,7 +103,7 @@ export const StadiumCard = ({ stadium }: StadiumCardProps) => {
         
         {/* Amenities */}
         {stadium.amenities && stadium.amenities.length > 0 && (
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-1 pb-2">
             {stadium.amenities.slice(0, 3).map((amenity) => (
               <Badge key={amenity} variant="outline" className="text-xs border-primary/30 text-primary">
                 {amenity}
