@@ -248,13 +248,13 @@ const BeneficiaryHome = () => {
                       </div>
                     )}
                     
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="flex gap-4 text-sm">
                       {favoriteStadium && (
-                        <div className="flex items-center gap-2 text-muted-foreground">
+                        <div className="flex items-center gap-1 text-muted-foreground flex-1 min-w-0">
                           🏟️ <span>Mon stade:</span>
                           <Link 
                             to={`/stadium/${favoriteStadium.id}`}
-                            className="font-medium text-foreground hover:text-primary hover:underline"
+                            className="font-medium text-foreground hover:text-primary hover:underline truncate"
                           >
                             {favoriteStadium.name}
                           </Link>
@@ -262,11 +262,11 @@ const BeneficiaryHome = () => {
                       )}
                       
                       {favoriteTeam && (
-                        <div className="flex items-center gap-2 text-muted-foreground">
+                        <div className="flex items-center gap-1 text-muted-foreground flex-1 min-w-0">
                           ⚽ <span>Mon équipe:</span>
                           <Link 
                             to={`/organizer/${favoriteTeam.organizer_name}`}
-                            className="font-medium text-foreground hover:text-primary hover:underline"
+                            className="font-medium text-foreground hover:text-primary hover:underline truncate"
                           >
                             {favoriteTeam.organizer_name}
                           </Link>
