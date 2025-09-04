@@ -251,7 +251,7 @@ const BeneficiaryHome = () => {
                     <div className="flex flex-wrap gap-6">
                       {favoriteStadium && (
                         <div className="flex items-center gap-2 text-muted-foreground">
-                          🏟️ <span>Mon stade préféré:</span>
+                          🏟️ <span>Mon stade:</span>
                           <Link 
                             to={`/stadium/${favoriteStadium.id}`}
                             className="font-medium text-foreground hover:text-primary hover:underline"
@@ -263,7 +263,7 @@ const BeneficiaryHome = () => {
                       
                       {favoriteTeam && (
                         <div className="flex items-center gap-2 text-muted-foreground">
-                          ⚽ <span>Mon équipe préférée:</span>
+                          ⚽ <span>Mon équipe:</span>
                           <Link 
                             to={`/organizer/${favoriteTeam.organizer_name}`}
                             className="font-medium text-foreground hover:text-primary hover:underline"
