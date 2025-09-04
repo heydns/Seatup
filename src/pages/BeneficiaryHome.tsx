@@ -203,13 +203,13 @@ const BeneficiaryHome = () => {
         {/* Mes Informations + Wallet */}
         <section>
           <div className="max-w-7xl rounded-3xl shadow-lg border border-border/30 p-8 mx-auto bg-white/95 backdrop-blur-sm">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
               {/* Mes Informations */}
-              <div className="space-y-6">
+              <div className="space-y-6 h-full">
                 <h2 className="text-xl md:text-2xl font-monument text-brand mb-4">
                   Mes Informations
                 </h2>
-                <div className="card-sport">
+                <div className="card-sport h-full flex flex-col">
                   <div className="flex items-center gap-4 mb-6">
                     <Avatar className="h-20 w-20 border-4 border-primary/20">
                       <AvatarImage src={userInfo.avatar} />
@@ -243,7 +243,7 @@ const BeneficiaryHome = () => {
                   </div>
                   
                   {/* Informations détaillées */}
-                  <div className="space-y-4 pt-4 border-t border-border/20">
+                  <div className="space-y-4 pt-4 border-t border-border/20 flex-1">
                     {(fullUserProfile?.city || fullUserProfile?.postal_code) && (
                       <div className="flex items-center gap-2 text-muted-foreground">
                         🏙️ <span>Ma ville:</span>
@@ -281,11 +281,11 @@ const BeneficiaryHome = () => {
               </div>
 
               {/* Wallet */}
-              <div className="space-y-6">
+              <div className="space-y-6 h-full">
                 <h2 className="text-xl md:text-2xl font-monument text-brand mb-4">
                   Mon Wallet
                 </h2>
-                <div className="card-sport">
+                <div className="card-sport h-full flex flex-col">
                   <div className="mb-6">
                     <div className="balance-badge inline-flex items-center gap-2 mb-4">
                       <Wallet className="h-5 w-5" />
@@ -310,7 +310,7 @@ const BeneficiaryHome = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="space-y-3 flex-1">
                     <div className="flex justify-between text-sm">
                       <span>Budget total</span>
                       <span className="font-semibold">{walletData.totalBudget}€</span>
