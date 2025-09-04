@@ -35,7 +35,7 @@ const BeneficiaryHome = () => {
 
   // Mock data
   const userInfo = {
-    avatar: null,
+    avatar: userProfile?.avatar_url || null,
     firstName: userProfile?.first_name || '',
     lastName: userProfile?.last_name || '',
     reviewsCount: 12,

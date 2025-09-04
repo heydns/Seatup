@@ -22,6 +22,7 @@ interface UserProfile {
   role: 'beneficiary' | 'cse_admin' | 'organizer_admin';
   created_at: string;
   updated_at: string;
+  avatar_url: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
