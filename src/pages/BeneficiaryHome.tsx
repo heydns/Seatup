@@ -38,6 +38,8 @@ const BeneficiaryHome = () => {
   const [fullUserProfile, setFullUserProfile] = useState(null);
   const [favoriteStadium, setFavoriteStadium] = useState(null);
   const [favoriteTeam, setFavoriteTeam] = useState(null);
+  const [progressWidth, setProgressWidth] = useState(0);
+  const [showSparkles, setShowSparkles] = useState(false);
 
   useEffect(() => {
     const fetchBeneficiaryData = async () => {
@@ -99,6 +101,25 @@ const BeneficiaryHome = () => {
 
     fetchBeneficiaryData();
   }, [userProfile]);
+
+  // Animation de la barre de progression
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const targetWidth = (walletData.usedBudget / walletData.totalBudget) * 100;
+      setProgressWidth(targetWidth);
+      
+      // Déclencher les paillettes après l'animation de la barre
+      const sparkleTimer = setTimeout(() => {
+        setShowSparkles(true);
+        // Cacher les paillettes après 2 secondes
+        setTimeout(() => setShowSparkles(false), 2000);
+      }, 1500); // 1.5s pour laisser la barre se remplir
+      
+      return () => clearTimeout(sparkleTimer);
+    }, 500); // Délai initial de 500ms
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSignOut = async () => {
     const { error } = await signOut();
@@ -319,11 +340,28 @@ const BeneficiaryHome = () => {
                       <span>Déjà utilisé</span>
                       <span className="font-semibold text-secondary">{walletData.usedBudget}€</span>
                     </div>
-                    <div className="w-full bg-muted rounded-full h-3">
+                    <div className="relative w-full bg-muted rounded-full h-3 overflow-hidden">
                       <div 
-                        className="bg-gradient-primary h-3 rounded-full transition-all duration-500" 
-                        style={{ width: `${(walletData.usedBudget / walletData.totalBudget) * 100}%` }}
-                      ></div>
+                        className="bg-gradient-primary h-3 rounded-full transition-all duration-1500 ease-out relative" 
+                        style={{ width: `${progressWidth}%` }}
+                      >
+                        {/* Paillettes */}
+                        {showSparkles && (
+                          <div className="absolute top-0 right-0 w-full h-full">
+                            {[...Array(8)].map((_, i) => (
+                              <div
+                                key={i}
+                                className="absolute w-1 h-1 bg-yellow-400 rounded-full animate-sparkle opacity-0"
+                                style={{
+                                  top: `${Math.random() * 100}%`,
+                                  right: `${Math.random() * 20}%`,
+                                  animationDelay: `${i * 0.1}s`,
+                                }}
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <p className="text-xs text-muted-foreground text-center">
                       {Math.round((walletData.usedBudget / walletData.totalBudget) * 100)}% utilisé
