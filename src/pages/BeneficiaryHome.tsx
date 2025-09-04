@@ -108,15 +108,15 @@ const BeneficiaryHome = () => {
       const targetWidth = (walletData.usedBudget / walletData.totalBudget) * 100;
       setProgressWidth(targetWidth);
       
-      // Déclencher les paillettes après l'animation de la barre
+      // Déclencher les paillettes après l'animation de la barre (plus long)
       const sparkleTimer = setTimeout(() => {
         setShowSparkles(true);
-        // Cacher les paillettes après 2 secondes
-        setTimeout(() => setShowSparkles(false), 2000);
-      }, 1500); // 1.5s pour laisser la barre se remplir
+        // Cacher les paillettes après 4 secondes
+        setTimeout(() => setShowSparkles(false), 4000);
+      }, 3000); // 3s pour laisser la barre se remplir lentement
       
       return () => clearTimeout(sparkleTimer);
-    }, 500); // Délai initial de 500ms
+    }, 800); // Délai initial de 800ms
 
     return () => clearTimeout(timer);
   }, []);
@@ -342,20 +342,33 @@ const BeneficiaryHome = () => {
                     </div>
                     <div className="relative w-full bg-muted rounded-full h-3 overflow-hidden">
                       <div 
-                        className="bg-gradient-primary h-3 rounded-full transition-all duration-1500 ease-out relative" 
+                        className="bg-gradient-primary h-3 rounded-full transition-all duration-[3000ms] ease-out relative" 
                         style={{ width: `${progressWidth}%` }}
                       >
                         {/* Paillettes */}
                         {showSparkles && (
-                          <div className="absolute top-0 right-0 w-full h-full">
-                            {[...Array(8)].map((_, i) => (
+                          <div className="absolute -top-2 -right-2 w-full h-8 overflow-visible">
+                            {[...Array(16)].map((_, i) => (
                               <div
                                 key={i}
-                                className="absolute w-1 h-1 bg-yellow-400 rounded-full animate-sparkle opacity-0"
+                                className="absolute w-2 h-2 bg-yellow-400 rounded-full animate-sparkle-long opacity-0 shadow-lg"
                                 style={{
-                                  top: `${Math.random() * 100}%`,
-                                  right: `${Math.random() * 20}%`,
-                                  animationDelay: `${i * 0.1}s`,
+                                  top: `${Math.random() * 150}%`,
+                                  right: `${Math.random() * 30}%`,
+                                  animationDelay: `${i * 0.2}s`,
+                                  transform: `rotate(${Math.random() * 360}deg)`,
+                                }}
+                              />
+                            ))}
+                            {/* Paillettes plus grosses */}
+                            {[...Array(8)].map((_, i) => (
+                              <div
+                                key={`big-${i}`}
+                                className="absolute w-3 h-3 bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-full animate-sparkle-big opacity-0 shadow-xl"
+                                style={{
+                                  top: `${Math.random() * 200}%`,
+                                  right: `${Math.random() * 25}%`,
+                                  animationDelay: `${i * 0.3}s`,
                                 }}
                               />
                             ))}
