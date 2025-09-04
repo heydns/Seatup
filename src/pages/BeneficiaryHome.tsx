@@ -113,10 +113,10 @@ const BeneficiaryHome = () => {
         setShowSparkles(true);
         // Cacher les paillettes après 4 secondes
         setTimeout(() => setShowSparkles(false), 4000);
-      }, 3000); // 3s pour laisser la barre se remplir lentement
+      }, 5500); // 5.5s pour laisser la barre se remplir très lentement
       
       return () => clearTimeout(sparkleTimer);
-    }, 800); // Délai initial de 800ms
+    }, 1200); // Délai initial de 1.2s
 
     return () => clearTimeout(timer);
   }, []);
@@ -342,7 +342,7 @@ const BeneficiaryHome = () => {
                     </div>
                     <div className="relative w-full bg-muted rounded-full h-3 overflow-hidden">
                       <div 
-                        className="bg-gradient-primary h-3 rounded-full transition-all duration-[3000ms] ease-out relative" 
+                        className="bg-gradient-primary h-3 rounded-full transition-all duration-[5000ms] ease-out relative" 
                         style={{ width: `${progressWidth}%` }}
                       >
                         {/* Paillettes */}
