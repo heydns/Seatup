@@ -206,9 +206,14 @@ const BeneficiaryHome = () => {
                         <h3 className="text-xl font-monument font-semibold">
                           {userInfo.firstName} {userInfo.lastName}
                         </h3>
-                         <Badge variant="secondary" className="bg-gradient-primary/10 text-brand border-primary/20">
-                           {fullUserProfile?.status_badge || 'Fans 🏟️'}
-                         </Badge>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="secondary" className="bg-gradient-primary/10 text-brand border-primary/20">
+                            {fullUserProfile?.status_badge || 'Fans 🏟️'}
+                          </Badge>
+                          <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 font-semibold">
+                            4200 pts
+                          </Badge>
+                        </div>
                       </div>
                       <p className="text-muted-foreground mb-3">{userProfile?.email}</p>
                       
