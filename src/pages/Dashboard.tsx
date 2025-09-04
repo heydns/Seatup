@@ -1,7 +1,6 @@
 import React from 'react';
 import { useAuth } from '@/components/AuthProvider';
 import { Navigate } from 'react-router-dom';
-import BeneficiaryDashboard from '@/components/dashboards/BeneficiaryDashboard';
 import CSEAdminDashboard from '@/components/dashboards/CSEAdminDashboard';
 import OrganizerAdminDashboard from '@/components/dashboards/OrganizerAdminDashboard';
 import { Loader2 } from 'lucide-react';
@@ -23,7 +22,7 @@ const Dashboard = () => {
 
   switch (userProfile.role) {
     case 'beneficiary':
-      return <BeneficiaryDashboard />;
+      return <Navigate to="/home" replace />;
     case 'cse_admin':
       return <CSEAdminDashboard />;
     case 'organizer_admin':

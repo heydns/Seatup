@@ -8,6 +8,7 @@ import { AuthDebug } from "@/components/AuthDebug";
 import { EventsPage } from "@/components/EventsPage";
 import Auth from "@/pages/Auth";
 import Dashboard from "@/pages/Dashboard";
+import BeneficiaryHome from "@/pages/BeneficiaryHome";
 import { EventDetail } from "@/pages/EventDetail";
 import { OrganizerDetail } from "@/pages/OrganizerDetail";
 import { OrganizersPage } from "@/pages/OrganizersPage";
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/home" element={<BeneficiaryHome />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <AuthDebug />
