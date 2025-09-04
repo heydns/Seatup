@@ -14,6 +14,109 @@ export type Database = {
   }
   public: {
     Tables: {
+      beneficiaries: {
+        Row: {
+          allocated_budget: number | null
+          consumed_budget: number | null
+          created_at: string
+          cse_company_id: string
+          id: string
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          allocated_budget?: number | null
+          consumed_budget?: number | null
+          created_at?: string
+          cse_company_id: string
+          id?: string
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          allocated_budget?: number | null
+          consumed_budget?: number | null
+          created_at?: string
+          cse_company_id?: string
+          id?: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "beneficiaries_cse_company_id_fkey"
+            columns: ["cse_company_id"]
+            isOneToOne: false
+            referencedRelation: "cse_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cart_items: {
+        Row: {
+          created_at: string
+          event_id: number
+          id: string
+          quantity: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: number
+          id?: string
+          quantity?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: number
+          id?: string
+          quantity?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cart_items_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "event"
+            referencedColumns: ["id_event"]
+          },
+        ]
+      }
+      cse_companies: {
+        Row: {
+          consumed_budget: number | null
+          created_at: string
+          id: string
+          name: string
+          total_budget: number | null
+          updated_at: string
+        }
+        Insert: {
+          consumed_budget?: number | null
+          created_at?: string
+          id?: string
+          name: string
+          total_budget?: number | null
+          updated_at?: string
+        }
+        Update: {
+          consumed_budget?: number | null
+          created_at?: string
+          id?: string
+          name?: string
+          total_budget?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       event: {
         Row: {
           access: string | null
@@ -120,6 +223,154 @@ export type Database = {
           Sport?: string | null
         }
         Relationships: []
+      }
+      favorite_events: {
+        Row: {
+          created_at: string
+          event_id: number
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: number
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: number
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorite_events_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "event"
+            referencedColumns: ["id_event"]
+          },
+        ]
+      }
+      organizers: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          organization_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          organization_name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          organization_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          company_name: string | null
+          created_at: string
+          email: string
+          first_name: string | null
+          id: string
+          last_name: string | null
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company_name?: string | null
+          created_at?: string
+          email: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          role: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company_name?: string | null
+          created_at?: string
+          email?: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      purchases: {
+        Row: {
+          created_at: string
+          event_id: number | null
+          final_price: number
+          id: string
+          original_price: number
+          payment_method: string | null
+          purchase_date: string
+          qr_code: string | null
+          quantity: number
+          status: string | null
+          subsidized_amount: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id?: number | null
+          final_price: number
+          id?: string
+          original_price: number
+          payment_method?: string | null
+          purchase_date?: string
+          qr_code?: string | null
+          quantity?: number
+          status?: string | null
+          subsidized_amount?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: number | null
+          final_price?: number
+          id?: string
+          original_price?: number
+          payment_method?: string | null
+          purchase_date?: string
+          qr_code?: string | null
+          quantity?: number
+          status?: string | null
+          subsidized_amount?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchases_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "event"
+            referencedColumns: ["id_event"]
+          },
+        ]
       }
       stadiums: {
         Row: {
