@@ -158,7 +158,7 @@ export const StadiumsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-accent">
+    <div className="min-h-screen bg-white">
       <Header />
       
       <main className="container mx-auto px-4 py-8">
@@ -181,7 +181,7 @@ export const StadiumsPage = () => {
               placeholder="Rechercher un stade..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-12 text-base rounded-xl border-2 focus:border-primary transition-colors"
+              className="search-input pl-10 h-12 text-lg"
             />
           </div>
 
