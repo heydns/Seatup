@@ -36,7 +36,7 @@ const BeneficiaryHome = () => {
 
   // Mock data
   const userInfo = {
-    avatar: userProfile?.avatar_url || marvinAvatar,
+    avatar: userProfile?.avatar_url?.includes('/src/assets/marvin-avatar.jpg') ? marvinAvatar : (userProfile?.avatar_url || marvinAvatar),
     firstName: userProfile?.first_name || '',
     lastName: userProfile?.last_name || '',
     reviewsCount: 12,
