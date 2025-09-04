@@ -240,11 +240,11 @@ const BeneficiaryHome = () => {
                       <div className="text-sm font-medium text-muted-foreground mb-1">Email</div>
                       <p className="text-sm">{fullUserProfile?.email}</p>
                     </div>
-                    {(fullUserProfile?.city || fullUserProfile?.postal_code) && (
+                    {fullUserProfile?.city && (
                       <div>
                         <div className="text-sm font-medium text-muted-foreground mb-1">Ville</div>
                         <p className="text-sm">
-                          {fullUserProfile?.city} {fullUserProfile?.postal_code}
+                          {fullUserProfile?.city}
                         </p>
                       </div>
                     )}
