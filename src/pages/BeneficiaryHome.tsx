@@ -108,15 +108,15 @@ const BeneficiaryHome = () => {
       const targetWidth = (walletData.usedBudget / walletData.totalBudget) * 100;
       setProgressWidth(targetWidth);
       
-      // Déclencher les paillettes après l'animation de la barre (plus long)
+      // Déclencher les paillettes après l'animation de la barre 
       const sparkleTimer = setTimeout(() => {
         setShowSparkles(true);
         // Cacher les paillettes après 4 secondes
         setTimeout(() => setShowSparkles(false), 4000);
-      }, 5500); // 5.5s pour laisser la barre se remplir très lentement
+      }, 8500); // 8.5s pour laisser la barre se remplir très lentement
       
       return () => clearTimeout(sparkleTimer);
-    }, 1200); // Délai initial de 1.2s
+    }, 800); // Délai initial de 800ms
 
     return () => clearTimeout(timer);
   }, []);
@@ -342,7 +342,7 @@ const BeneficiaryHome = () => {
                     </div>
                     <div className="relative w-full bg-muted rounded-full h-3 overflow-hidden">
                       <div 
-                        className="bg-gradient-primary h-3 rounded-full transition-all duration-[5000ms] ease-out relative" 
+                        className="bg-gradient-primary h-3 rounded-full transition-all duration-[8000ms] ease-in-out relative" 
                         style={{ width: `${progressWidth}%` }}
                       >
                         {/* Paillettes */}
