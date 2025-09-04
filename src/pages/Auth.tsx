@@ -26,7 +26,7 @@ const Auth = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/dashboard');
+      navigate('/home');
     }
   }, [user, navigate]);
 
@@ -46,7 +46,7 @@ const Auth = () => {
           }
         } else {
           toast.success('Connexion réussie !');
-          navigate('/dashboard');
+          navigate('/home');
         }
       } else {
         // Validation des champs obligatoires
