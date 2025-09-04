@@ -22,6 +22,7 @@ import { useAuth } from '@/components/AuthProvider';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
+import marvinAvatar from '@/assets/marvin-avatar.jpg';
 
 const BeneficiaryHome = () => {
   const { userProfile, signOut } = useAuth();
@@ -35,7 +36,7 @@ const BeneficiaryHome = () => {
 
   // Mock data
   const userInfo = {
-    avatar: userProfile?.avatar_url || null,
+    avatar: userProfile?.avatar_url || marvinAvatar,
     firstName: userProfile?.first_name || '',
     lastName: userProfile?.last_name || '',
     reviewsCount: 12,
