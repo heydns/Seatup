@@ -21,6 +21,7 @@ import {
 import { useAuth } from '@/components/AuthProvider';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
+import { Header } from '@/components/Header';
 
 const BeneficiaryHome = () => {
   const { userProfile, signOut } = useAuth();
@@ -117,33 +118,9 @@ const BeneficiaryHome = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b bg-card header-gradient">
-        <div className="container mx-auto px-4 py-6 relative z-10">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-monument font-bold text-brand">
-                Bonjour {userInfo.firstName} !
-              </h1>
-              <p className="text-base md:text-lg text-muted-foreground mt-1">
-                Découvrez vos événements et gérez votre budget
-              </p>
-            </div>
-            <div className="flex items-center gap-4">
-              <Button variant="outline" size="sm" className="hover-scale">
-                <Settings className="h-4 w-4 mr-2" />
-                Paramètres
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleSignOut} className="hover-scale">
-                <LogOut className="h-4 w-4 mr-2" />
-                Déconnexion
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
-      <div className="container mx-auto px-4 py-8 space-y-8">
+      <div className="container mx-auto px-4 py-8 pt-28 space-y-8">
         {/* Mes Informations + Wallet */}
         <section>
           <div className="max-w-7xl rounded-3xl shadow-lg border border-border/30 p-8 mx-auto bg-white/95 backdrop-blur-sm">
