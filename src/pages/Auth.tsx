@@ -49,6 +49,20 @@ const Auth = () => {
           navigate('/dashboard');
         }
       } else {
+        // Validation des champs obligatoires
+        if (!formData.firstName.trim()) {
+          toast.error('Le prénom est requis');
+          return;
+        }
+        if (!formData.lastName.trim()) {
+          toast.error('Le nom est requis');
+          return;
+        }
+        if ((formData.role === 'cse_admin' || formData.role === 'organizer_admin') && !formData.companyName.trim()) {
+          toast.error(`Le nom de ${formData.role === 'cse_admin' ? 'l\'entreprise' : 'l\'organisation'} est requis`);
+          return;
+        }
+
         const { error, data } = await signUp(
           formData.email, 
           formData.password, 
@@ -120,23 +134,25 @@ const Auth = () => {
                 <>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="firstName">Prénom</Label>
+                      <Label htmlFor="firstName">Prénom <span className="text-red-500">*</span></Label>
                       <Input
                         id="firstName"
                         type="text"
                         value={formData.firstName}
                         onChange={(e) => handleInputChange('firstName', e.target.value)}
                         required={!isLogin}
+                        placeholder="Votre prénom"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="lastName">Nom</Label>
+                      <Label htmlFor="lastName">Nom <span className="text-red-500">*</span></Label>
                       <Input
                         id="lastName"
                         type="text"
                         value={formData.lastName}
                         onChange={(e) => handleInputChange('lastName', e.target.value)}
                         required={!isLogin}
+                        placeholder="Votre nom"
                       />
                     </div>
                   </div>
@@ -158,7 +174,7 @@ const Auth = () => {
                   {(formData.role === 'cse_admin' || formData.role === 'organizer_admin') && (
                     <div className="space-y-2">
                       <Label htmlFor="companyName">
-                        {formData.role === 'cse_admin' ? 'Nom de l\'entreprise' : 'Nom de l\'organisation'}
+                        {formData.role === 'cse_admin' ? 'Nom de l\'entreprise' : 'Nom de l\'organisation'} <span className="text-red-500">*</span>
                       </Label>
                       <Input
                         id="companyName"
@@ -166,6 +182,7 @@ const Auth = () => {
                         value={formData.companyName}
                         onChange={(e) => handleInputChange('companyName', e.target.value)}
                         required={formData.role === 'cse_admin' || formData.role === 'organizer_admin'}
+                        placeholder={formData.role === 'cse_admin' ? 'Nom de votre entreprise' : 'Nom de votre organisation'}
                       />
                     </div>
                   )}

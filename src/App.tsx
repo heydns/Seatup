@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/components/AuthProvider";
+import { AuthDebug } from "@/components/AuthDebug";
 import { EventsPage } from "@/components/EventsPage";
 import Auth from "@/pages/Auth";
 import Dashboard from "@/pages/Dashboard";
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <AuthDebug />
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
