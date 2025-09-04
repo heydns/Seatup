@@ -218,24 +218,22 @@ const BeneficiaryHome = () => {
                       <p className="text-muted-foreground mb-3">{userProfile?.email}</p>
                       
                       {/* Mon entreprise */}
-                      {companyData && (
-                        <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center border-2 border-primary/20">
-                            <img 
-                              src={orusLogo} 
-                              alt="Logo Orus" 
-                              className="w-8 h-8 object-contain"
-                            />
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <Building2 className="h-4 w-4 text-muted-foreground" />
-                              <span className="font-medium text-sm">Mon entreprise</span>
-                            </div>
-                            <p className="font-semibold text-brand">{companyData.name}</p>
-                          </div>
+                      <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center border-2 border-primary/20">
+                          <img 
+                            src={orusLogo} 
+                            alt="Logo Orus" 
+                            className="w-8 h-8 object-contain"
+                          />
                         </div>
-                      )}
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <Building2 className="h-4 w-4 text-muted-foreground" />
+                            <span className="font-medium text-sm">Mon entreprise</span>
+                          </div>
+                          <p className="font-semibold text-brand">{companyData?.name || 'Orus'}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
