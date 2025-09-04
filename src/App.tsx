@@ -3,8 +3,10 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthPage } from "@/components/AuthPage";
+import { AuthProvider } from "@/components/AuthProvider";
 import { EventsPage } from "@/components/EventsPage";
+import Auth from "@/pages/Auth";
+import Dashboard from "@/pages/Dashboard";
 import { EventDetail } from "@/pages/EventDetail";
 import { OrganizerDetail } from "@/pages/OrganizerDetail";
 import { OrganizersPage } from "@/pages/OrganizersPage";
@@ -19,25 +21,28 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/events" element={<EventsPage />} />
-          <Route path="/organizers" element={<OrganizersPage />} />
-          <Route path="/stadiums" element={<StadiumsPage />} />
-          <Route path="/event/:id" element={<EventDetail />} />
-          <Route path="/organizer/:name" element={<OrganizerDetail />} />
-          <Route path="/stadium/:id" element={<StadiumDetail />} />
-          <Route path="/team/:id" element={<TeamDetail />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/events" element={<EventsPage />} />
+            <Route path="/organizers" element={<OrganizersPage />} />
+            <Route path="/stadiums" element={<StadiumsPage />} />
+            <Route path="/event/:id" element={<EventDetail />} />
+            <Route path="/organizer/:name" element={<OrganizerDetail />} />
+            <Route path="/stadium/:id" element={<StadiumDetail />} />
+            <Route path="/team/:id" element={<TeamDetail />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
