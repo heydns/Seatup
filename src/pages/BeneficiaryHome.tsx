@@ -248,32 +248,28 @@ const BeneficiaryHome = () => {
                       </div>
                     )}
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex flex-wrap gap-6">
                       {favoriteStadium && (
-                        <div>
-                          <div className="flex items-center gap-2 text-muted-foreground">
-                            🏟️ <span>Mon stade préféré:</span>
-                            <Link 
-                              to={`/stadium/${favoriteStadium.id}`}
-                              className="font-medium text-foreground hover:text-primary hover:underline"
-                            >
-                              {favoriteStadium.name}
-                            </Link>
-                          </div>
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          🏟️ <span>Mon stade préféré:</span>
+                          <Link 
+                            to={`/stadium/${favoriteStadium.id}`}
+                            className="font-medium text-foreground hover:text-primary hover:underline"
+                          >
+                            {favoriteStadium.name}
+                          </Link>
                         </div>
                       )}
                       
                       {favoriteTeam && (
-                        <div>
-                          <div className="flex items-center gap-2 text-muted-foreground">
-                            ⚽ <span>Mon équipe préférée:</span>
-                            <Link 
-                              to={`/organizer/${favoriteTeam.organizer_name}`}
-                              className="font-medium text-foreground hover:text-primary hover:underline"
-                            >
-                              {favoriteTeam.organizer_name}
-                            </Link>
-                          </div>
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          ⚽ <span>Mon équipe préférée:</span>
+                          <Link 
+                            to={`/organizer/${favoriteTeam.organizer_name}`}
+                            className="font-medium text-foreground hover:text-primary hover:underline"
+                          >
+                            {favoriteTeam.organizer_name}
+                          </Link>
                         </div>
                       )}
                     </div>
