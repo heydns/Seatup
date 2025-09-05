@@ -17,7 +17,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
 import marvinAvatar from '@/assets/marvin-avatar.jpg';
 
-// Import team member avatars
+// Import all team member avatars
 import sophieMartin from '@/assets/team/sophie-martin.jpg';
 import thomasBernard from '@/assets/team/thomas-bernard.jpg';
 import marieDubois from '@/assets/team/marie-dubois.jpg';
