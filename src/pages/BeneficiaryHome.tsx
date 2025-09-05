@@ -391,101 +391,77 @@ const BeneficiaryHome = () => {
         {/* Mon Équipe */}
         <section>
           <div className="max-w-7xl rounded-3xl shadow-lg border border-border/30 p-8 mx-auto bg-white/95 backdrop-blur-sm">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Nombre d'amis */}
-              <div className="space-y-6">
-                <h2 className="text-xl md:text-2xl font-monument text-brand mb-4">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl md:text-2xl font-monument text-brand mb-2">
                   <Users className="inline-block mr-3 h-6 w-6" />
                   Mon Équipe
                 </h2>
-                <div className="card-sport">
-                  <div className="text-center p-6">
-                    <div className="w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Users className="h-10 w-10 text-white" />
-                    </div>
-                    <div className="text-4xl font-monument font-bold text-brand mb-2">
-                      15
-                    </div>
-                    <p className="text-muted-foreground mb-4">Personnes dans votre réseau</p>
-                    
-                    {/* Répartition par type */}
-                    <div className="flex justify-center gap-4 mb-6">
-                      <div className="text-center">
-                        <div className="text-lg font-monument font-bold text-blue-600">5</div>
-                        <p className="text-xs text-muted-foreground">Collègues</p>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-lg font-monument font-bold text-pink-600">5</div>
-                        <p className="text-xs text-muted-foreground">Amis</p>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-lg font-monument font-bold text-green-600">5</div>
-                        <p className="text-xs text-muted-foreground">Famille</p>
-                      </div>
-                    </div>
-                    
-                    <Link to="/my-team">
-                      <Button className="w-full bg-gradient-primary text-white hover-scale group">
-                        Voir mon équipe
-                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </Link>
+                <p className="text-muted-foreground">
+                  Vos connexions sur Seatup
+                </p>
+              </div>
+              <Link to="/team">
+                <Button variant="sport" size="lg" className="group">
+                  Voir mon équipe
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Stats d'équipe */}
+              <div className="card-sport">
+                <div className="text-center p-6">
+                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Users className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="text-3xl font-monument font-bold text-brand mb-2">
+                    15
+                  </div>
+                  <p className="text-muted-foreground mb-4">Membres dans votre équipe</p>
+                  <div className="flex justify-center gap-2 text-sm">
+                    <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                      💼 5 Collègues
+                    </Badge>
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                      🤝 5 Amis
+                    </Badge>
+                    <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+                      👨‍👩‍👧‍👦 5 Famille
+                    </Badge>
                   </div>
                 </div>
               </div>
 
-              {/* Derniers ajouts */}
-              <div className="space-y-6">
-                <h2 className="text-xl md:text-2xl font-monument text-brand mb-4">
-                  Derniers ajouts
-                </h2>
-                <div className="card-sport">
-                  <div className="space-y-4">
-                    {/* Aperçu des derniers membres */}
-                    <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                      <Avatar className="h-12 w-12 border-2 border-primary/20">
-                        <AvatarFallback className="bg-gradient-primary text-white">SM</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium truncate">Sophie Martin</p>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="text-xs bg-blue-100 text-blue-800 border-blue-200">
-                            <Briefcase className="h-3 w-3 mr-1" />
-                            Collègue
-                          </Badge>
+              {/* Aperçu des membres récents */}
+              <div className="card-sport">
+                <div className="p-6">
+                  <h3 className="font-monument font-semibold mb-4">Nouveaux membres</h3>
+                  <div className="space-y-3">
+                    {[
+                      { name: 'Sophie Martin', badge: 'VIP 🌟', city: 'Paris' },
+                      { name: 'Thomas Bernard', badge: 'Fans 🏟️', city: 'Lyon' },
+                      { name: 'Marie Dubois', badge: 'Expert 🎯', city: 'Marseille' }
+                    ].map((member, index) => (
+                      <div key={index} className="flex items-center gap-3">
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src={marvinAvatar} />
+                          <AvatarFallback className="bg-gradient-primary text-white text-sm">
+                            {member.name.split(' ').map(n => n.charAt(0)).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <p className="font-medium text-sm">{member.name}</p>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className="text-xs">
+                              {member.badge}
+                            </Badge>
+                            <span className="text-xs text-muted-foreground">{member.city}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                      <Avatar className="h-12 w-12 border-2 border-primary/20">
-                        <AvatarFallback className="bg-gradient-primary text-white">TB</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium truncate">Thomas Bernard</p>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="text-xs bg-pink-100 text-pink-800 border-pink-200">
-                            <Heart className="h-3 w-3 mr-1" />
-                            Ami
-                          </Badge>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                      <Avatar className="h-12 w-12 border-2 border-primary/20">
-                        <AvatarFallback className="bg-gradient-primary text-white">MD</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium truncate">Marie Dubois</p>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="text-xs bg-green-100 text-green-800 border-green-200">
-                            <Home className="h-3 w-3 mr-1" />
-                            Famille
-                          </Badge>
-                        </div>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
