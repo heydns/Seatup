@@ -34,6 +34,20 @@ import chloeLambert from '@/assets/team/chloe-lambert.jpg';
 import julienBonnet from '@/assets/team/julien-bonnet.jpg';
 import amelieGerard from '@/assets/team/amelie-gerard.jpg';
 
+// Import new team member avatars
+import antoineRodriguez from '@/assets/team/antoine-rodriguez.jpg';
+import camilleGarcia from '@/assets/team/camille-garcia.jpg';
+import chloeSanchez from '@/assets/team/chloe-sanchez.jpg';
+import claireLaurent from '@/assets/team/claire-laurent.jpg';
+import emmaLeroy from '@/assets/team/emma-leroy.jpg';
+import julienSimon from '@/assets/team/julien-simon.jpg';
+import leaMartinez from '@/assets/team/lea-martinez.jpg';
+import maximeLopez from '@/assets/team/maxime-lopez.jpg';
+import nicolasMichel from '@/assets/team/nicolas-michel.jpg';
+import pierreMoreau from '@/assets/team/pierre-moreau.jpg';
+import romainPerez from '@/assets/team/romain-perez.jpg';
+import sarahGonzalez from '@/assets/team/sarah-gonzalez.jpg';
+
 interface TeamMember {
   id: string;
   first_name: string;
@@ -104,6 +118,35 @@ const TeamPage = () => {
 // Map avatar URLs to imported images
   const getAvatarImage = (avatarUrl: string) => {
     const avatarMap = {
+      '/src/assets/team/sophie-martin.jpg': sophieMartin,
+      '/src/assets/team/thomas-bernard.jpg': thomasBernard,
+      '/src/assets/team/marie-dubois.jpg': marieDubois,
+      '/src/assets/team/pierre-rousseau.jpg': pierreRousseau,
+      '/src/assets/team/julie-garcia.jpg': julieGarcia,
+      '/src/assets/team/antoine-moreau.jpg': antoineMoreau,
+      '/src/assets/team/camille-petit.jpg': camillePetit,
+      '/src/assets/team/laurent-simon.jpg': laurentSimon,
+      '/src/assets/team/emma-michel.jpg': emmaMichel,
+      '/src/assets/team/nicolas-leroy.jpg': nicolasLeroy,
+      '/src/assets/team/sarah-roux.jpg': sarahRoux,
+      '/src/assets/team/maxime-fontaine.jpg': maximeFontaine,
+      '/src/assets/team/chloe-lambert.jpg': chloeLambert,
+      '/src/assets/team/julien-bonnet.jpg': julienBonnet,
+      '/src/assets/team/amelie-gerard.jpg': amelieGerard,
+      // New team member avatars
+      '/src/assets/team/antoine-rodriguez.jpg': antoineRodriguez,
+      '/src/assets/team/camille-garcia.jpg': camilleGarcia,
+      '/src/assets/team/chloe-sanchez.jpg': chloeSanchez,
+      '/src/assets/team/claire-laurent.jpg': claireLaurent,
+      '/src/assets/team/emma-leroy.jpg': emmaLeroy,
+      '/src/assets/team/julien-simon.jpg': julienSimon,
+      '/src/assets/team/lea-martinez.jpg': leaMartinez,
+      '/src/assets/team/maxime-lopez.jpg': maximeLopez,
+      '/src/assets/team/nicolas-michel.jpg': nicolasMichel,
+      '/src/assets/team/pierre-moreau.jpg': pierreMoreau,
+      '/src/assets/team/romain-perez.jpg': romainPerez,
+      '/src/assets/team/sarah-gonzalez.jpg': sarahGonzalez,
+      // Backwards compatibility for old paths without leading slash
       'src/assets/team/sophie-martin.jpg': sophieMartin,
       'src/assets/team/thomas-bernard.jpg': thomasBernard,
       'src/assets/team/marie-dubois.jpg': marieDubois,
