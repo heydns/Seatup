@@ -404,12 +404,21 @@ const BeneficiaryHome = () => {
                   Vos connexions sur Seatup
                 </p>
               </div>
-              <Link to="/team">
-                <Button variant="sport" size="lg" className="group">
-                  Voir mon équipe
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link to="/team">
+                  <Button variant="sport" size="lg" className="group">
+                    Voir mon équipe
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+                
+                <Link to="/groups">
+                  <Button variant="outline" size="lg" className="group">
+                    <Users className="mr-2 h-4 w-4" />
+                    Groupes
+                  </Button>
+                </Link>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

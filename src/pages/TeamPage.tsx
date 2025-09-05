@@ -217,10 +217,19 @@ const TeamPage = () => {
               </p>
             </div>
           </div>
-          <Button className="bg-gradient-primary text-white">
-            <UserPlus className="h-4 w-4 mr-2" />
-            Inviter des amis
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button className="bg-gradient-primary text-white">
+              <UserPlus className="h-4 w-4 mr-2" />
+              Inviter des amis
+            </Button>
+            
+            <Link to="/groups">
+              <Button variant="outline">
+                <Users className="h-4 w-4 mr-2" />
+                Gérer les groupes
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Filters and Search */}

@@ -16,6 +16,7 @@ import { StadiumsPage } from "@/pages/StadiumsPage";
 import { StadiumDetail } from "@/pages/StadiumDetail";
 import { TeamDetail } from "@/pages/TeamDetail";
 import TeamPage from "@/pages/TeamPage";
+import GroupsPage from "@/pages/GroupsPage";
 import Index from "./pages/Index";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/home" element={<BeneficiaryHome />} />
             <Route path="/team" element={<TeamPage />} />
+            <Route path="/groups" element={<GroupsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <AuthDebug />

@@ -253,6 +253,75 @@ export type Database = {
           },
         ]
       }
+      group_members: {
+        Row: {
+          added_at: string
+          added_by: string
+          group_id: string
+          id: string
+          member_id: string
+        }
+        Insert: {
+          added_at?: string
+          added_by: string
+          group_id: string
+          id?: string
+          member_id: string
+        }
+        Update: {
+          added_at?: string
+          added_by?: string
+          group_id?: string
+          id?: string
+          member_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_members_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_members_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "team_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      groups: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+          whatsapp_link: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+          whatsapp_link?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+          whatsapp_link?: string | null
+        }
+        Relationships: []
+      }
       organizers: {
         Row: {
           created_at: string
