@@ -479,38 +479,6 @@ const BeneficiaryHome = () => {
                 </div>
               </div>
             </div>
-
-            {/* Mes Groupes WhatsApp */}
-            <div className="mt-6">
-              <h3 className="font-monument font-semibold mb-4">Mes Groupes WhatsApp</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {[
-                  { name: 'Équipe Marketing Digital', members: 4, icon: '💼' },
-                  { name: 'PSG Fans Orus', members: 3, icon: '⚽' },
-                  { name: 'Famille Cadoret', members: 5, icon: '👨‍👩‍👧‍👦' }
-                ].map((group, index) => (
-                  <Link key={index} to="/groups" className="card-sport block hover:shadow-lg transition-all duration-300 group">
-                    <div className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="text-2xl">
-                          {group.icon}
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="font-monument font-medium text-sm group-hover:text-primary transition-colors">
-                            {group.name}
-                          </h4>
-                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <Users className="h-3 w-3" />
-                            <span>{group.members} membres</span>
-                          </div>
-                        </div>
-                        <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
           </div>
         </section>
 
@@ -547,7 +515,7 @@ const BeneficiaryHome = () => {
                   whatsapp: true
                 },
                 { 
-                  name: 'PSG Fans Orus', 
+                  name: 'Amis du Sport', 
                   description: 'Passionnés pour sorties sportives',
                   members: 3,
                   type: 'Amis',
