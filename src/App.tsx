@@ -15,6 +15,7 @@ import { OrganizersPage } from "@/pages/OrganizersPage";
 import { StadiumsPage } from "@/pages/StadiumsPage";
 import { StadiumDetail } from "@/pages/StadiumDetail";
 import { TeamDetail } from "@/pages/TeamDetail";
+import MyTeam from "@/pages/MyTeam";
 import Index from "./pages/Index";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/home" element={<BeneficiaryHome />} />
+            <Route path="/my-team" element={<MyTeam />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <AuthDebug />
