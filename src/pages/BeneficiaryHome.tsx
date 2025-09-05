@@ -32,6 +32,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { differenceInDays } from 'date-fns';
 import marvinAvatar from '@/assets/marvin-avatar.jpg';
 import orusLogo from '@/assets/orus-logo-new.png';
+import sophieMartin from '@/assets/team/sophie-martin.jpg';
+import thomasBernard from '@/assets/team/thomas-bernard.jpg';
+import marieDubois from '@/assets/team/marie-dubois.jpg';
 
 const BeneficiaryHome = () => {
   const { userProfile, signOut } = useAuth();
@@ -440,13 +443,13 @@ const BeneficiaryHome = () => {
                   <h3 className="font-monument font-semibold mb-4">Nouveaux membres</h3>
                   <div className="space-y-3">
                     {[
-                      { name: 'Sophie Martin', badge: 'VIP 🌟', city: 'Paris' },
-                      { name: 'Thomas Bernard', badge: 'Fans 🏟️', city: 'Lyon' },
-                      { name: 'Marie Dubois', badge: 'Expert 🎯', city: 'Marseille' }
+                      { name: 'Sophie Martin', badge: 'Ultra 🌟', city: 'Paris', avatar: sophieMartin },
+                      { name: 'Thomas Bernard', badge: 'Fans 🏟️', city: 'Lyon', avatar: thomasBernard },
+                      { name: 'Marie Dubois', badge: 'Débutant 🎯', city: 'Marseille', avatar: marieDubois }
                     ].map((member, index) => (
                       <div key={index} className="flex items-center gap-3">
                         <Avatar className="h-10 w-10">
-                          <AvatarImage src={marvinAvatar} />
+                          <AvatarImage src={member.avatar} />
                           <AvatarFallback className="bg-gradient-primary text-white text-sm">
                             {member.name.split(' ').map(n => n.charAt(0)).join('')}
                           </AvatarFallback>
