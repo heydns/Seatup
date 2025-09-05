@@ -17,6 +17,23 @@ import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
 import marvinAvatar from '@/assets/marvin-avatar.jpg';
 
+// Import team member avatars
+import sophieMartin from '@/assets/team/sophie-martin.jpg';
+import thomasBernard from '@/assets/team/thomas-bernard.jpg';
+import marieDubois from '@/assets/team/marie-dubois.jpg';
+import pierreRousseau from '@/assets/team/pierre-rousseau.jpg';
+import julieGarcia from '@/assets/team/julie-garcia.jpg';
+import antoineMoreau from '@/assets/team/antoine-moreau.jpg';
+import camillePetit from '@/assets/team/camille-petit.jpg';
+import laurentSimon from '@/assets/team/laurent-simon.jpg';
+import emmaMichel from '@/assets/team/emma-michel.jpg';
+import nicolasLeroy from '@/assets/team/nicolas-leroy.jpg';
+import sarahRoux from '@/assets/team/sarah-roux.jpg';
+import maximeFontaine from '@/assets/team/maxime-fontaine.jpg';
+import chloeLambert from '@/assets/team/chloe-lambert.jpg';
+import julienBonnet from '@/assets/team/julien-bonnet.jpg';
+import amelieGerard from '@/assets/team/amelie-gerard.jpg';
+
 interface TeamMember {
   id: string;
   first_name: string;
@@ -83,6 +100,28 @@ const TeamPage = () => {
 
     setFilteredMembers(filtered);
   }, [searchQuery, selectedFilter, teamMembers]);
+
+// Map avatar URLs to imported images
+  const getAvatarImage = (avatarUrl: string) => {
+    const avatarMap = {
+      'src/assets/team/sophie-martin.jpg': sophieMartin,
+      'src/assets/team/thomas-bernard.jpg': thomasBernard,
+      'src/assets/team/marie-dubois.jpg': marieDubois,
+      'src/assets/team/pierre-rousseau.jpg': pierreRousseau,
+      'src/assets/team/julie-garcia.jpg': julieGarcia,
+      'src/assets/team/antoine-moreau.jpg': antoineMoreau,
+      'src/assets/team/camille-petit.jpg': camillePetit,
+      'src/assets/team/laurent-simon.jpg': laurentSimon,
+      'src/assets/team/emma-michel.jpg': emmaMichel,
+      'src/assets/team/nicolas-leroy.jpg': nicolasLeroy,
+      'src/assets/team/sarah-roux.jpg': sarahRoux,
+      'src/assets/team/maxime-fontaine.jpg': maximeFontaine,
+      'src/assets/team/chloe-lambert.jpg': chloeLambert,
+      'src/assets/team/julien-bonnet.jpg': julienBonnet,
+      'src/assets/team/amelie-gerard.jpg': amelieGerard,
+    };
+    return avatarMap[avatarUrl] || marvinAvatar;
+  };
 
   const getBadgeVariant = (badge: string) => {
     if (badge.includes('VIP')) return 'default';
@@ -211,12 +250,12 @@ const TeamPage = () => {
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <Avatar className="h-12 w-12 border-2 border-primary/20">
-                        <AvatarImage src={member.avatar_url || marvinAvatar} />
-                        <AvatarFallback className="bg-gradient-primary text-white">
-                          {member.first_name.charAt(0)}{member.last_name.charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
+                       <Avatar className="h-12 w-12 border-2 border-primary/20">
+                         <AvatarImage src={getAvatarImage(member.avatar_url)} />
+                         <AvatarFallback className="bg-gradient-primary text-white">
+                           {member.first_name.charAt(0)}{member.last_name.charAt(0)}
+                         </AvatarFallback>
+                       </Avatar>
                       <div>
                         <h3 className="font-monument font-semibold">
                           {member.first_name} {member.last_name}
