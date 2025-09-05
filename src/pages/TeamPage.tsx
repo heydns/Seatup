@@ -167,8 +167,8 @@ const TeamPage = () => {
   };
 
   const getBadgeVariant = (badge: string) => {
-    if (badge.includes('VIP')) return 'default';
-    if (badge.includes('Expert')) return 'secondary';
+    if (badge.includes('Ultra')) return 'default';
+    if (badge.includes('Débutant')) return 'secondary';
     return 'outline';
   };
 
@@ -241,8 +241,8 @@ const TeamPage = () => {
                 <div className="flex gap-2">
                   {[
                     { key: 'all', label: 'Tous' },
-                    { key: 'vip', label: 'VIP 🌟' },
-                    { key: 'expert', label: 'Expert 🎯' },
+                    { key: 'ultra', label: 'Ultra 🌟' },
+                    { key: 'débutant', label: 'Débutant 🎯' },
                     { key: 'fans', label: 'Fans 🏟️' }
                   ].map((filter) => (
                     <Button
