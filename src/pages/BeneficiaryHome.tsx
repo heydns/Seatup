@@ -22,7 +22,8 @@ import {
   Users,
   Clock,
   Briefcase,
-  Home
+  Home,
+  MessageCircle
 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { toast } from 'sonner';
@@ -477,6 +478,104 @@ const BeneficiaryHome = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Mes Groupes */}
+        <section>
+          <div className="max-w-7xl rounded-3xl shadow-lg border border-border/30 p-8 mx-auto bg-white/95 backdrop-blur-sm">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl md:text-2xl font-monument text-brand mb-2">
+                  <Users className="inline-block mr-3 h-6 w-6" />
+                  Mes Groupes
+                </h2>
+                <p className="text-muted-foreground">
+                  Vos groupes WhatsApp organisés
+                </p>
+              </div>
+              <Link to="/groups">
+                <Button variant="sport" size="lg" className="group">
+                  Gérer les groupes
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { 
+                  name: 'Équipe Marketing Digital', 
+                  description: 'Campagnes et événements marketing',
+                  members: 4,
+                  type: 'Collègues',
+                  emoji: '💼',
+                  color: 'bg-blue-100 text-blue-700',
+                  whatsapp: true
+                },
+                { 
+                  name: 'Amis du Sport', 
+                  description: 'Passionnés pour sorties sportives',
+                  members: 3,
+                  type: 'Amis',
+                  emoji: '🤝',
+                  color: 'bg-green-100 text-green-700',
+                  whatsapp: true
+                },
+                { 
+                  name: 'Famille Cadoret', 
+                  description: 'Groupe familial et réunions',
+                  members: 5,
+                  type: 'Famille',
+                  emoji: '👨‍👩‍👧‍👦',
+                  color: 'bg-purple-100 text-purple-700',
+                  whatsapp: false
+                }
+              ].map((group, index) => (
+                <Link key={index} to="/groups" className="card-sport block hover:shadow-lg transition-all duration-300 group">
+                  <div className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="font-monument font-semibold text-lg group-hover:text-primary transition-colors">
+                          {group.name}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {group.description}
+                        </p>
+                      </div>
+                      <Badge variant="outline" className={`${group.color} shrink-0`}>
+                        {group.emoji} {group.type}
+                      </Badge>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <Users className="h-3 w-3" />
+                        <span>{group.members} membres</span>
+                      </div>
+                      
+                      {group.whatsapp ? (
+                        <Badge variant="default" className="bg-green-500 text-white">
+                          <MessageCircle className="h-3 w-3 mr-1" />
+                          WhatsApp
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline">
+                          À configurer
+                        </Badge>
+                      )}
+                    </div>
+                    
+                    <div className="mt-4 pt-4 border-t border-border/50">
+                      <div className="flex items-center text-sm text-primary group-hover:text-primary/80 transition-colors">
+                        <span>Ouvrir le groupe</span>
+                        <ArrowRight className="ml-2 h-3 w-3 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </section>
