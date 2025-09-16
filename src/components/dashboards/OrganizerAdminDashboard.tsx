@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { 
   Calendar, 
   TrendingUp, 
+  TrendingDown,
   Users, 
   Euro,
   Settings,
@@ -86,6 +87,14 @@ const OrganizerAdminDashboard = () => {
     totalTicketsSold: events.reduce((sum, event) => sum + event.soldTickets, 0),
     averageTicketPrice: Math.round(events.reduce((sum, event) => sum + event.price, 0) / events.length),
     upcomingEvents: events.filter(event => event.status === 'upcoming').length
+  };
+
+  // Trends data - mock data for demonstration
+  const trends = {
+    totalRevenue: { change: 12.5, isPositive: true },
+    totalTicketsSold: { change: 8.3, isPositive: true },
+    averageTicketPrice: { change: -2.1, isPositive: false },
+    upcomingEvents: { change: 15.7, isPositive: true }
   };
 
   const customers = [
@@ -179,7 +188,17 @@ const OrganizerAdminDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-monument text-brand">{salesData.totalRevenue.toLocaleString()}€</div>
-                  <p className="text-xs text-muted-foreground">Total généré</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-muted-foreground">Total généré</p>
+                    <div className={`flex items-center gap-1 text-xs font-medium ${trends.totalRevenue.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                      {trends.totalRevenue.isPositive ? (
+                        <TrendingUp className="h-3 w-3" />
+                      ) : (
+                        <TrendingDown className="h-3 w-3" />
+                      )}
+                      {trends.totalRevenue.change}%
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -192,7 +211,17 @@ const OrganizerAdminDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-monument text-brand">{salesData.totalTicketsSold}</div>
-                  <p className="text-xs text-muted-foreground">Toutes catégories</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-muted-foreground">Toutes catégories</p>
+                    <div className={`flex items-center gap-1 text-xs font-medium ${trends.totalTicketsSold.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                      {trends.totalTicketsSold.isPositive ? (
+                        <TrendingUp className="h-3 w-3" />
+                      ) : (
+                        <TrendingDown className="h-3 w-3" />
+                      )}
+                      {trends.totalTicketsSold.change}%
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -205,7 +234,17 @@ const OrganizerAdminDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-monument text-brand">{salesData.averageTicketPrice}€</div>
-                  <p className="text-xs text-muted-foreground">Par billet</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-muted-foreground">Par billet</p>
+                    <div className={`flex items-center gap-1 text-xs font-medium ${trends.averageTicketPrice.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                      {trends.averageTicketPrice.isPositive ? (
+                        <TrendingUp className="h-3 w-3" />
+                      ) : (
+                        <TrendingDown className="h-3 w-3" />
+                      )}
+                      {Math.abs(trends.averageTicketPrice.change)}%
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -218,7 +257,17 @@ const OrganizerAdminDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-monument text-brand">{salesData.upcomingEvents}</div>
-                  <p className="text-xs text-muted-foreground">À venir</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-muted-foreground">À venir</p>
+                    <div className={`flex items-center gap-1 text-xs font-medium ${trends.upcomingEvents.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                      {trends.upcomingEvents.isPositive ? (
+                        <TrendingUp className="h-3 w-3" />
+                      ) : (
+                        <TrendingDown className="h-3 w-3" />
+                      )}
+                      {trends.upcomingEvents.change}%
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>
