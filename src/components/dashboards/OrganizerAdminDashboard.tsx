@@ -159,11 +159,10 @@ const OrganizerAdminDashboard = () => {
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="overview" className="space-y-8 animate-fade-up" style={{ animationDelay: '0.3s' }}>
-          <TabsList className="grid w-full grid-cols-5 bg-white/95 backdrop-blur-sm shadow-sm">
+            <TabsList className="grid w-full grid-cols-4 bg-white/95 backdrop-blur-sm shadow-sm">
             <TabsTrigger value="overview" className="font-medium">Vue d'ensemble</TabsTrigger>
             <TabsTrigger value="events" className="font-medium">Événements</TabsTrigger>
             <TabsTrigger value="sales" className="font-medium">Ventes</TabsTrigger>
-            <TabsTrigger value="customers" className="font-medium">Clients</TabsTrigger>
             <TabsTrigger value="community" className="font-medium">Communauté</TabsTrigger>
           </TabsList>
 
@@ -503,77 +502,6 @@ const OrganizerAdminDashboard = () => {
             </Card>
           </TabsContent>
 
-          {/* Customers Tab */}
-          <TabsContent value="customers" className="space-y-8">
-            <Card className="card-sport animate-fade-up">
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <CardTitle className="text-lg font-monument text-brand">Base Clients</CardTitle>
-                    <CardDescription>
-                      Gérez vos relations clients
-                    </CardDescription>
-                  </div>
-                  <Button variant="hero">
-                    <Download className="h-4 w-4 mr-2" />
-                    Exporter
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="flex gap-4 mb-6">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Rechercher un client..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                  <Button variant="sport">
-                    <Filter className="h-4 w-4 mr-2" />
-                    Filtres
-                  </Button>
-                </div>
-
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Client</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Achats</TableHead>
-                      <TableHead>Total Dépensé</TableHead>
-                      <TableHead>Dernier Achat</TableHead>
-                      <TableHead>Préférences</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {customers.map((customer) => (
-                      <TableRow key={customer.id}>
-                        <TableCell className="font-medium">{customer.name}</TableCell>
-                        <TableCell>{customer.email}</TableCell>
-                        <TableCell>{customer.totalPurchases}</TableCell>
-                        <TableCell className="font-bold">{customer.totalSpent}€</TableCell>
-                        <TableCell>
-                          {new Date(customer.lastPurchase).toLocaleDateString('fr-FR')}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-1">
-                            {customer.favoriteEvents.map((event) => (
-                              <Badge key={event} variant="secondary" className="text-xs">
-                                {event}
-                              </Badge>
-                            ))}
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
           {/* Community Tab */}
           <TabsContent value="community" className="space-y-8">
@@ -763,17 +691,21 @@ const OrganizerAdminDashboard = () => {
               </Card>
             </div>
 
-            {/* Followers/Community List */}
+            {/* Base Clients / Communauté */}
             <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.8s' }}>
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <div>
-                    <CardTitle className="text-lg font-monument text-brand">Communauté</CardTitle>
+                    <CardTitle className="text-lg font-monument text-brand">Base Clients & Communauté</CardTitle>
                     <CardDescription>
-                      Vos followers les plus engagés
+                      Gérez vos relations clients et votre communauté
                     </CardDescription>
                   </div>
                   <div className="flex gap-2">
+                    <Button variant="hero" size="sm">
+                      <Download className="h-4 w-4 mr-2" />
+                      Exporter
+                    </Button>
                     <div className="relative">
                       <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -794,40 +726,44 @@ const OrganizerAdminDashboard = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Fan</TableHead>
-                      <TableHead>Engagement</TableHead>
+                      <TableHead>Client</TableHead>
+                      <TableHead>Email</TableHead>
                       <TableHead>Achats</TableHead>
-                      <TableHead>Dernière Activité</TableHead>
+                      <TableHead>Total Dépensé</TableHead>
+                      <TableHead>Dernier Achat</TableHead>
+                      <TableHead>Préférences</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {[
-                      { name: 'Marie Dubois', email: 'marie@email.com', engagement: 'Très élevé', purchases: '5 événements', lastActivity: '2 jours', avatar: '👩' },
-                      { name: 'Pierre Martin', email: 'pierre@email.com', engagement: 'Élevé', purchases: '8 événements', lastActivity: '1 semaine', avatar: '👨' },
-                      { name: 'Sophie Laurent', email: 'sophie@email.com', engagement: 'Moyen', purchases: '2 événements', lastActivity: '3 jours', avatar: '👩' },
-                      { name: 'Lucas Moreau', email: 'lucas@email.com', engagement: 'Très élevé', purchases: '12 événements', lastActivity: '1 jour', avatar: '👨' },
-                      { name: 'Emma Leroy', email: 'emma@email.com', engagement: 'Élevé', purchases: '6 événements', lastActivity: '5 jours', avatar: '👩' },
-                    ].map((fan, index) => (
-                      <TableRow key={index}>
+                    {customers.map((customer) => (
+                      <TableRow key={customer.id}>
                         <TableCell>
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center text-white font-semibold">
-                              {fan.avatar}
+                              {customer.name.charAt(0)}
                             </div>
                             <div>
-                              <p className="font-semibold">{fan.name}</p>
-                              <p className="text-sm text-muted-foreground">{fan.email}</p>
+                              <p className="font-semibold">{customer.name}</p>
+                              <p className="text-sm text-muted-foreground">{customer.email}</p>
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell>
-                          <Badge variant={fan.engagement === 'Très élevé' ? 'default' : fan.engagement === 'Élevé' ? 'secondary' : 'outline'}>
-                            {fan.engagement}
-                          </Badge>
+                        <TableCell className="text-muted-foreground">{customer.email}</TableCell>
+                        <TableCell className="font-semibold">{customer.totalPurchases}</TableCell>
+                        <TableCell className="font-bold">{customer.totalSpent}€</TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {new Date(customer.lastPurchase).toLocaleDateString('fr-FR')}
                         </TableCell>
-                        <TableCell className="font-semibold">{fan.purchases}</TableCell>
-                        <TableCell className="text-muted-foreground">{fan.lastActivity}</TableCell>
+                        <TableCell>
+                          <div className="flex gap-1">
+                            {customer.favoriteEvents.map((event) => (
+                              <Badge key={event} variant="secondary" className="text-xs">
+                                {event}
+                              </Badge>
+                            ))}
+                          </div>
+                        </TableCell>
                         <TableCell>
                           <div className="flex gap-2">
                             <Button variant="ghost" size="sm" className="gap-2">
