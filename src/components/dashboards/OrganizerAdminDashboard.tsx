@@ -17,7 +17,16 @@ import {
   Filter,
   Eye,
   Edit,
-  BarChart3
+  BarChart3,
+  Heart,
+  MessageSquare,
+  Send,
+  Instagram,
+  Facebook,
+  Twitter,
+  UserPlus,
+  Share2,
+  Target
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAuth } from '@/components/AuthProvider';
@@ -150,11 +159,12 @@ const OrganizerAdminDashboard = () => {
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="overview" className="space-y-8 animate-fade-up" style={{ animationDelay: '0.3s' }}>
-          <TabsList className="grid w-full grid-cols-4 bg-white/95 backdrop-blur-sm shadow-sm">
+          <TabsList className="grid w-full grid-cols-5 bg-white/95 backdrop-blur-sm shadow-sm">
             <TabsTrigger value="overview" className="font-medium">Vue d'ensemble</TabsTrigger>
             <TabsTrigger value="events" className="font-medium">Événements</TabsTrigger>
             <TabsTrigger value="sales" className="font-medium">Ventes</TabsTrigger>
             <TabsTrigger value="customers" className="font-medium">Clients</TabsTrigger>
+            <TabsTrigger value="community" className="font-medium">Communauté</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -555,6 +565,277 @@ const OrganizerAdminDashboard = () => {
                                 {event}
                               </Badge>
                             ))}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Community Tab */}
+          <TabsContent value="community" className="space-y-8">
+            {/* Community Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.1s' }}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-brand">Followers</CardTitle>
+                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <UserPlus className="h-4 w-4 text-white" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-monument text-brand">12,450</div>
+                  <p className="text-xs text-muted-foreground">+125 cette semaine</p>
+                </CardContent>
+              </Card>
+
+              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.2s' }}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-brand">Engagement</CardTitle>
+                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Heart className="h-4 w-4 text-white" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-monument text-brand">8.7%</div>
+                  <p className="text-xs text-muted-foreground">Taux moyen</p>
+                </CardContent>
+              </Card>
+
+              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.3s' }}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-brand">Messages</CardTitle>
+                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <MessageSquare className="h-4 w-4 text-white" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-monument text-brand">247</div>
+                  <p className="text-xs text-muted-foreground">En attente</p>
+                </CardContent>
+              </Card>
+
+              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.4s' }}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-brand">Portée</CardTitle>
+                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Target className="h-4 w-4 text-white" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-monument text-brand">45.2K</div>
+                  <p className="text-xs text-muted-foreground">Impressions/semaine</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Social Media Management */}
+            <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.5s' }}>
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle className="text-lg font-monument text-brand">Gestion des Réseaux Sociaux</CardTitle>
+                    <CardDescription>
+                      Publiez et gérez vos contenus sur toutes les plateformes
+                    </CardDescription>
+                  </div>
+                  <Button variant="hero" className="gap-2">
+                    <Plus className="h-4 w-4" />
+                    Nouveau Post
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                        <Instagram className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Instagram</p>
+                        <p className="text-sm text-muted-foreground">8.2K followers</p>
+                      </div>
+                    </div>
+                    <Button variant="sport" size="sm">Publier</Button>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <Facebook className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Facebook</p>
+                        <p className="text-sm text-muted-foreground">12.5K followers</p>
+                      </div>
+                    </div>
+                    <Button variant="sport" size="sm">Publier</Button>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-sky-500 rounded-lg flex items-center justify-center">
+                        <Twitter className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Twitter</p>
+                        <p className="text-sm text-muted-foreground">15.3K followers</p>
+                      </div>
+                    </div>
+                    <Button variant="sport" size="sm">Publier</Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Messaging Center */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.6s' }}>
+                <CardHeader>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <CardTitle className="text-lg font-monument text-brand">Centre de Messages</CardTitle>
+                      <CardDescription>
+                        Répondez aux messages de vos fans
+                      </CardDescription>
+                    </div>
+                    <Button variant="hero" size="sm" className="gap-2">
+                      <Send className="h-4 w-4" />
+                      Nouveau
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {[
+                    { name: 'Marie Dubois', message: 'Quand sortent les billets pour le prochain match ?', time: '5 min', unread: true },
+                    { name: 'Pierre Martin', message: 'Merci pour ce super événement !', time: '1h', unread: false },
+                    { name: 'Sophie Laurent', message: 'Y aura-t-il des places VIP disponibles ?', time: '2h', unread: true },
+                    { name: 'Lucas Moreau', message: 'Félicitations pour la victoire !', time: '3h', unread: false },
+                  ].map((msg, index) => (
+                    <div key={index} className={`p-3 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer ${msg.unread ? 'border-primary/50 bg-primary/5' : ''}`}>
+                      <div className="flex justify-between items-start mb-2">
+                        <p className="font-semibold text-sm">{msg.name}</p>
+                        <span className="text-xs text-muted-foreground">{msg.time}</span>
+                      </div>
+                      <p className="text-sm text-muted-foreground truncate">{msg.message}</p>
+                      {msg.unread && <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>}
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.7s' }}>
+                <CardHeader>
+                  <CardTitle className="text-lg font-monument text-brand">Campagnes Marketing</CardTitle>
+                  <CardDescription>
+                    Créez des campagnes ciblées pour vos fans
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Button variant="hero" className="w-full justify-start gap-3">
+                    <Target className="h-4 w-4" />
+                    Créer une Campagne Email
+                  </Button>
+                  <Button variant="sport" className="w-full justify-start gap-3">
+                    <Share2 className="h-4 w-4" />
+                    Promotion Réseaux Sociaux
+                  </Button>
+                  <Button variant="sport" className="w-full justify-start gap-3">
+                    <Users className="h-4 w-4" />
+                    Segmentation Clients
+                  </Button>
+                  
+                  <div className="mt-6 p-4 bg-gradient-primary/10 rounded-lg border">
+                    <h4 className="font-semibold text-brand mb-2">Campagne Active</h4>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      "Offre Spéciale Match PSG vs OM"
+                    </p>
+                    <div className="flex justify-between text-xs">
+                      <span>Envoyée à 8,450 fans</span>
+                      <span className="text-green-600">Taux d'ouverture: 42%</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Followers/Community List */}
+            <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.8s' }}>
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle className="text-lg font-monument text-brand">Communauté</CardTitle>
+                    <CardDescription>
+                      Vos followers les plus engagés
+                    </CardDescription>
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="relative">
+                      <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Rechercher..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-8 w-64"
+                      />
+                    </div>
+                    <Button variant="sport" size="sm" className="gap-2">
+                      <Filter className="h-4 w-4" />
+                      Filtrer
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Fan</TableHead>
+                      <TableHead>Engagement</TableHead>
+                      <TableHead>Achats</TableHead>
+                      <TableHead>Dernière Activité</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {[
+                      { name: 'Marie Dubois', email: 'marie@email.com', engagement: 'Très élevé', purchases: '5 événements', lastActivity: '2 jours', avatar: '👩' },
+                      { name: 'Pierre Martin', email: 'pierre@email.com', engagement: 'Élevé', purchases: '8 événements', lastActivity: '1 semaine', avatar: '👨' },
+                      { name: 'Sophie Laurent', email: 'sophie@email.com', engagement: 'Moyen', purchases: '2 événements', lastActivity: '3 jours', avatar: '👩' },
+                      { name: 'Lucas Moreau', email: 'lucas@email.com', engagement: 'Très élevé', purchases: '12 événements', lastActivity: '1 jour', avatar: '👨' },
+                      { name: 'Emma Leroy', email: 'emma@email.com', engagement: 'Élevé', purchases: '6 événements', lastActivity: '5 jours', avatar: '👩' },
+                    ].map((fan, index) => (
+                      <TableRow key={index}>
+                        <TableCell>
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center text-white font-semibold">
+                              {fan.avatar}
+                            </div>
+                            <div>
+                              <p className="font-semibold">{fan.name}</p>
+                              <p className="text-sm text-muted-foreground">{fan.email}</p>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={fan.engagement === 'Très élevé' ? 'default' : fan.engagement === 'Élevé' ? 'secondary' : 'outline'}>
+                            {fan.engagement}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="font-semibold">{fan.purchases}</TableCell>
+                        <TableCell className="text-muted-foreground">{fan.lastActivity}</TableCell>
+                        <TableCell>
+                          <div className="flex gap-2">
+                            <Button variant="ghost" size="sm" className="gap-2">
+                              <MessageSquare className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="sm" className="gap-2">
+                              <Eye className="h-4 w-4" />
+                            </Button>
                           </div>
                         </TableCell>
                       </TableRow>
