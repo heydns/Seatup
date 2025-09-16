@@ -101,20 +101,20 @@ const CSEAdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold">
+      <header className="border-b bg-white/95 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-6 flex justify-between items-center">
+          <div className="animate-fade-up">
+            <h1 className="text-2xl md:text-3xl font-monument text-brand mb-2">
               Dashboard CSE - {userProfile?.company_name}
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-base text-muted-foreground">
               Gérez vos budgets et vos bénéficiaires
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm">
+          <div className="flex items-center gap-4 animate-fade-up" style={{ animationDelay: '0.2s' }}>
+            <Button variant="sport" size="sm">
               <Settings className="h-4 w-4 mr-2" />
               Paramètres
             </Button>
@@ -126,61 +126,69 @@ const CSEAdminDashboard = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
-            <TabsTrigger value="beneficiaries">Bénéficiaires</TabsTrigger>
-            <TabsTrigger value="reports">Rapports</TabsTrigger>
-            <TabsTrigger value="statistics">Statistiques</TabsTrigger>
+      <div className="container mx-auto px-4 py-8">
+        <Tabs defaultValue="overview" className="space-y-8 animate-fade-up" style={{ animationDelay: '0.3s' }}>
+          <TabsList className="grid w-full grid-cols-4 bg-white/95 backdrop-blur-sm shadow-sm">
+            <TabsTrigger value="overview" className="font-medium">Vue d'ensemble</TabsTrigger>
+            <TabsTrigger value="beneficiaries" className="font-medium">Bénéficiaires</TabsTrigger>
+            <TabsTrigger value="reports" className="font-medium">Rapports</TabsTrigger>
+            <TabsTrigger value="statistics" className="font-medium">Statistiques</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-6">
+          <TabsContent value="overview" className="space-y-8">
             {/* Budget Overview */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <Card>
+              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.1s' }}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Budget Total</CardTitle>
-                  <Euro className="h-4 w-4 text-muted-foreground" />
+                  <CardTitle className="text-sm font-medium text-brand">Budget Total</CardTitle>
+                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Euro className="h-4 w-4 text-white" />
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{budgetData.totalBudget.toLocaleString()}€</div>
+                  <div className="text-2xl font-monument text-brand">{budgetData.totalBudget.toLocaleString()}€</div>
                   <p className="text-xs text-muted-foreground">Alloué cette année</p>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.2s' }}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Budget Consommé</CardTitle>
-                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                  <CardTitle className="text-sm font-medium text-brand">Budget Consommé</CardTitle>
+                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <TrendingUp className="h-4 w-4 text-white" />
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{budgetData.consumedBudget.toLocaleString()}€</div>
+                  <div className="text-2xl font-monument text-brand">{budgetData.consumedBudget.toLocaleString()}€</div>
                   <p className="text-xs text-muted-foreground">
                     {Math.round((budgetData.consumedBudget / budgetData.totalBudget) * 100)}% du budget
                   </p>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.3s' }}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Budget Restant</CardTitle>
-                  <Euro className="h-4 w-4 text-muted-foreground" />
+                  <CardTitle className="text-sm font-medium text-brand">Budget Restant</CardTitle>
+                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Euro className="h-4 w-4 text-white" />
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{budgetData.remainingBudget.toLocaleString()}€</div>
+                  <div className="text-2xl font-monument text-brand">{budgetData.remainingBudget.toLocaleString()}€</div>
                   <p className="text-xs text-muted-foreground">Disponible</p>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.4s' }}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Bénéficiaires Actifs</CardTitle>
-                  <Users className="h-4 w-4 text-muted-foreground" />
+                  <CardTitle className="text-sm font-medium text-brand">Bénéficiaires Actifs</CardTitle>
+                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Users className="h-4 w-4 text-white" />
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{statistics.activeBeneficiaries}</div>
+                  <div className="text-2xl font-monument text-brand">{statistics.activeBeneficiaries}</div>
                   <p className="text-xs text-muted-foreground">
                     sur {statistics.totalBeneficiaries} inscrits
                   </p>
@@ -189,9 +197,9 @@ const CSEAdminDashboard = () => {
             </div>
 
             {/* Budget Usage Chart */}
-            <Card>
+            <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.5s' }}>
               <CardHeader>
-                <CardTitle>Répartition Budget</CardTitle>
+                <CardTitle className="text-lg font-monument text-brand">Répartition Budget</CardTitle>
                 <CardDescription>
                   Utilisation du budget par période
                 </CardDescription>
@@ -223,9 +231,9 @@ const CSEAdminDashboard = () => {
             </Card>
 
             {/* Recent Activity */}
-            <Card>
+            <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.6s' }}>
               <CardHeader>
-                <CardTitle>Activité Récente</CardTitle>
+                <CardTitle className="text-lg font-monument text-brand">Activité Récente</CardTitle>
                 <CardDescription>
                   Derniers achats de vos bénéficiaires
                 </CardDescription>
@@ -250,17 +258,17 @@ const CSEAdminDashboard = () => {
           </TabsContent>
 
           {/* Beneficiaries Tab */}
-          <TabsContent value="beneficiaries" className="space-y-6">
-            <Card>
+          <TabsContent value="beneficiaries" className="space-y-8">
+            <Card className="card-sport animate-fade-up">
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <div>
-                    <CardTitle>Gestion des Bénéficiaires</CardTitle>
+                    <CardTitle className="text-lg font-monument text-brand">Gestion des Bénéficiaires</CardTitle>
                     <CardDescription>
                       Gérez les comptes de vos salariés
                     </CardDescription>
                   </div>
-                  <Button>
+                  <Button variant="hero">
                     <Plus className="h-4 w-4 mr-2" />
                     Ajouter un bénéficiaire
                   </Button>
@@ -277,11 +285,11 @@ const CSEAdminDashboard = () => {
                       className="pl-10"
                     />
                   </div>
-                  <Button variant="outline">
+                  <Button variant="sport">
                     <Filter className="h-4 w-4 mr-2" />
                     Filtres
                   </Button>
-                  <Button variant="outline">
+                  <Button variant="sport">
                     <Download className="h-4 w-4 mr-2" />
                     Exporter
                   </Button>
@@ -324,7 +332,7 @@ const CSEAdminDashboard = () => {
                           {new Date(beneficiary.lastActivity).toLocaleDateString('fr-FR')}
                         </TableCell>
                         <TableCell>
-                          <Button variant="outline" size="sm">
+                          <Button variant="sport" size="sm">
                             Modifier
                           </Button>
                         </TableCell>
@@ -337,17 +345,17 @@ const CSEAdminDashboard = () => {
           </TabsContent>
 
           {/* Reports Tab */}
-          <TabsContent value="reports" className="space-y-6">
-            <Card>
+          <TabsContent value="reports" className="space-y-8">
+            <Card className="card-sport animate-fade-up">
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <div>
-                    <CardTitle>Rapports d'Achats</CardTitle>
+                    <CardTitle className="text-lg font-monument text-brand">Rapports d'Achats</CardTitle>
                     <CardDescription>
                       Détail des transactions par bénéficiaire
                     </CardDescription>
                   </div>
-                  <Button variant="outline">
+                  <Button variant="hero">
                     <Download className="h-4 w-4 mr-2" />
                     Exporter le rapport
                   </Button>
@@ -383,11 +391,11 @@ const CSEAdminDashboard = () => {
           </TabsContent>
 
           {/* Statistics Tab */}
-          <TabsContent value="statistics" className="space-y-6">
+          <TabsContent value="statistics" className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
+              <Card className="card-sport animate-fade-up">
                 <CardHeader>
-                  <CardTitle>Statistiques Générales</CardTitle>
+                  <CardTitle className="text-lg font-monument text-brand">Statistiques Générales</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex justify-between">
@@ -411,19 +419,19 @@ const CSEAdminDashboard = () => {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.1s' }}>
                 <CardHeader>
-                  <CardTitle>Événements Populaires</CardTitle>
+                  <CardTitle className="text-lg font-monument text-brand">Événements Populaires</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     {statistics.mostPopularEvents.map((event, index) => (
                       <div key={event} className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
+                          <div className="w-6 h-6 rounded-full bg-gradient-primary text-white text-xs flex items-center justify-center font-bold">
                             {index + 1}
                           </div>
-                          <span>{event}</span>
+                          <span className="font-medium">{event}</span>
                         </div>
                         <Badge variant="secondary">{Math.floor(Math.random() * 50) + 10} achats</Badge>
                       </div>

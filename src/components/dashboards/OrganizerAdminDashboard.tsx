@@ -122,20 +122,20 @@ const OrganizerAdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold">
+      <header className="border-b bg-white/95 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-6 flex justify-between items-center">
+          <div className="animate-fade-up">
+            <h1 className="text-2xl md:text-3xl font-monument text-brand mb-2">
               Dashboard Organisateur - {userProfile?.company_name}
             </h1>
-            <p className="text-muted-foreground">
-              Gérez vos événements et suivez vos ventes
+            <p className="text-base text-muted-foreground">
+              Gérez vos événements et analysez vos ventes
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm">
+          <div className="flex items-center gap-4 animate-fade-up" style={{ animationDelay: '0.2s' }}>
+            <Button variant="sport" size="sm">
               <Settings className="h-4 w-4 mr-2" />
               Paramètres
             </Button>
@@ -147,68 +147,76 @@ const OrganizerAdminDashboard = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
-            <TabsTrigger value="events">Événements</TabsTrigger>
-            <TabsTrigger value="sales">Ventes</TabsTrigger>
-            <TabsTrigger value="customers">Clients</TabsTrigger>
+      <div className="container mx-auto px-4 py-8">
+        <Tabs defaultValue="overview" className="space-y-8 animate-fade-up" style={{ animationDelay: '0.3s' }}>
+          <TabsList className="grid w-full grid-cols-4 bg-white/95 backdrop-blur-sm shadow-sm">
+            <TabsTrigger value="overview" className="font-medium">Vue d'ensemble</TabsTrigger>
+            <TabsTrigger value="events" className="font-medium">Événements</TabsTrigger>
+            <TabsTrigger value="sales" className="font-medium">Ventes</TabsTrigger>
+            <TabsTrigger value="customers" className="font-medium">Clients</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-6">
+          <TabsContent value="overview" className="space-y-8">
             {/* Key Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <Card>
+              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.1s' }}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Chiffre d'Affaires</CardTitle>
-                  <Euro className="h-4 w-4 text-muted-foreground" />
+                  <CardTitle className="text-sm font-medium text-brand">Chiffre d'Affaires</CardTitle>
+                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Euro className="h-4 w-4 text-white" />
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{salesData.totalRevenue.toLocaleString()}€</div>
+                  <div className="text-2xl font-monument text-brand">{salesData.totalRevenue.toLocaleString()}€</div>
                   <p className="text-xs text-muted-foreground">Total généré</p>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.2s' }}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Billets Vendus</CardTitle>
-                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                  <CardTitle className="text-sm font-medium text-brand">Billets Vendus</CardTitle>
+                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <TrendingUp className="h-4 w-4 text-white" />
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{salesData.totalTicketsSold}</div>
+                  <div className="text-2xl font-monument text-brand">{salesData.totalTicketsSold}</div>
                   <p className="text-xs text-muted-foreground">Toutes catégories</p>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.3s' }}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Prix Moyen</CardTitle>
-                  <Euro className="h-4 w-4 text-muted-foreground" />
+                  <CardTitle className="text-sm font-medium text-brand">Prix Moyen</CardTitle>
+                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <BarChart3 className="h-4 w-4 text-white" />
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{salesData.averageTicketPrice}€</div>
+                  <div className="text-2xl font-monument text-brand">{salesData.averageTicketPrice}€</div>
                   <p className="text-xs text-muted-foreground">Par billet</p>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.4s' }}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Événements Actifs</CardTitle>
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <CardTitle className="text-sm font-medium text-brand">Événements Actifs</CardTitle>
+                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Calendar className="h-4 w-4 text-white" />
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{salesData.upcomingEvents}</div>
+                  <div className="text-2xl font-monument text-brand">{salesData.upcomingEvents}</div>
                   <p className="text-xs text-muted-foreground">À venir</p>
                 </CardContent>
               </Card>
             </div>
 
             {/* Recent Events Performance */}
-            <Card>
+            <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.5s' }}>
               <CardHeader>
-                <CardTitle>Performance des Événements</CardTitle>
+                <CardTitle className="text-lg font-monument text-brand">Performance des Événements</CardTitle>
                 <CardDescription>
                   Suivi des ventes par événement
                 </CardDescription>
@@ -250,9 +258,9 @@ const OrganizerAdminDashboard = () => {
             </Card>
 
             {/* Top Customers */}
-            <Card>
+            <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.6s' }}>
               <CardHeader>
-                <CardTitle>Meilleurs Clients</CardTitle>
+                <CardTitle className="text-lg font-monument text-brand">Meilleurs Clients</CardTitle>
                 <CardDescription>
                   Clients avec le plus d'achats
                 </CardDescription>
@@ -280,17 +288,17 @@ const OrganizerAdminDashboard = () => {
           </TabsContent>
 
           {/* Events Tab */}
-          <TabsContent value="events" className="space-y-6">
-            <Card>
+          <TabsContent value="events" className="space-y-8">
+            <Card className="card-sport animate-fade-up">
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <div>
-                    <CardTitle>Gestion des Événements</CardTitle>
+                    <CardTitle className="text-lg font-monument text-brand">Gestion des Événements</CardTitle>
                     <CardDescription>
                       Créez et gérez vos événements sportifs
                     </CardDescription>
                   </div>
-                  <Button>
+                  <Button variant="hero">
                     <Plus className="h-4 w-4 mr-2" />
                     Nouvel événement
                   </Button>
@@ -307,7 +315,7 @@ const OrganizerAdminDashboard = () => {
                       className="pl-10"
                     />
                   </div>
-                  <Button variant="outline">
+                  <Button variant="sport">
                     <Filter className="h-4 w-4 mr-2" />
                     Filtres
                   </Button>
@@ -343,7 +351,7 @@ const OrganizerAdminDashboard = () => {
                         <TableCell className="font-bold">{event.revenue.toLocaleString()}€</TableCell>
                         <TableCell>
                           <div className="flex gap-2">
-                            <Button variant="outline" size="sm">
+                            <Button variant="sport" size="sm">
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button variant="outline" size="sm">
@@ -360,11 +368,11 @@ const OrganizerAdminDashboard = () => {
           </TabsContent>
 
           {/* Sales Tab */}
-          <TabsContent value="sales" className="space-y-6">
+          <TabsContent value="sales" className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
+              <Card className="card-sport animate-fade-up">
                 <CardHeader>
-                  <CardTitle>Revenus par Événement</CardTitle>
+                  <CardTitle className="text-lg font-monument text-brand">Revenus par Événement</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -388,9 +396,9 @@ const OrganizerAdminDashboard = () => {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.1s' }}>
                 <CardHeader>
-                  <CardTitle>Analyse des Ventes</CardTitle>
+                  <CardTitle className="text-lg font-monument text-brand">Analyse des Ventes</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -417,11 +425,11 @@ const OrganizerAdminDashboard = () => {
               </Card>
             </div>
 
-            <Card>
+            <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.2s' }}>
               <CardHeader>
                 <div className="flex justify-between items-center">
-                  <CardTitle>Historique des Ventes</CardTitle>
-                  <Button variant="outline">
+                  <CardTitle className="text-lg font-monument text-brand">Historique des Ventes</CardTitle>
+                  <Button variant="hero">
                     <Download className="h-4 w-4 mr-2" />
                     Exporter
                   </Button>
@@ -440,17 +448,17 @@ const OrganizerAdminDashboard = () => {
           </TabsContent>
 
           {/* Customers Tab */}
-          <TabsContent value="customers" className="space-y-6">
-            <Card>
+          <TabsContent value="customers" className="space-y-8">
+            <Card className="card-sport animate-fade-up">
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <div>
-                    <CardTitle>Base Clients</CardTitle>
+                    <CardTitle className="text-lg font-monument text-brand">Base Clients</CardTitle>
                     <CardDescription>
                       Gérez vos relations clients
                     </CardDescription>
                   </div>
-                  <Button variant="outline">
+                  <Button variant="hero">
                     <Download className="h-4 w-4 mr-2" />
                     Exporter
                   </Button>
@@ -467,7 +475,7 @@ const OrganizerAdminDashboard = () => {
                       className="pl-10"
                     />
                   </div>
-                  <Button variant="outline">
+                  <Button variant="sport">
                     <Filter className="h-4 w-4 mr-2" />
                     Filtres
                   </Button>
