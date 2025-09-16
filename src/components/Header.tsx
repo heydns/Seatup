@@ -1,13 +1,24 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Menu, X, User, LogOut, ChevronDown } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
+import { toast } from "sonner";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast.error('Erreur lors de la déconnexion');
+    } else {
+      toast.success('Vous êtes déconnecté');
+    }
+  };
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -54,11 +65,33 @@ export const Header = () => {
             >
               Contact
             </Link>
-            <Button variant="hero" asChild>
-              <Link to={user ? "/home" : "/auth"}>
-                {user ? "Mon compte" : "Se connecter"}
-              </Link>
-            </Button>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="hero" className="gap-2">
+                    <User className="h-4 w-4" />
+                    Mon compte
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem asChild>
+                    <Link to="/home" className="flex items-center gap-2 w-full">
+                      <User className="h-4 w-4" />
+                      Mon compte
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSignOut} className="flex items-center gap-2 text-destructive focus:text-destructive">
+                    <LogOut className="h-4 w-4" />
+                    Se déconnecter
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button variant="hero" asChild>
+                <Link to="/auth">Se connecter</Link>
+              </Button>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -111,11 +144,33 @@ export const Header = () => {
               >
                 Contact
               </Link>
-              <Button variant="hero" asChild className="w-fit">
-                <Link to={user ? "/home" : "/auth"} onClick={() => setIsMenuOpen(false)}>
-                  {user ? "Mon compte" : "Se connecter"}
-                </Link>
-              </Button>
+              {user ? (
+                <div className="flex flex-col gap-2 pt-2 border-t border-border">
+                  <Button variant="outline" asChild className="w-fit justify-start">
+                    <Link to="/home" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2">
+                      <User className="h-4 w-4" />
+                      Mon compte
+                    </Link>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      handleSignOut();
+                    }} 
+                    className="w-fit justify-start text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Se déconnecter
+                  </Button>
+                </div>
+              ) : (
+                <Button variant="hero" asChild className="w-fit">
+                  <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                    Se connecter
+                  </Link>
+                </Button>
+              )}
             </nav>
           </div>
         )}
