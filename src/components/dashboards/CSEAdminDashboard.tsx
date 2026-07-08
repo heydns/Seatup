@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { 
   TrendingUp, 
   Users, 
@@ -17,6 +18,13 @@ import {
   Filter
 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
+import { 
+mockCseCompany, 
+mockBeneficiaries, 
+computeCseStats,
+getReservationsByCseCompany,
+getEventById,
+} from '@/data/mockData';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 
@@ -31,73 +39,41 @@ const CSEAdminDashboard = () => {
     }
   };
 
-  // Mock data - in real app, fetch from Supabase
   const budgetData = {
-    totalBudget: 50000,
-    consumedBudget: 18500,
-    remainingBudget: 31500,
-    monthlySpending: 6200
+    totalBudget: mockCseCompany.totalBudget,
+    consumedBudget: mockCseCompany.consumedBudget,
+    remainingBudget: mockCseCompany.totalBudget - mockCseCompany.consumedBudget,
+    monthlySpending: mockCseCompany.monthlySpending,
   };
-
-  const beneficiaries = [
-    {
-      id: 1,
-      firstName: 'Marie',
-      lastName: 'Dupont',
-      email: 'marie.dupont@company.com',
-      allocatedBudget: 500,
-      consumedBudget: 180,
-      status: 'active',
-      lastActivity: '2024-02-20'
-    },
-    {
-      id: 2,
-      firstName: 'Pierre',
-      lastName: 'Martin',
-      email: 'pierre.martin@company.com',
-      allocatedBudget: 500,
-      consumedBudget: 320,
-      status: 'active',
-      lastActivity: '2024-02-18'
-    },
-    {
-      id: 3,
-      firstName: 'Sophie',
-      lastName: 'Bernard',
-      email: 'sophie.bernard@company.com',
-      allocatedBudget: 500,
-      consumedBudget: 450,
-      status: 'active',
-      lastActivity: '2024-02-22'
-    }
-  ];
-
-  const purchaseReports = [
-    {
-      id: 1,
-      beneficiary: 'Marie Dupont',
-      event: 'PSG vs OM',
-      date: '2024-02-20',
-      originalPrice: 85,
-      subsidizedAmount: 20,
-      finalPrice: 65
-    },
-    {
-      id: 2,
-      beneficiary: 'Pierre Martin',
-      event: 'Roland Garros',
-      date: '2024-02-18',
-      originalPrice: 120,
-      subsidizedAmount: 40,
-      finalPrice: 80
-    }
-  ];
-
+  const beneficiaries = mockBeneficiaries.map((b) => ({
+    id: b.id,
+    firstName: b.firstName,
+    lastName: b.lastName,
+    email: b.email,
+    allocatedBudget: b.allocatedBudget,
+    consumedBudget: b.consumedBudget,
+    status: b.status,
+    lastActivity: b.lastActivity,
+  }));
+  const cseStats = computeCseStats(mockCseCompany.id);
+  const purchaseReports = getReservationsByCseCompany(mockCseCompany.id).map((r) => {
+    const ev = getEventById(r.eventId);
+    const ben = mockBeneficiaries.find((b) => b.id === r.beneficiaryId);
+    return {
+      id: r.id,
+      beneficiary: `${ben?.firstName} ${ben?.lastName}`,
+      event: ev?.Event ?? 'Événement inconnu',
+      date: r.date,
+      originalPrice: r.originalPrice,
+      subsidizedAmount: r.subsidizedAmount,
+      finalPrice: r.finalPrice,
+    };
+  });
   const statistics = {
-    totalBeneficiaries: beneficiaries.length,
-    activeBeneficiaries: beneficiaries.filter(b => b.status === 'active').length,
-    averageSpending: Math.round(beneficiaries.reduce((sum, b) => sum + b.consumedBudget, 0) / beneficiaries.length),
-    mostPopularEvents: ['Football', 'Tennis', 'Basketball']
+    totalBeneficiaries: cseStats.totalBeneficiaries,
+    activeBeneficiaries: cseStats.activeBeneficiaries,
+    averageSpending: cseStats.averageSpending,
+    mostPopularEvents: cseStats.topSports.map((s) => s.sport),
   };
 
   return (
@@ -441,21 +417,24 @@ const CSEAdminDashboard = () => {
               </Card>
             </div>
 
-            <Card>
+            <Card className="card-sport">
               <CardHeader>
-                <CardTitle>Graphiques et Analytics</CardTitle>
-                <CardDescription>
-                  Visualisation des données de consommation
-                </CardDescription>
+                <CardTitle className="text-lg font-monument text-brand">Sports populaires chez vos salariés</CardTitle>
+                <CardDescription>Nombre de billets achetés par discipline</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center justify-center h-64 text-muted-foreground">
-                  <div className="text-center">
-                    <BarChart3 className="h-12 w-12 mx-auto mb-4" />
-                    <p>Graphiques à implémenter</p>
-                    <p className="text-sm">Intégration avec une librairie de charts</p>
-                  </div>
-                </div>
+                <ResponsiveContainer width="100%" height={260}>
+                  <BarChart data={cseStats.topSports.map((s) => ({ name: s.sport, value: s.count }))}>
+                    <XAxis dataKey="name" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
+                    <YAxis hide />
+                    <Tooltip contentStyle={{ borderRadius: 8, border: '1px solid #e5e7eb' }} />
+                    <Bar dataKey="value" radius={[8, 8, 0, 0]}>
+                      {cseStats.topSports.map((_, i) => (
+                        <Cell key={i} fill={['hsl(221,100%,61%)', 'hsl(336,71%,46%)', '#A4E034', '#F1640B', '#2D3E73'][i % 5]} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
               </CardContent>
             </Card>
           </TabsContent>

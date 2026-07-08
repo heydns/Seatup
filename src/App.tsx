@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/components/AuthProvider";
+import { ReservationsProvider } from "@/contexts/ReservationsContext";
 import { AuthDebug } from "@/components/AuthDebug";
 import { EventsPage } from "@/components/EventsPage";
 import Auth from "@/pages/Auth";
@@ -20,12 +21,14 @@ import GroupsPage from "@/pages/GroupsPage";
 import Index from "./pages/Index";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import { DemoSwitcher } from "@/components/DemoSwitcher";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
+      <ReservationsProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -47,9 +50,11 @@ const App = () => (
             <Route path="/groups" element={<GroupsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <AuthDebug />
+          {/* <AuthDebug /> */}
+          <DemoSwitcher />
         </BrowserRouter>
       </TooltipProvider>
+      </ReservationsProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

@@ -31,11 +31,17 @@ import {
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAuth } from '@/components/AuthProvider';
+import { computeOrganizerStats, mockSocialMessages } from '@/data/mockData';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 
 const OrganizerAdminDashboard = () => {
   const { userProfile, signOut } = useAuth();
+  // Pour la démo, on prend Paris Saint-Germain comme organisateur par défaut
+  // En prod, remplacer par userProfile?.company_name
+  const organizationName = userProfile?.company_name || 'Paris Saint-Germain';
+  const orgStats = computeOrganizerStats(organizationName);
+
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSignOut = async () => {
@@ -45,49 +51,23 @@ const OrganizerAdminDashboard = () => {
     }
   };
 
-  // Mock data - in real app, fetch from Supabase
-  const events = [
-    {
-      id: 1,
-      title: 'PSG vs OM',
-      date: '2024-03-15',
-      venue: 'Parc des Princes',
-      status: 'upcoming',
-      totalTickets: 500,
-      soldTickets: 387,
-      revenue: 32450,
-      price: 85
-    },
-    {
-      id: 2,
-      title: 'Handball PSG vs Montpellier',
-      date: '2024-02-20',
-      venue: 'Stade Pierre de Coubertin',
-      status: 'completed',
-      totalTickets: 300,
-      soldTickets: 280,
-      revenue: 12600,
-      price: 45
-    },
-    {
-      id: 3,
-      title: 'Tennis - Masters de Paris',
-      date: '2024-04-15',
-      venue: 'AccorHotels Arena',
-      status: 'upcoming',
-      totalTickets: 800,
-      soldTickets: 156,
-      revenue: 14040,
-      price: 90
-    }
-  ];
-
-  const salesData = {
-    totalRevenue: events.reduce((sum, event) => sum + event.revenue, 0),
-    totalTicketsSold: events.reduce((sum, event) => sum + event.soldTickets, 0),
-    averageTicketPrice: Math.round(events.reduce((sum, event) => sum + event.price, 0) / events.length),
-    upcomingEvents: events.filter(event => event.status === 'upcoming').length
-  };
+  const events = orgStats.events.map((e) => ({
+      id: e.ID_event,
+      title: e.Event,
+      date: e.Date,
+      venue: e.Location,
+      status: new Date(e.Date) > new Date() ? 'upcoming' : 'completed',
+      totalTickets: e.totalTickets,
+      soldTickets: e.soldTickets,
+      revenue: e.soldTickets * parseInt(e.Our_Price.replace('€',''), 10),
+      price: parseInt(e.Our_Price.replace('€',''), 10),
+    }));
+    const salesData = {
+      totalRevenue: orgStats.totalRevenue,
+      totalTicketsSold: orgStats.totalTicketsSold,
+      averageTicketPrice: orgStats.averageTicketPrice,
+      upcomingEvents: orgStats.upcomingEvents,
+    };
 
   // Trends data - mock data for demonstration
   const trends = {

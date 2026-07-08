@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useReservations } from '@/contexts/ReservationsContext';
+import MyReservations from '@/components/MyReservations';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
   Heart, 
@@ -39,6 +41,7 @@ import marieDubois from '@/assets/team/marie-dubois.jpg';
 
 const BeneficiaryHome = () => {
   const { userProfile, signOut } = useAuth();
+  const { wallet } = useReservations();
   const [beneficiaryData, setBeneficiaryData] = useState(null);
   const [companyData, setCompanyData] = useState(null);
   const [fullUserProfile, setFullUserProfile] = useState(null);
@@ -149,11 +152,7 @@ const BeneficiaryHome = () => {
     purchasesCount: 25
   };
 
-  const walletData = {
-    totalBudget: 500,
-    remainingBudget: 340,
-    usedBudget: 160
-  };
+  const walletData = wallet; 
 
   const favoriteEvents = [
     {
@@ -391,7 +390,8 @@ const BeneficiaryHome = () => {
             </div>
           </div>
         </section>
-
+        {/* Mes Billets */}
+        <MyReservations />
         {/* Mon Équipe */}
         <section>
           <div className="max-w-7xl rounded-3xl shadow-lg border border-border/30 p-8 mx-auto bg-white/95 backdrop-blur-sm">
