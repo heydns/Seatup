@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+# Env files (locaux, non commits) — les VITE_ sont OK à commit mais on protège les secrets
+.env.local
+.env.*.local
+supabase-keys.txt
+*-keys.txt
+*.secret.txt
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -1,445 +1,450 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useEffect, useMemo, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { 
-  TrendingUp, 
-  Users, 
-  Euro, 
-  BarChart3,
-  Settings,
-  LogOut,
-  Download,
-  Plus,
-  Search,
-  Filter
-} from 'lucide-react';
-import { useAuth } from '@/components/AuthProvider';
-import { 
-mockCseCompany, 
-mockBeneficiaries, 
-computeCseStats,
-getReservationsByCseCompany,
-getEventById,
-} from '@/data/mockData';
 import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Users,
+  UserCheck,
+  UserX,
+  Ticket,
+  Wallet,
+  Search,
+  Plus,
+  LogOut,
+  Loader2,
+  TrendingUp,
+} from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/components/AuthProvider';
 import { toast } from 'sonner';
+import AddBeneficiaryModal from '@/components/modals/AddBeneficiaryModal';
+import RechargeWalletModal from '@/components/modals/RechargeWalletModal';
+import BeneficiaryDetailModal, { type Beneficiary } from '@/components/modals/BeneficiaryDetailModal';
+
+/**
+ * CSEAdminDashboard — Prio 1 CSE #8 : Tableau de bord Admin CSE
+ * ─────────────────────────────────────────────────────────────────────────
+ * Branché sur Supabase (profiles + cse_companies + reservations + events).
+ * Boutons Ajouter bénéficiaire, Recharger cagnotte, clic bénéficiaire → fiche.
+ */
+
+interface CseCompany {
+  id: string;
+  name: string;
+  total_budget: number;
+  consumed_budget: number;
+}
+
+const COLORS = ['hsl(221,100%,61%)', 'hsl(336,71%,46%)', '#A4E034', '#F1640B', '#2D3E73'];
 
 const CSEAdminDashboard = () => {
   const { userProfile, signOut } = useAuth();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [company, setCompany] = useState<CseCompany | null>(null);
+  const [beneficiaries, setBeneficiaries] = useState<Beneficiary[]>([]);
+  const [topSports, setTopSports] = useState<{ sport: string; count: number }[]>([]);
+  const [topClubs, setTopClubs] = useState<{ name: string; count: number }[]>([]);
+  const [ticketsCount, setTicketsCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [addOpen, setAddOpen] = useState(false);
+  const [rechargeOpen, setRechargeOpen] = useState(false);
+  const [selectedBen, setSelectedBen] = useState<Beneficiary | null>(null);
 
-  const handleSignOut = async () => {
-    const { error } = await signOut();
-    if (error) {
-      toast.error('Erreur lors de la déconnexion');
+  const cseCompanyId = (userProfile as any)?.cse_company_id;
+
+  const loadData = async () => {
+    if (!cseCompanyId) {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    try {
+      const { data: comp } = await supabase
+        .from('cse_companies')
+        .select('id, name, total_budget, consumed_budget')
+        .eq('id', cseCompanyId)
+        .maybeSingle();
+      setCompany(comp as CseCompany | null);
+
+      const { data: bens } = await supabase
+        .from('profiles')
+        .select('id, first_name, last_name, email, is_activated, allocated_budget, consumed_budget, last_activity, created_at')
+        .eq('cse_company_id', cseCompanyId)
+        .eq('role', 'beneficiary')
+        .order('created_at', { ascending: false });
+
+      setBeneficiaries((bens as Beneficiary[]) ?? []);
+
+      if (bens && bens.length > 0) {
+        const benIds = bens.map((b: any) => b.id);
+        const { data: reservs } = await supabase
+          .from('reservations')
+          .select('quantity, event:events(sport, organizer:organizers(name))')
+          .in('beneficiary_id', benIds)
+          .eq('status', 'confirmed');
+
+        if (reservs) {
+          const sportMap: Record<string, number> = {};
+          const clubMap: Record<string, number> = {};
+          let totalTix = 0;
+          for (const r of reservs as any[]) {
+            const sport = r.event?.sport ?? 'Autre';
+            const club = r.event?.organizer?.name ?? '—';
+            sportMap[sport] = (sportMap[sport] ?? 0) + r.quantity;
+            clubMap[club] = (clubMap[club] ?? 0) + r.quantity;
+            totalTix += r.quantity;
+          }
+          setTicketsCount(totalTix);
+          setTopSports(
+            Object.entries(sportMap)
+              .sort(([, a], [, b]) => b - a)
+              .slice(0, 5)
+              .map(([sport, count]) => ({ sport, count }))
+          );
+          setTopClubs(
+            Object.entries(clubMap)
+              .sort(([, a], [, b]) => b - a)
+              .slice(0, 5)
+              .map(([name, count]) => ({ name, count }))
+          );
+        }
+      }
+    } catch (err) {
+      console.error('Load CSE data:', err);
+      toast.error('Erreur chargement du dashboard');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const budgetData = {
-    totalBudget: mockCseCompany.totalBudget,
-    consumedBudget: mockCseCompany.consumedBudget,
-    remainingBudget: mockCseCompany.totalBudget - mockCseCompany.consumedBudget,
-    monthlySpending: mockCseCompany.monthlySpending,
-  };
-  const beneficiaries = mockBeneficiaries.map((b) => ({
-    id: b.id,
-    firstName: b.firstName,
-    lastName: b.lastName,
-    email: b.email,
-    allocatedBudget: b.allocatedBudget,
-    consumedBudget: b.consumedBudget,
-    status: b.status,
-    lastActivity: b.lastActivity,
-  }));
-  const cseStats = computeCseStats(mockCseCompany.id);
-  const purchaseReports = getReservationsByCseCompany(mockCseCompany.id).map((r) => {
-    const ev = getEventById(r.eventId);
-    const ben = mockBeneficiaries.find((b) => b.id === r.beneficiaryId);
-    return {
-      id: r.id,
-      beneficiary: `${ben?.firstName} ${ben?.lastName}`,
-      event: ev?.Event ?? 'Événement inconnu',
-      date: r.date,
-      originalPrice: r.originalPrice,
-      subsidizedAmount: r.subsidizedAmount,
-      finalPrice: r.finalPrice,
-    };
-  });
-  const statistics = {
-    totalBeneficiaries: cseStats.totalBeneficiaries,
-    activeBeneficiaries: cseStats.activeBeneficiaries,
-    averageSpending: cseStats.averageSpending,
-    mostPopularEvents: cseStats.topSports.map((s) => s.sport),
+  useEffect(() => {
+    loadData();
+  }, [cseCompanyId]);
+
+  const filteredBens = useMemo(() => {
+    if (!search.trim()) return beneficiaries;
+    const q = search.toLowerCase();
+    return beneficiaries.filter(
+      (b) =>
+        (b.first_name?.toLowerCase() ?? '').includes(q) ||
+        (b.last_name?.toLowerCase() ?? '').includes(q) ||
+        b.email.toLowerCase().includes(q)
+    );
+  }, [beneficiaries, search]);
+
+  const activeCount = beneficiaries.filter((b) => b.is_activated).length;
+  const inactiveCount = beneficiaries.length - activeCount;
+  const budgetRemaining = (company?.total_budget ?? 0) - (company?.consumed_budget ?? 0);
+  const budgetUsagePct = company?.total_budget
+    ? Math.round((company.consumed_budget / company.total_budget) * 100)
+    : 0;
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) toast.error('Erreur déconnexion');
   };
 
+  if (!cseCompanyId && !loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-8">
+        <Card className="max-w-md">
+          <CardHeader>
+            <CardTitle>Aucun CSE rattaché</CardTitle>
+            <CardDescription>
+              Votre profil n'est pas encore lié à une entreprise CSE. Contactez votre
+              administrateur pour finaliser la configuration.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button variant="outline" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4 mr-2" />
+              Se déconnecter
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
+    <div className="min-h-screen bg-background">
       <header className="border-b bg-white/95 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-6 flex justify-between items-center">
-          <div className="animate-fade-up">
-            <h1 className="text-2xl md:text-3xl font-monument text-brand mb-2">
-              Dashboard CSE - {userProfile?.company_name}
+          <div>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Espace CSE</p>
+            <h1 className="text-2xl md:text-3xl font-monument text-brand mt-1">
+              {company?.name ?? userProfile?.company_name ?? 'Mon CSE'}
             </h1>
-            <p className="text-base text-muted-foreground">
-              Gérez vos budgets et vos bénéficiaires
+            <p className="text-sm text-muted-foreground">
+              Bonjour {userProfile?.first_name}, gérez vos bénéficiaires et votre budget
             </p>
           </div>
-          <div className="flex items-center gap-4 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-            <Button variant="sport" size="sm">
-              <Settings className="h-4 w-4 mr-2" />
-              Paramètres
-            </Button>
-            <Button variant="outline" size="sm" onClick={handleSignOut}>
-              <LogOut className="h-4 w-4 mr-2" />
-              Déconnexion
-            </Button>
-          </div>
+          <Button variant="outline" size="sm" onClick={handleSignOut}>
+            <LogOut className="h-4 w-4 mr-2" />
+            Déconnexion
+          </Button>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="overview" className="space-y-8 animate-fade-up" style={{ animationDelay: '0.3s' }}>
-          <TabsList className="grid w-full grid-cols-4 bg-white/95 backdrop-blur-sm shadow-sm">
-            <TabsTrigger value="overview" className="font-medium">Vue d'ensemble</TabsTrigger>
-            <TabsTrigger value="beneficiaries" className="font-medium">Bénéficiaires</TabsTrigger>
-            <TabsTrigger value="reports" className="font-medium">Rapports</TabsTrigger>
-            <TabsTrigger value="statistics" className="font-medium">Statistiques</TabsTrigger>
-          </TabsList>
+      <div className="container mx-auto px-4 py-8 space-y-8">
+        <div className="flex flex-wrap gap-3">
+          <Button variant="hero" size="lg" onClick={() => setAddOpen(true)} className="gap-2">
+            <Plus className="h-4 w-4" />
+            Ajouter un bénéficiaire
+          </Button>
+          <Button variant="sport" size="lg" onClick={() => setRechargeOpen(true)} className="gap-2">
+            <Wallet className="h-4 w-4" />
+            Recharger la cagnotte
+          </Button>
+        </div>
 
-          {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-8">
-            {/* Budget Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.1s' }}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-brand">Budget Total</CardTitle>
-                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Euro className="h-4 w-4 text-white" />
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-monument text-brand">{budgetData.totalBudget.toLocaleString()}€</div>
-                  <p className="text-xs text-muted-foreground">Alloué cette année</p>
-                </CardContent>
-              </Card>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+          <Card className="card-sport">
+            <CardHeader className="pb-2 flex flex-row items-center justify-between">
+              <CardTitle className="text-sm font-medium text-brand">Bénéficiaires</CardTitle>
+              <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
+                <Users className="h-4 w-4 text-white" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-monument text-brand">{beneficiaries.length}</div>
+              <p className="text-xs text-muted-foreground">Rattachés à votre CSE</p>
+            </CardContent>
+          </Card>
 
-              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.2s' }}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-brand">Budget Consommé</CardTitle>
-                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <TrendingUp className="h-4 w-4 text-white" />
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-monument text-brand">{budgetData.consumedBudget.toLocaleString()}€</div>
-                  <p className="text-xs text-muted-foreground">
-                    {Math.round((budgetData.consumedBudget / budgetData.totalBudget) * 100)}% du budget
-                  </p>
-                </CardContent>
-              </Card>
+          <Card className="card-sport">
+            <CardHeader className="pb-2 flex flex-row items-center justify-between">
+              <CardTitle className="text-sm font-medium text-brand">Actifs</CardTitle>
+              <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
+                <UserCheck className="h-4 w-4 text-white" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-monument text-brand">{activeCount}</div>
+              <p className="text-xs text-muted-foreground">
+                {beneficiaries.length > 0
+                  ? `${Math.round((activeCount / beneficiaries.length) * 100)}% d'activation`
+                  : '—'}
+              </p>
+            </CardContent>
+          </Card>
 
-              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.3s' }}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-brand">Budget Restant</CardTitle>
-                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Euro className="h-4 w-4 text-white" />
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-monument text-brand">{budgetData.remainingBudget.toLocaleString()}€</div>
-                  <p className="text-xs text-muted-foreground">Disponible</p>
-                </CardContent>
-              </Card>
+          <Card className="card-sport">
+            <CardHeader className="pb-2 flex flex-row items-center justify-between">
+              <CardTitle className="text-sm font-medium text-brand">Non connectés</CardTitle>
+              <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
+                <UserX className="h-4 w-4 text-white" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-monument text-brand">{inactiveCount}</div>
+              <p className="text-xs text-muted-foreground">À relancer</p>
+            </CardContent>
+          </Card>
 
-              <Card className="card-sport group animate-fade-up" style={{ animationDelay: '0.4s' }}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-brand">Bénéficiaires Actifs</CardTitle>
-                  <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Users className="h-4 w-4 text-white" />
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-monument text-brand">{statistics.activeBeneficiaries}</div>
-                  <p className="text-xs text-muted-foreground">
-                    sur {statistics.totalBeneficiaries} inscrits
-                  </p>
-                </CardContent>
-              </Card>
+          <Card className="card-sport">
+            <CardHeader className="pb-2 flex flex-row items-center justify-between">
+              <CardTitle className="text-sm font-medium text-brand">Billets achetés</CardTitle>
+              <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
+                <Ticket className="h-4 w-4 text-white" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-monument text-brand">{ticketsCount}</div>
+              <p className="text-xs text-muted-foreground">Cumul depuis lancement</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Card className="bg-gradient-primary text-white border-0 shadow-lg">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="flex items-center gap-2 text-sm opacity-90">
+                  <Wallet className="h-4 w-4" />
+                  Cagnotte globale
+                </p>
+                <p className="mt-3 text-4xl font-monument">
+                  {(company?.consumed_budget ?? 0).toLocaleString('fr-FR')} €{' '}
+                  <span className="text-xl opacity-70">
+                    / {(company?.total_budget ?? 0).toLocaleString('fr-FR')} €
+                  </span>
+                </p>
+                <p className="mt-1 text-sm opacity-90">
+                  {budgetUsagePct}% utilisée · Restant : {budgetRemaining.toLocaleString('fr-FR')} €
+                </p>
+              </div>
             </div>
-
-            {/* Budget Usage Chart */}
-            <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.5s' }}>
-              <CardHeader>
-                <CardTitle className="text-lg font-monument text-brand">Répartition Budget</CardTitle>
-                <CardDescription>
-                  Utilisation du budget par période
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span>Budget utilisé</span>
-                    <span>{budgetData.consumedBudget.toLocaleString()}€</span>
-                  </div>
-                  <div className="w-full bg-secondary rounded-full h-4">
-                    <div 
-                      className="bg-primary h-4 rounded-full" 
-                      style={{ width: `${(budgetData.consumedBudget / budgetData.totalBudget) * 100}%` }}
-                    ></div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <p className="text-muted-foreground">Dépense mensuelle moyenne</p>
-                      <p className="font-bold">{budgetData.monthlySpending.toLocaleString()}€</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground">Projection fin d'année</p>
-                      <p className="font-bold">{(budgetData.monthlySpending * 12).toLocaleString()}€</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Recent Activity */}
-            <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.6s' }}>
-              <CardHeader>
-                <CardTitle className="text-lg font-monument text-brand">Activité Récente</CardTitle>
-                <CardDescription>
-                  Derniers achats de vos bénéficiaires
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {purchaseReports.slice(0, 5).map((purchase) => (
-                    <div key={purchase.id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                      <div>
-                        <p className="font-medium">{purchase.beneficiary}</p>
-                        <p className="text-sm text-muted-foreground">{purchase.event}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-bold">{purchase.finalPrice}€</p>
-                        <p className="text-sm text-green-600">Subvention: {purchase.subsidizedAmount}€</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Beneficiaries Tab */}
-          <TabsContent value="beneficiaries" className="space-y-8">
-            <Card className="card-sport animate-fade-up">
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <CardTitle className="text-lg font-monument text-brand">Gestion des Bénéficiaires</CardTitle>
-                    <CardDescription>
-                      Gérez les comptes de vos salariés
-                    </CardDescription>
-                  </div>
-                  <Button variant="hero">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Ajouter un bénéficiaire
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="flex gap-4 mb-6">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Rechercher un bénéficiaire..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                  <Button variant="sport">
-                    <Filter className="h-4 w-4 mr-2" />
-                    Filtres
-                  </Button>
-                  <Button variant="sport">
-                    <Download className="h-4 w-4 mr-2" />
-                    Exporter
-                  </Button>
-                </div>
-
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Bénéficiaire</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Budget Alloué</TableHead>
-                      <TableHead>Budget Utilisé</TableHead>
-                      <TableHead>Statut</TableHead>
-                      <TableHead>Dernière Activité</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {beneficiaries.map((beneficiary) => (
-                      <TableRow key={beneficiary.id}>
-                        <TableCell className="font-medium">
-                          {beneficiary.firstName} {beneficiary.lastName}
-                        </TableCell>
-                        <TableCell>{beneficiary.email}</TableCell>
-                        <TableCell>{beneficiary.allocatedBudget}€</TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <span>{beneficiary.consumedBudget}€</span>
-                            <span className="text-xs text-muted-foreground">
-                              ({Math.round((beneficiary.consumedBudget / beneficiary.allocatedBudget) * 100)}%)
-                            </span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={beneficiary.status === 'active' ? 'default' : 'secondary'}>
-                            {beneficiary.status === 'active' ? 'Actif' : 'Inactif'}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          {new Date(beneficiary.lastActivity).toLocaleDateString('fr-FR')}
-                        </TableCell>
-                        <TableCell>
-                          <Button variant="sport" size="sm">
-                            Modifier
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Reports Tab */}
-          <TabsContent value="reports" className="space-y-8">
-            <Card className="card-sport animate-fade-up">
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <CardTitle className="text-lg font-monument text-brand">Rapports d'Achats</CardTitle>
-                    <CardDescription>
-                      Détail des transactions par bénéficiaire
-                    </CardDescription>
-                  </div>
-                  <Button variant="hero">
-                    <Download className="h-4 w-4 mr-2" />
-                    Exporter le rapport
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Bénéficiaire</TableHead>
-                      <TableHead>Événement</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Prix Original</TableHead>
-                      <TableHead>Subvention</TableHead>
-                      <TableHead>Prix Final</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {purchaseReports.map((report) => (
-                      <TableRow key={report.id}>
-                        <TableCell className="font-medium">{report.beneficiary}</TableCell>
-                        <TableCell>{report.event}</TableCell>
-                        <TableCell>{new Date(report.date).toLocaleDateString('fr-FR')}</TableCell>
-                        <TableCell>{report.originalPrice}€</TableCell>
-                        <TableCell className="text-green-600">{report.subsidizedAmount}€</TableCell>
-                        <TableCell className="font-bold">{report.finalPrice}€</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Statistics Tab */}
-          <TabsContent value="statistics" className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card className="card-sport animate-fade-up">
-                <CardHeader>
-                  <CardTitle className="text-lg font-monument text-brand">Statistiques Générales</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex justify-between">
-                    <span>Nombre total de bénéficiaires</span>
-                    <span className="font-bold">{statistics.totalBeneficiaries}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Bénéficiaires actifs</span>
-                    <span className="font-bold">{statistics.activeBeneficiaries}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Dépense moyenne par bénéficiaire</span>
-                    <span className="font-bold">{statistics.averageSpending}€</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Taux d'utilisation du budget</span>
-                    <span className="font-bold">
-                      {Math.round((budgetData.consumedBudget / budgetData.totalBudget) * 100)}%
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="card-sport animate-fade-up" style={{ animationDelay: '0.1s' }}>
-                <CardHeader>
-                  <CardTitle className="text-lg font-monument text-brand">Événements Populaires</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {statistics.mostPopularEvents.map((event, index) => (
-                      <div key={event} className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-full bg-gradient-primary text-white text-xs flex items-center justify-center font-bold">
-                            {index + 1}
-                          </div>
-                          <span className="font-medium">{event}</span>
-                        </div>
-                        <Badge variant="secondary">{Math.floor(Math.random() * 50) + 10} achats</Badge>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="mt-5 h-2 w-full rounded-full bg-white/20 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-[#A4E034] transition-all"
+                style={{ width: `${budgetUsagePct}%` }}
+              />
             </div>
+          </CardContent>
+        </Card>
 
+        {topSports.length > 0 && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <Card className="card-sport">
               <CardHeader>
-                <CardTitle className="text-lg font-monument text-brand">Sports populaires chez vos salariés</CardTitle>
-                <CardDescription>Nombre de billets achetés par discipline</CardDescription>
+                <CardTitle className="font-monument text-brand text-lg flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4" />
+                  Sports les plus populaires
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={260}>
-                  <BarChart data={cseStats.topSports.map((s) => ({ name: s.sport, value: s.count }))}>
+                <ResponsiveContainer width="100%" height={220}>
+                  <BarChart data={topSports.map((s) => ({ name: s.sport, value: s.count }))}>
                     <XAxis dataKey="name" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
                     <YAxis hide />
                     <Tooltip contentStyle={{ borderRadius: 8, border: '1px solid #e5e7eb' }} />
                     <Bar dataKey="value" radius={[8, 8, 0, 0]}>
-                      {cseStats.topSports.map((_, i) => (
-                        <Cell key={i} fill={['hsl(221,100%,61%)', 'hsl(336,71%,46%)', '#A4E034', '#F1640B', '#2D3E73'][i % 5]} />
+                      {topSports.map((_, i) => (
+                        <Cell key={i} fill={COLORS[i % COLORS.length]} />
                       ))}
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
+
+            <Card className="card-sport">
+              <CardHeader>
+                <CardTitle className="font-monument text-brand text-lg flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4" />
+                  Clubs les plus populaires
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={220}>
+                  <BarChart
+                    data={topClubs.map((c) => ({ name: c.name.slice(0, 15), value: c.count }))}
+                    layout="vertical"
+                  >
+                    <XAxis type="number" hide />
+                    <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} width={110} />
+                    <Tooltip contentStyle={{ borderRadius: 8, border: '1px solid #e5e7eb' }} />
+                    <Bar dataKey="value" fill="hsl(221,100%,61%)" radius={[0, 8, 8, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        <Card className="card-sport">
+          <CardHeader>
+            <div className="flex items-center justify-between flex-wrap gap-3">
+              <div>
+                <CardTitle className="font-monument text-brand">
+                  Vos bénéficiaires ({filteredBens.length})
+                </CardTitle>
+                <CardDescription>Cliquez sur une ligne pour ouvrir la fiche</CardDescription>
+              </div>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Rechercher…"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-9 w-64"
+                />
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {filteredBens.length === 0 ? (
+              <p className="text-center py-8 text-muted-foreground text-sm">
+                {beneficiaries.length === 0
+                  ? 'Aucun bénéficiaire pour le moment. Ajoutez votre premier collaborateur avec le bouton ci-dessus.'
+                  : 'Aucun résultat pour cette recherche.'}
+              </p>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nom</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Budget</TableHead>
+                    <TableHead>Statut</TableHead>
+                    <TableHead>Dernière activité</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredBens.map((b) => (
+                    <TableRow
+                      key={b.id}
+                      className="cursor-pointer hover:bg-muted/50"
+                      onClick={() => setSelectedBen(b)}
+                    >
+                      <TableCell className="font-medium">
+                        {b.first_name ?? '—'} {b.last_name ?? ''}
+                      </TableCell>
+                      <TableCell className="text-sm">{b.email}</TableCell>
+                      <TableCell>
+                        <span className="text-sm">
+                          {(b.consumed_budget ?? 0)} / {(b.allocated_budget ?? 0)} €
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        {b.is_activated ? (
+                          <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
+                            Actif
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="text-amber-600 border-amber-300">
+                            Non activé
+                          </Badge>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">
+                        {b.last_activity
+                          ? new Date(b.last_activity).toLocaleDateString('fr-FR')
+                          : 'Jamais'}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
       </div>
+
+      {cseCompanyId && (
+        <>
+          <AddBeneficiaryModal
+            open={addOpen}
+            onOpenChange={setAddOpen}
+            cseCompanyId={cseCompanyId}
+            onSuccess={loadData}
+          />
+          <RechargeWalletModal
+            open={rechargeOpen}
+            onOpenChange={setRechargeOpen}
+            cseCompanyId={cseCompanyId}
+            currentBudget={company?.total_budget ?? 0}
+            onSuccess={loadData}
+          />
+          <BeneficiaryDetailModal
+            open={selectedBen !== null}
+            onOpenChange={(o) => !o && setSelectedBen(null)}
+            beneficiary={selectedBen}
+          />
+        </>
+      )}
     </div>
   );
 };

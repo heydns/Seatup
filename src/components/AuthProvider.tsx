@@ -28,7 +28,8 @@ interface AuthContextType {
 
 interface UserProfile {
   id: string;
-  user_id: string;
+  // user_id est un alias de id, gardé pour compat avec les composants existants
+  user_id?: string;
   email: string;
   first_name: string | null;
   last_name: string | null;
@@ -145,13 +146,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               const { data: profile, error } = await supabase
                 .from('profiles')
                 .select('*')
-                .eq('user_id', session.user.id)
+                .eq('id', session.user.id)
                 .maybeSingle();
 
               if (error) {
                 console.error('Error fetching profile:', error);
-              } else {
-                setUserProfile(profile as UserProfile);
+              } else if (profile) {
+                // Ajoute user_id = id pour compat avec les composants Lovable existants
+                setUserProfile({ ...profile, user_id: profile.id } as UserProfile);
               }
             } catch (error) {
               console.error('Profile fetch error:', error);

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Map, Ticket, Star, Trophy } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,6 +7,8 @@ import Autoplay from "embla-carousel-autoplay";
 import LogoTicker from "./LogoTicker";
 import { AnimatedText } from "./AnimatedText";
 import { Footer } from "./Footer";
+import { supabase } from "@/integrations/supabase/client";
+import { mockEvents } from "@/data/mockData";
 
 // Import images
 import psgOmImage from "@/assets/psg-om.jpg";
@@ -39,9 +42,57 @@ const sports = [{
   icon: "🏐"
 }];
 const clubs = ["PSG", "OM", "OL", "AS Monaco", "LOSC", "Stade Rennais", "RC Strasbourg", "OGC Nice", "Montpellier HSC", "FC Nantes"];
+interface FeaturedEvent {
+  id: string | number;
+  title: string;
+  date: string;
+  venue: string;
+  price: string;
+  originalPrice: string;
+  image?: string;
+}
+
 export const PublicHomepage = () => {
   const navigate = useNavigate();
-  
+  const [featuredEvents, setFeaturedEvents] = useState<FeaturedEvent[]>([]);
+
+  // ── Fetch max 5 events pour le carrousel "Offres du moment" ─────────
+  useEffect(() => {
+    (async () => {
+      // Supabase d'abord
+      const { data } = await supabase
+        .from('events')
+        .select('id, title, event_date, location_name, original_price, our_price, image_url')
+        .eq('is_published', true)
+        .gte('event_date', new Date().toISOString()) // uniquement à venir
+        .order('event_date', { ascending: true })
+        .limit(5);
+
+      const supaEvents: FeaturedEvent[] = (data ?? []).map((e: any) => ({
+        id: e.id,
+        title: e.title,
+        date: new Date(e.event_date).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' }),
+        venue: e.location_name,
+        price: `À partir de ${e.our_price}€`,
+        originalPrice: `${e.original_price}€`,
+        image: e.image_url,
+      }));
+
+      // Complète avec fixtures si moins de 5
+      const fixtures: FeaturedEvent[] = mockEvents.slice(0, 5 - supaEvents.length).map((e) => ({
+        id: e.ID_event,
+        title: e.Event,
+        date: new Date(e.Date).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' }),
+        venue: e.Location,
+        price: `À partir de ${e.Our_Price}`,
+        originalPrice: e.Original_Price,
+        image: e.imageUrl,
+      }));
+
+      setFeaturedEvents([...supaEvents, ...fixtures].slice(0, 5));
+    })();
+  }, []);
+
   return <div className="min-h-screen relative bg-white">
       
       {/* Hero Section */}
@@ -108,61 +159,18 @@ export const PublicHomepage = () => {
             containScroll: "trimSnaps",
             duration: 30
           }} plugins={[Autoplay({
-            delay: 4000,
+            delay: 5000,
             stopOnInteraction: true,
             stopOnMouseEnter: true,
             stopOnFocusIn: true
           })]}>
+              {featuredEvents.length === 0 && (
+                <div className="text-center py-12 text-muted-foreground text-sm">
+                  Aucune offre coup de cœur pour le moment.
+                </div>
+              )}
               <CarouselContent className="-ml-2 md:-ml-4">
-                {[{
-                title: "PSG vs SCO Angers - Journée 1 Ligue 1",
-                date: "Dimanche 24 Août",
-                venue: "Parc des Princes",
-                price: "À partir de 36€",
-                originalPrice: "45€",
-                image: "/lovable-uploads/147eb088-277c-4032-b6b4-e01dfed524d3.png",
-                id: 11
-              }, {
-                title: "Paris Basketball - Abonnement 25/26",
-                date: "Dim, 27 Jul",
-                venue: "Adidas Arena",
-                price: "À partir de 200€",
-                originalPrice: "250€",
-                image: "/lovable-uploads/2837c0cc-2ffb-4656-92c6-96c4f4dfd60f.png",
-                id: 12
-              }, {
-                title: "Rolex Paris Master 2025",
-                date: "Lun, 28 Jul",
-                venue: "La Défense U Arena",
-                price: "À partir de 64€",
-                originalPrice: "80€",
-                image: "/lovable-uploads/7809806e-e8e7-44e8-8cb6-4e9157c04ac5.png",
-                id: 13
-              }, {
-                title: "Hoka Semi Marathon Paris 2025",
-                date: "Mar, 29 Jul",
-                venue: "Ville de Paris",
-                price: "À partir de 44€",
-                originalPrice: "55€",
-                image: "/lovable-uploads/56eb70ed-a5f5-4845-b859-1354756c82ff.png",
-                id: 14
-              }, {
-                title: "Les Mariannes 92 - Saison 25/26",
-                date: "Mer, 30 Jul",
-                venue: "Le palais des sports Marcel Cerdan",
-                price: "À partir de 84€",
-                originalPrice: "105€",
-                image: "/lovable-uploads/498f232f-981f-4bb2-ab0f-d9d08551a8fb.png",
-                id: 15
-              }, {
-                title: "PSG Handball - Dunkerque / Journée 1 StarLigue",
-                date: "Dim, 07 Sep",
-                venue: "Stade Pierre de Coubertin",
-                price: "À partir de 28€",
-                originalPrice: "35€",
-                image: "/lovable-uploads/585f742a-f198-48d5-aaff-54c375f30f55.png",
-                id: 16
-              }].map((event, index) => <CarouselItem key={event.title} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/4">
+                {featuredEvents.map((event, index) => <CarouselItem key={String(event.id)} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/4">
                     <div className="group cursor-pointer animate-fade-up" style={{
                   animationDelay: `${index * 0.1}s`
                 }} onClick={() => navigate(`/event/${event.id}`)}>

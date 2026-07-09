@@ -7,13 +7,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Search, Filter, MapPin, Calendar, Euro, Users, Heart, Star, Zap, ChevronDown } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { supabase } from "@/integrations/supabase/client";
 import { mockEvents } from "@/data/mockData";
 import { EventCard } from "./EventCard";
 import { Header } from "./Header";
 import { useNavigate } from "react-router-dom";
 
 interface Event {
-  ID_event: number;
+  ID_event: number | string;
   Event: string;
   Date: string;
   Organization: string;
@@ -23,6 +24,9 @@ interface Event {
   Adress: string;
   Access: string;
   Link: string;
+  Original_Price?: string;
+  Our_Price?: string;
+  imageUrl?: string;
 }
 
 const SPORTS_FILTERS = [
@@ -132,7 +136,9 @@ export const EventsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [favorites, setFavorites] = useState<number[]>([]);
-  const [sortBy, setSortBy] = useState<"date" | "price" | "popularity">("date");
+  const [sortBy, setSortBy] = useState<"date" | "price_asc" | "price_desc" | "popularity">("date");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -141,8 +147,63 @@ export const EventsPage = () => {
   const userBalance = 75;
 
   useEffect(() => {
-    setEvents(mockEvents);
-    setIsLoading(false);
+    const loadEvents = async () => {
+      setIsLoading(true);
+      try {
+        // Fetch depuis Supabase — inclut les events créés via le wizard Marchand
+        const { data, error } = await supabase
+          .from('events')
+          .select('id, title, event_date, sport, competition, location_name, location_address, original_price, our_price, image_url, external_link, is_published, organizer:organizers(name)')
+          .eq('is_published', true)
+          .order('event_date', { ascending: true });
+
+        // ── Map format Supabase → Event
+        const supabaseEvents: Event[] = error
+          ? []
+          : (data ?? []).map((e: any) => ({
+              ID_event: e.id,
+              Event: e.title,
+              Date: e.event_date,
+              Organization: e.organizer?.name ?? '',
+              Sport: e.sport ?? 'Autre',
+              Competition: e.competition ?? '',
+              Location: e.location_name ?? '',
+              Adress: e.location_address ?? '',
+              Access: 'Ticketing',
+              Link: e.external_link ?? '',
+              Original_Price: e.original_price ? `${e.original_price}€` : undefined,
+              Our_Price: e.our_price ? `${e.our_price}€` : undefined,
+              imageUrl: e.image_url,
+            }));
+
+        // ── Ajoute les mockEvents (fixtures) pour remplir le catalogue en démo
+        const fixtureEvents: Event[] = mockEvents.map((e) => ({
+          ID_event: e.ID_event,
+          Event: e.Event,
+          Date: e.Date,
+          Organization: e.Organization,
+          Sport: e.Sport,
+          Competition: e.Competition,
+          Location: e.Location,
+          Adress: e.Adress,
+          Access: e.Access,
+          Link: e.Link,
+          Original_Price: e.Original_Price,
+          Our_Price: e.Our_Price,
+          imageUrl: e.imageUrl,
+        }));
+
+        // Supabase d'abord (les nouveaux en haut), puis les fixtures
+        setEvents([...supabaseEvents, ...fixtureEvents]);
+        if (error) console.error('Load events error:', error);
+      } catch (err) {
+        console.error('Load events threw:', err);
+        setEvents([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadEvents();
   }, []);
 
   useEffect(() => {
@@ -321,16 +382,23 @@ export const EventsPage = () => {
       );
     }
 
+    // Extraction du prix depuis "36€" ou "À partir de 36€"
+    const parsePrice = (raw?: string): number => {
+      if (!raw) return 0;
+      const m = raw.replace(',', '.').match(/\d+(\.\d+)?/);
+      return m ? parseFloat(m[0]) : 0;
+    };
+
     // Sort events
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "date":
           return new Date(a.Date || "").getTime() - new Date(b.Date || "").getTime();
-        case "price":
-          // Mock sorting by price since we don't have real prices
-          return Math.random() - 0.5;
+        case "price_asc":
+          return parsePrice((a as any).Our_Price) - parsePrice((b as any).Our_Price);
+        case "price_desc":
+          return parsePrice((b as any).Our_Price) - parsePrice((a as any).Our_Price);
         case "popularity":
-          // Mock sorting by popularity
           return Math.random() - 0.5;
         default:
           return 0;
@@ -384,15 +452,81 @@ export const EventsPage = () => {
           )}
         </div>
 
-        {/* Search Bar */}
+        {/* Search Bar + Auto-suggestions + Géoloc */}
         <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-          <Input
-            placeholder="Rechercher un événement, club, ville..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input pl-10 h-12 text-lg"
-          />
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              <Input
+                placeholder="Rechercher un événement, club, ville..."
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setShowSuggestions(e.target.value.length >= 2);
+                }}
+                onFocus={() => setShowSuggestions(searchQuery.length >= 2)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                className="search-input pl-10 h-12 text-lg"
+              />
+              {/* ─── Auto-suggestions dropdown ─── */}
+              {showSuggestions && (() => {
+                const q = searchQuery.toLowerCase();
+                const matches = events
+                  .filter(
+                    (e) =>
+                      e.Event?.toLowerCase().includes(q) ||
+                      e.Organization?.toLowerCase().includes(q) ||
+                      e.Location?.toLowerCase().includes(q) ||
+                      e.Sport?.toLowerCase().includes(q)
+                  )
+                  .slice(0, 6);
+                return matches.length > 0 ? (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-border rounded-lg shadow-lg overflow-hidden z-50 max-h-80 overflow-y-auto">
+                    {matches.map((m) => (
+                      <button
+                        key={String(m.ID_event)}
+                        onMouseDown={() => navigate(`/event/${m.ID_event}`)}
+                        className="w-full text-left px-4 py-3 hover:bg-primary/5 border-b border-border/50 last:border-b-0 transition-colors"
+                      >
+                        <p className="font-medium text-sm line-clamp-1">{m.Event}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {m.Sport} · {m.Location}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-border rounded-lg shadow-lg px-4 py-3 text-sm text-muted-foreground z-50">
+                    Aucun résultat ne correspond à votre recherche, essayez un autre mot-clé.
+                  </div>
+                );
+              })()}
+            </div>
+            {/* Bouton géolocalisation */}
+            <Button
+              variant={userLocation ? "hero" : "sport"}
+              size="lg"
+              className="h-12 gap-2"
+              onClick={() => {
+                if (userLocation) {
+                  setUserLocation(null);
+                  return;
+                }
+                if (!navigator.geolocation) {
+                  alert("La géolocalisation n'est pas supportée par votre navigateur.");
+                  return;
+                }
+                navigator.geolocation.getCurrentPosition(
+                  (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+                  () => alert("Impossible d'obtenir votre position.")
+                );
+              }}
+              title="Utiliser ma position pour prioriser les événements proches"
+            >
+              <MapPin className="h-4 w-4" />
+              {userLocation ? "Ma position ✓" : "Près de moi"}
+            </Button>
+          </div>
         </div>
 
         {/* Date Filters - Default Display */}
@@ -469,7 +603,8 @@ export const EventsPage = () => {
               className="px-3 py-2 border border-border rounded-md bg-white text-sm font-medium"
             >
               <option value="date">Trier par date</option>
-              <option value="price">Trier par prix</option>
+              <option value="price_asc">Prix croissant ↑</option>
+              <option value="price_desc">Prix décroissant ↓</option>
               <option value="popularity">Trier par popularité</option>
             </select>
           </div>

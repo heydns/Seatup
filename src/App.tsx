@@ -8,6 +8,8 @@ import { ReservationsProvider } from "@/contexts/ReservationsContext";
 import { AuthDebug } from "@/components/AuthDebug";
 import { EventsPage } from "@/components/EventsPage";
 import Auth from "@/pages/Auth";
+import ForgotPassword from "@/pages/ForgotPassword";
+import ResetPassword from "@/pages/ResetPassword";
 import Dashboard from "@/pages/Dashboard";
 import BeneficiaryHome from "@/pages/BeneficiaryHome";
 import { EventDetail } from "@/pages/EventDetail";
@@ -21,7 +23,6 @@ import GroupsPage from "@/pages/GroupsPage";
 import Index from "./pages/Index";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
-import { DemoSwitcher } from "@/components/DemoSwitcher";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,8 @@ const App = () => (
             <Route path="/team/:id" element={<TeamDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/home" element={<BeneficiaryHome />} />
             <Route path="/team" element={<TeamPage />} />
@@ -51,7 +54,6 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           {/* <AuthDebug /> */}
-          <DemoSwitcher />
         </BrowserRouter>
       </TooltipProvider>
       </ReservationsProvider>

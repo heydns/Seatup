@@ -1,18 +1,12 @@
 /**
- * EventDetail — version fake data + purchase flow réel
+ * EventDetail — version hybride Supabase + mockData
  * ─────────────────────────────────────────────────────────────────────────
- * REMPLACE entièrement src/pages/EventDetail.tsx
- *
- * Changements vs la version Lovable d'origine :
- *  ✓ Plus aucun appel Supabase pour les events (tout vient de mockData)
- *  ✓ Plus aucun fallback dupliqué (le code est 3x plus court)
- *  ✓ Bouton "Réserver maintenant" → ouvre un modal de paiement mocké
- *  ✓ La réservation est créée via useReservations() → débite la cagnotte
- *    → apparaît dans BeneficiaryHome "Mes billets" → impacte les stats CSE
- *  ✓ Toast de confirmation + redirection optionnelle vers /home
+ * Détecte si l'id URL est un UUID (event créé via wizard Marchand, table
+ * Supabase) ou un number (fixtures mockData). Fetch depuis la bonne source
+ * et normalise vers un shape MockEvent unique pour le rendu.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,22 +20,101 @@ import {
 import { ArrowLeft, Calendar, MapPin, Users, Globe, Share2, Heart, Ticket, Wallet, Loader2, Check } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { toast } from 'sonner';
-import { getEventById } from '@/data/mockData';
+import { getEventById, type MockEvent } from '@/data/mockData';
+import { supabase } from '@/integrations/supabase/client';
 import { useReservations } from '@/contexts/ReservationsContext';
+
+// ─── Détection UUID (Supabase) vs number (mockData) ──────────────────────
+const isUuid = (s: string) =>
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
+
+// Fetch depuis Supabase et map vers le format MockEvent
+const fetchSupabaseEvent = async (uuid: string): Promise<MockEvent | null> => {
+  const { data, error } = await supabase
+    .from('events')
+    .select('id, title, event_date, sport, competition, location_name, location_address, original_price, our_price, total_tickets, sold_tickets, image_url, external_link, description, conditions_specifiques, organizer:organizers(name)')
+    .eq('id', uuid)
+    .maybeSingle();
+
+  if (error || !data) return null;
+
+  const e: any = data;
+  return {
+    ID_event: e.id, // uuid, mais cast pour le type MockEvent (le composant s'en fout)
+    Event: e.title,
+    Date: e.event_date,
+    Organization: e.organizer?.name ?? '',
+    Sport: e.sport ?? 'Autre',
+    Competition: e.competition ?? '',
+    Location: e.location_name ?? '',
+    Adress: e.location_address ?? '',
+    Access: 'Ticketing',
+    Link: e.external_link ?? '',
+    Original_Price: e.original_price ? `${e.original_price}€` : '0€',
+    Our_Price: e.our_price ? `${e.our_price}€` : '0€',
+    totalTickets: e.total_tickets ?? 0,
+    soldTickets: e.sold_tickets ?? 0,
+    imageUrl: e.image_url,
+  } as any;
+};
 
 export const EventDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { reserve, wallet } = useReservations();
 
-  const event = id ? getEventById(parseInt(id, 10)) : null;
-
+  const [event, setEvent] = useState<MockEvent | null>(null);
+  const [isFetching, setIsFetching] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  // ─── Chargement de l'event (Supabase ou mockData) ─────────────────
+  useEffect(() => {
+    if (!id) {
+      setIsFetching(false);
+      return;
+    }
+    (async () => {
+      setIsFetching(true);
+      try {
+        if (isUuid(id)) {
+          // Event créé via wizard → Supabase
+          const ev = await fetchSupabaseEvent(id);
+          setEvent(ev);
+        } else {
+          // Fixture (ID numérique) → mockData
+          const numId = parseInt(id, 10);
+          if (!isNaN(numId)) {
+            setEvent(getEventById(numId));
+          } else {
+            setEvent(null);
+          }
+        }
+      } catch (err) {
+        console.error('Load event error:', err);
+        setEvent(null);
+      } finally {
+        setIsFetching(false);
+      }
+    })();
+  }, [id]);
+
+  // ─── Loader ───────────────────────────────────────────────────────
+  if (isFetching) {
+    return (
+      <>
+        <Header />
+        <div className="min-h-screen pt-24 flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </>
+    );
+  }
+
+  // ─── Event non trouvé ─────────────────────────────────────────────
   if (!event) {
     return (
       <>
@@ -61,8 +134,8 @@ export const EventDetail = () => {
     );
   }
 
-  const originalPrice = parseInt(event.Original_Price.replace('€', ''), 10);
-  const subsidizedPrice = parseInt(event.Our_Price.replace('€', ''), 10);
+  const originalPrice = parseInt((event.Original_Price ?? '0').replace('€', ''), 10);
+  const subsidizedPrice = parseInt((event.Our_Price ?? '0').replace('€', ''), 10);
   const savings = originalPrice - subsidizedPrice;
   const totalCost = subsidizedPrice * quantity;
   const totalSavings = savings * quantity;
@@ -87,8 +160,10 @@ export const EventDetail = () => {
     setIsProcessing(true);
     await new Promise((resolve) => setTimeout(resolve, 1200));
 
-    const reservation = reserve(event.ID_event, quantity);
-
+    // Note : reserve() dans ReservationsContext prend un number, ici on passe
+    // l'ID en tant que number (pour fixtures) ou string (pour Supabase). Le
+    // context stocke les réservations en localStorage pour la démo.
+    const reservation = reserve(event.ID_event as any, quantity);
     setIsProcessing(false);
 
     if (!reservation) {
@@ -108,6 +183,13 @@ export const EventDetail = () => {
       navigate('/home');
     }, 2000);
   };
+
+  // Disponibilité — utilise totalTickets/soldTickets si dispo, sinon défauts
+  const totalTix = (event as any).totalTickets ?? 0;
+  const soldTix = (event as any).soldTickets ?? 0;
+  const remainingTix = Math.max(0, totalTix - soldTix);
+  const fillRate = totalTix > 0 ? Math.round((soldTix / totalTix) * 100) : 0;
+  const isFull = totalTix > 0 && remainingTix === 0;
 
   return (
     <>
@@ -138,10 +220,14 @@ export const EventDetail = () => {
                 <button
                   onClick={() => setIsFavorite(!isFavorite)}
                   className="absolute top-4 right-4 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white shadow-lg transition-colors"
-                  aria-label={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
                 >
                   <Heart className={`h-5 w-5 ${isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-600'}`} />
                 </button>
+                {isFull && (
+                  <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg">
+                    Complet
+                  </div>
+                )}
               </div>
 
               <div className="space-y-6">
@@ -211,29 +297,28 @@ export const EventDetail = () => {
                   </div>
                 </div>
 
-                <div className="border-t pt-6">
-                  <h2 className="text-xl font-monument mb-4">Disponibilité</h2>
-                  <div className="bg-gray-50 rounded-xl p-4">
-                    <div className="flex items-center justify-between text-sm mb-2">
-                      <span className="text-muted-foreground">Billets restants</span>
-                      <span className="font-semibold">
-                        {(event.totalTickets - event.soldTickets).toLocaleString('fr-FR')} /{' '}
-                        {event.totalTickets.toLocaleString('fr-FR')}
-                      </span>
+                {totalTix > 0 && (
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-monument mb-4">Disponibilité</h2>
+                    <div className="bg-gray-50 rounded-xl p-4">
+                      <div className="flex items-center justify-between text-sm mb-2">
+                        <span className="text-muted-foreground">Billets restants</span>
+                        <span className="font-semibold">
+                          {remainingTix.toLocaleString('fr-FR')} / {totalTix.toLocaleString('fr-FR')}
+                        </span>
+                      </div>
+                      <div className="h-2 w-full bg-white rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-primary rounded-full transition-all"
+                          style={{ width: `${fillRate}%` }}
+                        />
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        {fillRate}% des places déjà vendues
+                      </p>
                     </div>
-                    <div className="h-2 w-full bg-white rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-primary rounded-full transition-all"
-                        style={{
-                          width: `${Math.round((event.soldTickets / event.totalTickets) * 100)}%`,
-                        }}
-                      />
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-2">
-                      {Math.round((event.soldTickets / event.totalTickets) * 100)}% des places déjà vendues
-                    </p>
                   </div>
-                </div>
+                )}
 
                 <div className="border-t pt-6">
                   <h2 className="text-xl font-monument mb-4">À propos</h2>
@@ -261,9 +346,15 @@ export const EventDetail = () => {
                   </div>
 
                   <div className="space-y-3">
-                    <Button variant="hero" size="lg" className="w-full gap-2" onClick={openReservationModal}>
+                    <Button
+                      variant="hero"
+                      size="lg"
+                      className="w-full gap-2"
+                      onClick={openReservationModal}
+                      disabled={isFull}
+                    >
                       <Ticket className="h-5 w-5" />
-                      Réserver maintenant
+                      {isFull ? 'Complet' : 'Réserver maintenant'}
                     </Button>
                     <Button variant="sport" size="lg" className="w-full gap-2">
                       <Share2 className="h-4 w-4" />
@@ -311,27 +402,11 @@ export const EventDetail = () => {
                 <div>
                   <label className="text-sm font-medium mb-2 block">Nombre de billets</label>
                   <div className="flex items-center gap-3">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                      disabled={isProcessing || quantity === 1}
-                    >
-                      −
-                    </Button>
+                    <Button variant="outline" size="icon" onClick={() => setQuantity((q) => Math.max(1, q - 1))} disabled={isProcessing || quantity === 1}>−</Button>
                     <div className="flex-1 text-center font-monument text-2xl">{quantity}</div>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => setQuantity((q) => Math.min(10, q + 1))}
-                      disabled={isProcessing || quantity === 10}
-                    >
-                      +
-                    </Button>
+                    <Button variant="outline" size="icon" onClick={() => setQuantity((q) => Math.min(10, q + 1))} disabled={isProcessing || quantity === 10}>+</Button>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {subsidizedPrice}€ par billet · max 10
-                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">{subsidizedPrice}€ par billet · max 10</p>
                 </div>
 
                 <div className="rounded-xl bg-gray-50 p-4 space-y-2 text-sm">
@@ -349,11 +424,7 @@ export const EventDetail = () => {
                   </div>
                 </div>
 
-                <div
-                  className={`rounded-xl p-3 text-sm flex items-center justify-between ${
-                    canAfford ? 'bg-blue-50 text-blue-900' : 'bg-red-50 text-red-900'
-                  }`}
-                >
+                <div className={`rounded-xl p-3 text-sm flex items-center justify-between ${canAfford ? 'bg-blue-50 text-blue-900' : 'bg-red-50 text-red-900'}`}>
                   <span className="flex items-center gap-2">
                     <Wallet className="h-4 w-4" />
                     Cagnotte après achat
@@ -365,21 +436,9 @@ export const EventDetail = () => {
               </div>
 
               <DialogFooter>
-                <Button variant="outline" onClick={() => setIsModalOpen(false)} disabled={isProcessing}>
-                  Annuler
-                </Button>
+                <Button variant="outline" onClick={() => setIsModalOpen(false)} disabled={isProcessing}>Annuler</Button>
                 <Button variant="hero" onClick={confirmReservation} disabled={!canAfford || isProcessing} className="gap-2">
-                  {isProcessing ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      Paiement…
-                    </>
-                  ) : (
-                    <>
-                      <Ticket className="h-4 w-4" />
-                      Confirmer & payer
-                    </>
-                  )}
+                  {isProcessing ? (<><Loader2 className="h-4 w-4 animate-spin" />Paiement…</>) : (<><Ticket className="h-4 w-4" />Confirmer & payer</>)}
                 </Button>
               </DialogFooter>
             </>
@@ -389,12 +448,8 @@ export const EventDetail = () => {
                 <Check className="h-8 w-8 text-green-600" />
               </div>
               <h3 className="text-xl font-monument mb-2">Réservation confirmée !</h3>
-              <p className="text-muted-foreground text-sm">
-                Vos billets sont disponibles dans votre espace personnel.
-              </p>
-              <p className="text-xs text-muted-foreground mt-3">
-                Redirection en cours…
-              </p>
+              <p className="text-muted-foreground text-sm">Vos billets sont disponibles dans votre espace personnel.</p>
+              <p className="text-xs text-muted-foreground mt-3">Redirection en cours…</p>
             </div>
           )}
         </DialogContent>
