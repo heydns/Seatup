@@ -13,20 +13,22 @@ import {
   Search,
   LogOut,
   Loader2,
-  Eye,
   Edit,
+  Trash2,
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/components/AuthProvider';
 import { toast } from 'sonner';
-import CreateEventWizard from '@/components/modals/CreateEventWizard';
+import CreateEventWizard, { type EditableEvent } from '@/components/modals/CreateEventWizard';
+import ConfirmDeleteModal from '@/components/modals/ConfirmDeleteModal';
 
 /**
- * OrganizerAdminDashboard — Prio 1 Marchand : Dashboard + Créer événement
+ * OrganizerAdminDashboard v2 — Prio 1 + Prio 2 Marchand
  * ─────────────────────────────────────────────────────────────────────────
- * Branché sur Supabase (events + reservations + organizers).
- * Bouton "Créer un événement" → wizard 3 étapes.
+ * Ajouts Prio 2 :
+ *  - Bouton "Modifier" sur chaque ligne événement (P2-6)
+ *  - Bouton "Supprimer" avec soft delete si billets vendus (P2-7)
  */
 
 interface EventRow {
@@ -34,12 +36,18 @@ interface EventRow {
   title: string;
   event_date: string;
   location_name: string;
+  location_address: string | null;
+  description: string | null;
+  sport: string;
+  competition: string | null;
   status: string;
   total_tickets: number;
   sold_tickets: number;
   original_price: number;
   our_price: number;
   is_published: boolean;
+  image_url: string | null;
+  conditions_specifiques: string | null;
 }
 
 interface Organizer {
@@ -54,6 +62,9 @@ const OrganizerAdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [wizardOpen, setWizardOpen] = useState(false);
+  const [eventToEdit, setEventToEdit] = useState<EditableEvent | null>(null);
+  const [eventToDelete, setEventToDelete] = useState<EventRow | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const organizerId = (userProfile as any)?.organizer_id;
 
@@ -73,8 +84,9 @@ const OrganizerAdminDashboard = () => {
 
       const { data: evs } = await supabase
         .from('events')
-        .select('id, title, event_date, location_name, status, total_tickets, sold_tickets, original_price, our_price, is_published')
+        .select('id, title, event_date, location_name, location_address, description, sport, competition, status, total_tickets, sold_tickets, original_price, our_price, is_published, image_url, conditions_specifiques')
         .eq('organizer_id', organizerId)
+        .neq('status', 'archived')
         .order('event_date', { ascending: false });
 
       setEvents((evs as EventRow[]) ?? []);
@@ -90,9 +102,72 @@ const OrganizerAdminDashboard = () => {
     loadData();
   }, [organizerId]);
 
+  // ─── Handlers ────────────────────────────────────────────────
+  const openCreate = () => {
+    setEventToEdit(null);
+    setWizardOpen(true);
+  };
+
+  const openEdit = (ev: EventRow) => {
+    setEventToEdit({
+      id: ev.id,
+      title: ev.title,
+      sport: ev.sport,
+      competition: ev.competition,
+      event_date: ev.event_date,
+      description: ev.description,
+      location_name: ev.location_name,
+      location_address: ev.location_address,
+      total_tickets: ev.total_tickets,
+      sold_tickets: ev.sold_tickets,
+      original_price: ev.original_price,
+      our_price: ev.our_price,
+      image_url: ev.image_url,
+      conditions_specifiques: ev.conditions_specifiques,
+      status: ev.status,
+      is_published: ev.is_published,
+    });
+    setWizardOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!eventToDelete) return;
+    setIsDeleting(true);
+    try {
+      if (eventToDelete.sold_tickets > 0) {
+        // Soft delete : passage en archived (l'historique reste consultable)
+        const { error } = await supabase
+          .from('events')
+          .update({ status: 'archived', is_published: false })
+          .eq('id', eventToDelete.id);
+        if (error) throw error;
+        toast.success(
+          `L'événement a été archivé (${eventToDelete.sold_tickets} billets déjà vendus, l'historique est conservé).`
+        );
+      } else {
+        // Hard delete si aucun billet vendu
+        const { error } = await supabase
+          .from('events')
+          .delete()
+          .eq('id', eventToDelete.id);
+        if (error) throw error;
+        toast.success('L\'événement a été supprimé avec succès.');
+      }
+      setEventToDelete(null);
+      await loadData();
+    } catch (err: any) {
+      console.error('Delete event error:', err);
+      toast.error(`Erreur : ${err.message ?? 'suppression impossible'}`);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const totalRevenue = events.reduce((s, e) => s + e.sold_tickets * e.our_price, 0);
   const totalSold = events.reduce((s, e) => s + e.sold_tickets, 0);
-  const upcomingEvents = events.filter((e) => new Date(e.event_date) > new Date()).length;
+  const upcomingEvents = events.filter(
+    (e) => new Date(e.event_date) > new Date() && e.is_published
+  ).length;
   const totalCapacity = events.reduce((s, e) => s + e.total_tickets, 0);
   const fillRate = totalCapacity > 0 ? Math.round((totalSold / totalCapacity) * 100) : 0;
   const avgPrice = events.length > 0
@@ -103,7 +178,6 @@ const OrganizerAdminDashboard = () => {
     e.title.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Fake sales trend for now (à brancher sur reservations agrégées plus tard)
   const salesTrend = [
     { mois: 'Jan', ca: Math.round(totalRevenue * 0.10) },
     { mois: 'Fév', ca: Math.round(totalRevenue * 0.15) },
@@ -179,7 +253,7 @@ const OrganizerAdminDashboard = () => {
 
       <div className="container mx-auto px-4 py-8 space-y-8">
         <div className="flex flex-wrap gap-3">
-          <Button variant="hero" size="lg" onClick={() => setWizardOpen(true)} className="gap-2">
+          <Button variant="hero" size="lg" onClick={openCreate} className="gap-2">
             <Plus className="h-4 w-4" />
             Créer un événement
           </Button>
@@ -304,7 +378,7 @@ const OrganizerAdminDashboard = () => {
                     <TableHead>Vendus</TableHead>
                     <TableHead>CA</TableHead>
                     <TableHead>Statut</TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -333,12 +407,23 @@ const OrganizerAdminDashboard = () => {
                         </TableCell>
                         <TableCell>{getStatusBadge(ev)}</TableCell>
                         <TableCell>
-                          <div className="flex gap-1">
-                            <Button variant="ghost" size="sm">
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="sm">
+                          <div className="flex gap-1 justify-end">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              title="Modifier"
+                              onClick={() => openEdit(ev)}
+                            >
                               <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              title="Supprimer"
+                              className="hover:text-destructive hover:bg-red-50"
+                              onClick={() => setEventToDelete(ev)}
+                            >
+                              <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
                         </TableCell>
@@ -352,14 +437,48 @@ const OrganizerAdminDashboard = () => {
         </Card>
       </div>
 
+      {/* ── Modals ─────────────────────────────────────────────── */}
       {organizerId && (
-        <CreateEventWizard
-          open={wizardOpen}
-          onOpenChange={setWizardOpen}
-          organizerId={organizerId}
-          organizerName={organizer?.name ?? 'Mon organisation'}
-          onSuccess={loadData}
-        />
+        <>
+          <CreateEventWizard
+            open={wizardOpen}
+            onOpenChange={(o) => {
+              setWizardOpen(o);
+              if (!o) setEventToEdit(null);
+            }}
+            organizerId={organizerId}
+            organizerName={organizer?.name ?? 'Mon organisation'}
+            eventToEdit={eventToEdit}
+            onSuccess={loadData}
+          />
+          <ConfirmDeleteModal
+            open={eventToDelete !== null}
+            onOpenChange={(o) => !o && setEventToDelete(null)}
+            title="Supprimer cet événement ?"
+            description={
+              eventToDelete && eventToDelete.sold_tickets > 0 ? (
+                <>
+                  <strong>{eventToDelete.sold_tickets} billet(s) déjà vendu(s).</strong> L'événement
+                  sera <strong>archivé</strong> plutôt que supprimé : il disparaîtra du catalogue
+                  mais les billets restent valides pour les bénéficiaires et l'historique est
+                  conservé pour audit.
+                </>
+              ) : (
+                <>
+                  Cette action est <strong>irréversible</strong>. L'événement sera retiré
+                  définitivement du catalogue. Aucun billet n'ayant été vendu, aucune donnée
+                  historique n'est concernée.
+                </>
+              )
+            }
+            confirmLabel={
+              eventToDelete && eventToDelete.sold_tickets > 0 ? 'Archiver' : 'Supprimer'
+            }
+            variant={eventToDelete && eventToDelete.sold_tickets > 0 ? 'warning' : 'danger'}
+            onConfirm={handleDelete}
+            isLoading={isDeleting}
+          />
+        </>
       )}
     </div>
   );

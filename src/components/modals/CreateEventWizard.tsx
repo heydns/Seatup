@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -43,11 +43,31 @@ import { toast } from 'sonner';
  * Insert dans public.events, image dans bucket Storage 'event-images'.
  */
 
+export interface EditableEvent {
+  id: string;
+  title: string;
+  sport: string;
+  competition?: string | null;
+  event_date: string;
+  description?: string | null;
+  location_name: string;
+  location_address?: string | null;
+  total_tickets: number;
+  sold_tickets: number;
+  original_price: number;
+  our_price: number;
+  image_url?: string | null;
+  conditions_specifiques?: string | null;
+  status?: string;
+  is_published?: boolean;
+}
+
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   organizerId: string;
   organizerName: string;
+  eventToEdit?: EditableEvent | null;
   onSuccess?: () => void;
 }
 
@@ -114,6 +134,7 @@ export default function CreateEventWizard({
   onOpenChange,
   organizerId,
   organizerName,
+  eventToEdit,
   onSuccess,
 }: Props) {
   const { user } = useAuth();
@@ -121,6 +142,37 @@ export default function CreateEventWizard({
   const [data, setData] = useState<FormData>(initialData);
   const [isLoading, setIsLoading] = useState(false);
   const [createdEventId, setCreatedEventId] = useState<string | null>(null);
+
+  const isEditMode = !!eventToEdit;
+
+  // ── Pré-remplir en mode édition ──
+  useEffect(() => {
+    if (eventToEdit && open) {
+      const dt = new Date(eventToEdit.event_date);
+      setData({
+        title: eventToEdit.title,
+        sport: eventToEdit.sport,
+        competition: eventToEdit.competition ?? '',
+        eventDate: dt.toISOString().slice(0, 10),
+        eventTime: dt.toTimeString().slice(0, 5),
+        description: eventToEdit.description ?? '',
+        locationName: eventToEdit.location_name,
+        locationAddress: eventToEdit.location_address ?? '',
+        totalTickets: String(eventToEdit.total_tickets),
+        originalPrice: String(eventToEdit.original_price),
+        ourPrice: String(eventToEdit.our_price),
+        imageFile: null,
+        imagePreview: eventToEdit.image_url ?? '',
+        conditions: eventToEdit.conditions_specifiques ?? '',
+        status: (eventToEdit.status as 'draft' | 'published') ?? 'published',
+      });
+      setStep(1);
+      setCreatedEventId(null);
+    } else if (open && !eventToEdit) {
+      setData(initialData);
+      setStep(1);
+    }
+  }, [eventToEdit, open]);
 
   const update = <K extends keyof FormData>(key: K, value: FormData[K]) =>
     setData((prev) => ({ ...prev, [key]: value }));
@@ -165,47 +217,75 @@ export default function CreateEventWizard({
 
   const handlePublish = async (publishStatus: 'draft' | 'published') => {
     if (!user) return;
+
+    // ── Validation quota vs sold en mode édition ──
+    if (isEditMode && eventToEdit) {
+      const newTotal = parseInt(data.totalTickets);
+      if (newTotal < eventToEdit.sold_tickets) {
+        toast.error(
+          `Le quota (${newTotal}) ne peut pas être inférieur au nombre de billets déjà vendus (${eventToEdit.sold_tickets}).`
+        );
+        return;
+      }
+    }
+
     setIsLoading(true);
     try {
-      const imageUrl = await uploadImage();
+      // Upload seulement si nouvelle image (sinon on garde l'ancienne URL)
+      let imageUrl: string | null = eventToEdit?.image_url ?? null;
+      if (data.imageFile) {
+        imageUrl = await uploadImage();
+      }
 
       const eventDateTime = new Date(`${data.eventDate}T${data.eventTime}:00`).toISOString();
 
-      const { data: inserted, error } = await supabase
-        .from('events')
-        .insert({
-          organizer_id: organizerId,
-          title: data.title.trim(),
-          description: data.description.trim(),
-          sport: data.sport,
-          competition: data.competition.trim() || null,
-          event_date: eventDateTime,
-          location_name: data.locationName.trim(),
-          location_address: data.locationAddress.trim() || null,
-          total_tickets: parseInt(data.totalTickets),
-          sold_tickets: 0,
-          original_price: parseFloat(data.originalPrice),
-          our_price: parseFloat(data.ourPrice),
-          image_url: imageUrl,
-          conditions_specifiques: data.conditions.trim() || null,
-          status: publishStatus,
-          is_published: publishStatus === 'published',
-        })
-        .select()
-        .single();
+      const payload = {
+        organizer_id: organizerId,
+        title: data.title.trim(),
+        description: data.description.trim(),
+        sport: data.sport,
+        competition: data.competition.trim() || null,
+        event_date: eventDateTime,
+        location_name: data.locationName.trim(),
+        location_address: data.locationAddress.trim() || null,
+        total_tickets: parseInt(data.totalTickets),
+        original_price: parseFloat(data.originalPrice),
+        our_price: parseFloat(data.ourPrice),
+        image_url: imageUrl,
+        conditions_specifiques: data.conditions.trim() || null,
+        status: publishStatus,
+        is_published: publishStatus === 'published',
+      };
 
-      if (error) throw error;
+      if (isEditMode && eventToEdit) {
+        // ── UPDATE ──
+        const { error } = await supabase
+          .from('events')
+          .update(payload)
+          .eq('id', eventToEdit.id);
+        if (error) throw error;
 
-      setCreatedEventId(inserted.id);
-      toast.success(
-        publishStatus === 'published'
-          ? '🎉 Événement publié !'
-          : 'Brouillon sauvegardé.'
-      );
+        setCreatedEventId(eventToEdit.id);
+        toast.success('Votre événement a bien été mis à jour.');
+      } else {
+        // ── INSERT ──
+        const { data: inserted, error } = await supabase
+          .from('events')
+          .insert({ ...payload, sold_tickets: 0 })
+          .select()
+          .single();
+        if (error) throw error;
+
+        setCreatedEventId(inserted.id);
+        toast.success(
+          publishStatus === 'published' ? '🎉 Événement publié !' : 'Brouillon sauvegardé.'
+        );
+      }
+
       onSuccess?.();
     } catch (err: any) {
-      console.error('Create event error:', err);
-      toast.error(`Erreur : ${err.message ?? 'échec création'}`);
+      console.error(isEditMode ? 'Update event error:' : 'Create event error:', err);
+      toast.error(`Erreur : ${err.message ?? 'échec'}`);
     } finally {
       setIsLoading(false);
     }
@@ -228,11 +308,15 @@ export default function CreateEventWizard({
             <div className="mx-auto w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
               <Check className="h-8 w-8 text-green-600" />
             </div>
-            <h3 className="text-xl font-monument mb-2">Votre événement a bien été créé.</h3>
+            <h3 className="text-xl font-monument mb-2">
+              {isEditMode ? 'Événement mis à jour !' : 'Votre événement a bien été créé.'}
+            </h3>
             <p className="text-muted-foreground mb-6">
-              {data.status === 'published'
+              {isEditMode
+                ? 'Les modifications sont visibles en temps réel côté bénéficiaires.'
+                : data.status === 'published'
                 ? "Il est désormais visible dans le catalogue côté bénéficiaires."
-                : "Vous pouvez le retrouver dans vos brouillons pour le compléter plus tard."}
+                : 'Vous pouvez le retrouver dans vos brouillons pour le compléter plus tard.'}
             </p>
             <Button variant="hero" onClick={handleClose} className="w-full">
               Fermer
@@ -248,7 +332,7 @@ export default function CreateEventWizard({
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-monument flex items-center gap-3">
-            Créer un événement
+            {isEditMode ? 'Modifier l\'événement' : 'Créer un événement'}
             <span className="text-xs font-normal text-muted-foreground ml-auto">
               Étape {step} / 3
             </span>

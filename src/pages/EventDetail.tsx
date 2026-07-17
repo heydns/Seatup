@@ -17,7 +17,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { ArrowLeft, Calendar, MapPin, Users, Globe, Share2, Heart, Ticket, Wallet, Loader2, Check } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Users, Globe, Share2, Heart, Ticket, Wallet, Loader2, Check, CreditCard, Lock, ShieldCheck } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Header } from '@/components/Header';
 import { toast } from 'sonner';
 import { getEventById, type MockEvent } from '@/data/mockData';
@@ -61,7 +63,7 @@ const fetchSupabaseEvent = async (uuid: string): Promise<MockEvent | null> => {
 export const EventDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { reserve, wallet } = useReservations();
+  const { reserve, wallet, topUpWallet } = useReservations();
 
   const [event, setEvent] = useState<MockEvent | null>(null);
   const [isFetching, setIsFetching] = useState(true);
@@ -70,6 +72,10 @@ export const EventDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  // CB (mocked — pas de Stripe SDK réel, juste UX propre)
+  const [cbNumber, setCbNumber] = useState('4242 4242 4242 4242');
+  const [cbExpiry, setCbExpiry] = useState('12/28');
+  const [cbCvc, setCbCvc] = useState('123');
 
   // ─── Chargement de l'event (Supabase ou mockData) ─────────────────
   useEffect(() => {
@@ -157,20 +163,49 @@ export const EventDetail = () => {
   };
 
   const confirmReservation = async () => {
+    const remainderCB = Math.max(0, totalCost - wallet.remainingBudget);
+
+    // Validation CB si nécessaire
+    if (remainderCB > 0) {
+      if (!cbNumber.replace(/\s/g, '').match(/^\d{16}$/)) {
+        toast.error('Numéro de carte invalide');
+        return;
+      }
+      if (!cbExpiry.match(/^\d{2}\/\d{2}$/)) {
+        toast.error('Date d\'expiration invalide (format MM/AA)');
+        return;
+      }
+      if (!cbCvc.match(/^\d{3,4}$/)) {
+        toast.error('CVC invalide');
+        return;
+      }
+    }
+
     setIsProcessing(true);
-    await new Promise((resolve) => setTimeout(resolve, 1200));
+    // Simulation paiement (1.2s pour cagnotte seule, 2s si CB)
+    await new Promise((resolve) => setTimeout(resolve, remainderCB > 0 ? 2000 : 1200));
 
-    // Note : reserve() dans ReservationsContext prend un number, ici on passe
-    // l'ID en tant que number (pour fixtures) ou string (pour Supabase). Le
-    // context stocke les réservations en localStorage pour la démo.
-    const reservation = reserve(event.ID_event as any, quantity);
-    setIsProcessing(false);
-
-    if (!reservation) {
-      toast.error('Solde insuffisant', {
-        description: `Il vous manque ${(totalCost - wallet.remainingBudget).toFixed(0)}€ sur votre cagnotte.`,
-      });
-      return;
+    // Si toute la charge est sur cagnotte → chemin normal
+    if (remainderCB === 0) {
+      const reservation = reserve(event.ID_event as any, quantity);
+      setIsProcessing(false);
+      if (!reservation) {
+        toast.error('Erreur de réservation');
+        return;
+      }
+    } else {
+      // Cas CB : on top-up temporairement la cagnotte pour permettre reserve()
+      // Simule que la CB a payé le reste. Dans une vraie prod, on ferait un
+      // insert direct dans reservations avec le split wallet/CB tracké.
+      topUpWallet(remainderCB);
+      const reservation = reserve(event.ID_event as any, quantity);
+      setIsProcessing(false);
+      if (!reservation) {
+        // Rollback le top-up si erreur
+        topUpWallet(-remainderCB);
+        toast.error('Erreur de réservation');
+        return;
+      }
     }
 
     setIsSuccess(true);
@@ -409,36 +444,128 @@ export const EventDetail = () => {
                   <p className="text-xs text-muted-foreground mt-1">{subsidizedPrice}€ par billet · max 10</p>
                 </div>
 
+                {/* ─── Récap prix ─────────────────────────────── */}
                 <div className="rounded-xl bg-gray-50 p-4 space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Prix billetterie publique</span>
-                    <span className="line-through text-muted-foreground">{originalPrice * quantity}€</span>
+                    <span className="line-through text-muted-foreground">
+                      {originalPrice * quantity}€
+                    </span>
                   </div>
                   <div className="flex justify-between text-green-600">
                     <span>Réduction CSE</span>
                     <span>−{totalSavings}€</span>
                   </div>
                   <div className="border-t border-gray-200 pt-2 flex justify-between font-semibold text-base">
-                    <span>Total à débiter</span>
+                    <span>Total à régler</span>
                     <span className="text-primary">{totalCost}€</span>
                   </div>
                 </div>
 
-                <div className={`rounded-xl p-3 text-sm flex items-center justify-between ${canAfford ? 'bg-blue-50 text-blue-900' : 'bg-red-50 text-red-900'}`}>
-                  <span className="flex items-center gap-2">
-                    <Wallet className="h-4 w-4" />
-                    Cagnotte après achat
-                  </span>
-                  <span className="font-semibold">
-                    {(wallet.remainingBudget - totalCost).toLocaleString('fr-FR')}€
-                  </span>
-                </div>
+                {/* ─── Répartition Cagnotte + CB ──────────────── */}
+                {(() => {
+                  const walletUsed = Math.min(totalCost, wallet.remainingBudget);
+                  const remainderCB = Math.max(0, totalCost - wallet.remainingBudget);
+                  const isCoveredByWallet = remainderCB === 0;
+                  return (
+                    <div className="rounded-xl bg-primary/5 border border-primary/20 p-4 space-y-3 text-sm">
+                      <div className="flex items-center justify-between">
+                        <span className="flex items-center gap-2 text-primary font-medium">
+                          <Wallet className="h-4 w-4" />
+                          Cagnotte CSE
+                        </span>
+                        <span className="font-semibold">−{walletUsed}€</span>
+                      </div>
+                      {!isCoveredByWallet && (
+                        <div className="flex items-center justify-between">
+                          <span className="flex items-center gap-2 text-secondary font-medium">
+                            <CreditCard className="h-4 w-4" />
+                            Reste à charge (CB)
+                          </span>
+                          <span className="font-semibold">−{remainderCB}€</span>
+                        </div>
+                      )}
+                      <p className="text-xs text-muted-foreground pt-1 border-t border-primary/10">
+                        {isCoveredByWallet
+                          ? "✅ 100% pris en charge par votre cagnotte, aucun paiement CB requis."
+                          : `⚠️ Votre cagnotte couvre ${walletUsed}€, il reste ${remainderCB}€ à régler par CB.`}
+                      </p>
+                    </div>
+                  );
+                })()}
+
+                {/* ─── Formulaire CB si nécessaire (mocké) ────── */}
+                {totalCost > wallet.remainingBudget && (
+                  <div className="rounded-xl border border-border p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-semibold flex items-center gap-2">
+                        <CreditCard className="h-4 w-4" />
+                        Paiement par carte bancaire
+                      </p>
+                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Lock className="h-3 w-3" />
+                        Paiement sécurisé
+                      </span>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="cbn" className="text-xs">Numéro de carte</Label>
+                      <Input
+                        id="cbn"
+                        value={cbNumber}
+                        onChange={(e) => setCbNumber(e.target.value)}
+                        placeholder="1234 5678 9012 3456"
+                        disabled={isProcessing}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-2">
+                        <Label htmlFor="cbe" className="text-xs">Date d'expiration</Label>
+                        <Input
+                          id="cbe"
+                          value={cbExpiry}
+                          onChange={(e) => setCbExpiry(e.target.value)}
+                          placeholder="MM/AA"
+                          disabled={isProcessing}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="cbc" className="text-xs">CVC</Label>
+                        <Input
+                          id="cbc"
+                          value={cbCvc}
+                          onChange={(e) => setCbCvc(e.target.value)}
+                          placeholder="123"
+                          maxLength={4}
+                          disabled={isProcessing}
+                        />
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground flex items-center gap-1">
+                      <ShieldCheck className="h-3 w-3 text-green-600" />
+                      Vos données sont chiffrées et transitent par notre PSP.
+                    </p>
+                  </div>
+                )}
               </div>
 
               <DialogFooter>
-                <Button variant="outline" onClick={() => setIsModalOpen(false)} disabled={isProcessing}>Annuler</Button>
-                <Button variant="hero" onClick={confirmReservation} disabled={!canAfford || isProcessing} className="gap-2">
-                  {isProcessing ? (<><Loader2 className="h-4 w-4 animate-spin" />Paiement…</>) : (<><Ticket className="h-4 w-4" />Confirmer & payer</>)}
+                <Button variant="outline" onClick={() => setIsModalOpen(false)} disabled={isProcessing}>
+                  Annuler
+                </Button>
+                <Button variant="hero" onClick={confirmReservation} disabled={isProcessing} className="gap-2">
+                  {isProcessing ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Paiement…
+                    </>
+                  ) : (
+                    <>
+                      <Ticket className="h-4 w-4" />
+                      {totalCost > wallet.remainingBudget
+                        ? `Payer ${totalCost - wallet.remainingBudget}€ par CB`
+                        : 'Confirmer'}
+                    </>
+                  )}
                 </Button>
               </DialogFooter>
             </>
