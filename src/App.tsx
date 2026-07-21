@@ -10,6 +10,9 @@ import { EventsPage } from "@/components/EventsPage";
 import Auth from "@/pages/Auth";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
+import MerchantInvoices from "@/pages/MerchantInvoices";
+import MerchantStats from "@/pages/MerchantStats";
+import MerchantCommunication from "@/pages/MerchantCommunication";
 import Dashboard from "@/pages/Dashboard";
 import BeneficiaryHome from "@/pages/BeneficiaryHome";
 import { EventDetail } from "@/pages/EventDetail";
@@ -48,6 +51,9 @@ const App = () => (
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/admin/marchand/factures" element={<MerchantInvoices />} />
+            <Route path="/admin/marchand/stats" element={<MerchantStats />} />
+            <Route path="/admin/marchand/communication" element={<MerchantCommunication />} />
             <Route path="/home" element={<BeneficiaryHome />} />
             <Route path="/team" element={<TeamPage />} />
             <Route path="/groups" element={<GroupsPage />} />

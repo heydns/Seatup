@@ -37,6 +37,10 @@ import RechargeWalletModal from '@/components/modals/RechargeWalletModal';
 import DistributeWalletModal from '@/components/modals/DistributeWalletModal';
 import BeneficiaryDetailModal, { type Beneficiary } from '@/components/modals/BeneficiaryDetailModal';
 import ConfirmDeleteModal from '@/components/modals/ConfirmDeleteModal';
+import ExportBeneficiariesModal from '@/components/modals/ExportBeneficiariesModal';
+import SendCommunicationModal from '@/components/modals/SendCommunicationModal';
+import { PeriodFilter, defaultPeriod, type PeriodRange } from '@/components/PeriodFilter';
+import { Download, Mail } from 'lucide-react';
 
 /**
  * CSEAdminDashboard v2 — Prio 1 + Prio 2 CSE
@@ -78,8 +82,11 @@ const CSEAdminDashboard = () => {
   const [rechargeOpen, setRechargeOpen] = useState(false);
   const [distributeOpen, setDistributeOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
+  const [commOpen, setCommOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedBen, setSelectedBen] = useState<Beneficiary | null>(null);
+  const [period, setPeriod] = useState<PeriodRange>(defaultPeriod);
 
   const cseCompanyId = (userProfile as any)?.cse_company_id;
 
@@ -110,11 +117,17 @@ const CSEAdminDashboard = () => {
 
       if (bens && bens.length > 0) {
         const benIds = bens.map((b: any) => b.id);
-        const { data: reservs } = await supabase
+        let reservsQuery = supabase
           .from('reservations')
-          .select('quantity, event:events(sport, organizer:organizers(name))')
+          .select('quantity, purchase_date, event:events(sport, organizer:organizers(name))')
           .in('beneficiary_id', benIds)
           .eq('status', 'confirmed');
+
+        // Filtre période
+        if (period.from) reservsQuery = reservsQuery.gte('purchase_date', period.from.toISOString());
+        if (period.to) reservsQuery = reservsQuery.lte('purchase_date', period.to.toISOString());
+
+        const { data: reservs } = await reservsQuery;
 
         if (reservs) {
           const sportMap: Record<string, number> = {};
@@ -152,7 +165,7 @@ const CSEAdminDashboard = () => {
 
   useEffect(() => {
     loadData();
-  }, [cseCompanyId]);
+  }, [cseCompanyId, period]);
 
   // ─── Filtres + Tri sur bénéficiaires ─────────────────────────
   const filteredBens = useMemo(() => {
@@ -305,19 +318,31 @@ const CSEAdminDashboard = () => {
       </header>
 
       <div className="container mx-auto px-4 py-8 space-y-8">
-        <div className="flex flex-wrap gap-3">
-          <Button variant="hero" size="lg" onClick={() => setAddOpen(true)} className="gap-2">
-            <Plus className="h-4 w-4" />
-            Ajouter un bénéficiaire
-          </Button>
-          <Button variant="sport" size="lg" onClick={() => setRechargeOpen(true)} className="gap-2">
-            <Wallet className="h-4 w-4" />
-            Recharger la cagnotte
-          </Button>
-          <Button variant="sport" size="lg" onClick={() => setDistributeOpen(true)} className="gap-2">
-            <Share2 className="h-4 w-4" />
-            Distribuer aux bénéficiaires
-          </Button>
+        {/* Barre période + actions rapides */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-2">
+            <Button variant="hero" size="lg" onClick={() => setAddOpen(true)} className="gap-2">
+              <Plus className="h-4 w-4" />
+              Ajouter un bénéficiaire
+            </Button>
+            <Button variant="sport" size="lg" onClick={() => setRechargeOpen(true)} className="gap-2">
+              <Wallet className="h-4 w-4" />
+              Recharger la cagnotte
+            </Button>
+            <Button variant="sport" size="lg" onClick={() => setDistributeOpen(true)} className="gap-2">
+              <Share2 className="h-4 w-4" />
+              Distribuer
+            </Button>
+            <Button variant="sport" size="lg" onClick={() => setCommOpen(true)} className="gap-2">
+              <Mail className="h-4 w-4" />
+              Communication
+            </Button>
+            <Button variant="outline" size="lg" onClick={() => setExportOpen(true)} className="gap-2">
+              <Download className="h-4 w-4" />
+              Exporter
+            </Button>
+          </div>
+          <PeriodFilter value={period} onChange={setPeriod} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
@@ -372,8 +397,17 @@ const CSEAdminDashboard = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-monument text-brand">{ticketsCount}</div>
-              <p className="text-xs text-muted-foreground">Cumul depuis lancement</p>
+              {ticketsCount === 0 ? (
+                <>
+                  <div className="text-2xl font-monument text-muted-foreground">—</div>
+                  <p className="text-xs text-muted-foreground">Aucun billet acheté pour le moment</p>
+                </>
+              ) : (
+                <>
+                  <div className="text-2xl font-monument text-brand">🎟️ {ticketsCount}</div>
+                  <p className="text-xs text-muted-foreground">Billets · {period.label}</p>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -406,16 +440,20 @@ const CSEAdminDashboard = () => {
           </CardContent>
         </Card>
 
-        {topSports.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            <Card className="card-sport">
-              <CardHeader>
-                <CardTitle className="font-monument text-brand text-lg flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4" />
-                  Sports les plus populaires
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <Card className="card-sport">
+            <CardHeader>
+              <CardTitle className="font-monument text-brand text-lg flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                Sports les plus populaires
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {topSports.length === 0 ? (
+                <div className="flex items-center justify-center h-[220px] text-sm text-muted-foreground">
+                  Aucune donnée pour le moment.
+                </div>
+              ) : (
                 <ResponsiveContainer width="100%" height={220}>
                   <BarChart data={topSports.map((s) => ({ name: s.sport, value: s.count }))}>
                     <XAxis dataKey="name" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
@@ -428,17 +466,23 @@ const CSEAdminDashboard = () => {
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
-              </CardContent>
-            </Card>
+              )}
+            </CardContent>
+          </Card>
 
-            <Card className="card-sport">
-              <CardHeader>
-                <CardTitle className="font-monument text-brand text-lg flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4" />
-                  Clubs les plus populaires
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+          <Card className="card-sport">
+            <CardHeader>
+              <CardTitle className="font-monument text-brand text-lg flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                Clubs les plus populaires
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {topClubs.length === 0 ? (
+                <div className="flex items-center justify-center h-[220px] text-sm text-muted-foreground">
+                  Aucune donnée pour le moment.
+                </div>
+              ) : (
                 <ResponsiveContainer width="100%" height={220}>
                   <BarChart
                     data={topClubs.map((c) => ({ name: c.name.slice(0, 15), value: c.count }))}
@@ -450,10 +494,10 @@ const CSEAdminDashboard = () => {
                     <Bar dataKey="value" fill="hsl(221,100%,61%)" radius={[0, 8, 8, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+              )}
+            </CardContent>
+          </Card>
+        </div>
 
         {/* ═══ Table Bénéficiaires avec filtres + multi-select ═══ */}
         <Card className="card-sport">
@@ -659,6 +703,18 @@ const CSEAdminDashboard = () => {
             confirmLabel={`Supprimer ${selectedIds.size} compte${selectedIds.size > 1 ? 's' : ''}`}
             onConfirm={handleDelete}
             isLoading={isDeleting}
+          />
+          <ExportBeneficiariesModal
+            open={exportOpen}
+            onOpenChange={setExportOpen}
+            beneficiaries={beneficiaries}
+          />
+          <SendCommunicationModal
+            open={commOpen}
+            onOpenChange={setCommOpen}
+            cseCompanyId={cseCompanyId}
+            companyName={company?.name ?? 'CSE'}
+            beneficiaries={beneficiaries}
           />
         </>
       )}

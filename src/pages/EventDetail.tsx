@@ -72,6 +72,8 @@ export const EventDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  // Choix du moyen de paiement — par défaut cagnotte si elle peut couvrir tout
+  const [paymentMethod, setPaymentMethod] = useState<'wallet' | 'cb'>('wallet');
   // CB (mocked — pas de Stripe SDK réel, juste UX propre)
   const [cbNumber, setCbNumber] = useState('4242 4242 4242 4242');
   const [cbExpiry, setCbExpiry] = useState('12/28');
@@ -159,14 +161,28 @@ export const EventDetail = () => {
     setQuantity(1);
     setIsSuccess(false);
     setIsProcessing(false);
+    // Par défaut : cagnotte si elle peut au moins participer, sinon CB
+    setPaymentMethod(wallet.remainingBudget > 0 ? 'wallet' : 'cb');
     setIsModalOpen(true);
   };
 
+  // Calcul du split en fonction du mode choisi
+  const computeSplit = () => {
+    if (paymentMethod === 'cb') {
+      // 100% CB : la cagnotte n'est PAS utilisée
+      return { walletUsed: 0, cbUsed: totalCost };
+    }
+    // Mode wallet : la cagnotte couvre ce qu'elle peut, la CB complète si besoin
+    const walletUsed = Math.min(totalCost, wallet.remainingBudget);
+    const cbUsed = Math.max(0, totalCost - walletUsed);
+    return { walletUsed, cbUsed };
+  };
+
   const confirmReservation = async () => {
-    const remainderCB = Math.max(0, totalCost - wallet.remainingBudget);
+    const { walletUsed, cbUsed } = computeSplit();
 
     // Validation CB si nécessaire
-    if (remainderCB > 0) {
+    if (cbUsed > 0) {
       if (!cbNumber.replace(/\s/g, '').match(/^\d{16}$/)) {
         toast.error('Numéro de carte invalide');
         return;
@@ -182,30 +198,23 @@ export const EventDetail = () => {
     }
 
     setIsProcessing(true);
-    // Simulation paiement (1.2s pour cagnotte seule, 2s si CB)
-    await new Promise((resolve) => setTimeout(resolve, remainderCB > 0 ? 2000 : 1200));
+    await new Promise((resolve) => setTimeout(resolve, cbUsed > 0 ? 2000 : 1200));
 
-    // Si toute la charge est sur cagnotte → chemin normal
-    if (remainderCB === 0) {
-      const reservation = reserve(event.ID_event as any, quantity);
-      setIsProcessing(false);
-      if (!reservation) {
-        toast.error('Erreur de réservation');
-        return;
-      }
-    } else {
-      // Cas CB : on top-up temporairement la cagnotte pour permettre reserve()
-      // Simule que la CB a payé le reste. Dans une vraie prod, on ferait un
-      // insert direct dans reservations avec le split wallet/CB tracké.
-      topUpWallet(remainderCB);
-      const reservation = reserve(event.ID_event as any, quantity);
-      setIsProcessing(false);
-      if (!reservation) {
-        // Rollback le top-up si erreur
-        topUpWallet(-remainderCB);
-        toast.error('Erreur de réservation');
-        return;
-      }
+    // Ajuste la cagnotte selon le split :
+    // - Si walletUsed > 0 et cbUsed = 0 : reserve() débite normalement
+    // - Si walletUsed = 0 et cbUsed > 0 : on top-up la cagnotte de totalCost (simule CB), reserve débite
+    // - Si les deux : on top-up de cbUsed pour couvrir la partie CB
+    if (cbUsed > 0) {
+      topUpWallet(cbUsed);
+    }
+
+    const reservation = reserve(event.ID_event as any, quantity);
+    setIsProcessing(false);
+
+    if (!reservation) {
+      if (cbUsed > 0) topUpWallet(-cbUsed);
+      toast.error('Erreur de réservation');
+      return;
     }
 
     setIsSuccess(true);
@@ -423,7 +432,7 @@ export const EventDetail = () => {
       </div>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
           {!isSuccess ? (
             <>
               <DialogHeader>
@@ -462,40 +471,79 @@ export const EventDetail = () => {
                   </div>
                 </div>
 
-                {/* ─── Répartition Cagnotte + CB ──────────────── */}
+                {/* ─── Choix du moyen de paiement ─────────────── */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Moyen de paiement</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('wallet')}
+                      disabled={isProcessing || wallet.remainingBudget === 0}
+                      className={`flex flex-col items-center gap-1 rounded-xl border-2 p-3 transition-all ${
+                        paymentMethod === 'wallet'
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border hover:border-primary/40'
+                      } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    >
+                      <Wallet className={`h-5 w-5 ${paymentMethod === 'wallet' ? 'text-primary' : 'text-muted-foreground'}`} />
+                      <span className="text-sm font-medium">Cagnotte CSE</span>
+                      <span className="text-xs text-muted-foreground">
+                        {wallet.remainingBudget}€ dispo
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('cb')}
+                      disabled={isProcessing}
+                      className={`flex flex-col items-center gap-1 rounded-xl border-2 p-3 transition-all ${
+                        paymentMethod === 'cb'
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border hover:border-primary/40'
+                      }`}
+                    >
+                      <CreditCard className={`h-5 w-5 ${paymentMethod === 'cb' ? 'text-primary' : 'text-muted-foreground'}`} />
+                      <span className="text-sm font-medium">Carte bancaire</span>
+                      <span className="text-xs text-muted-foreground">100% CB</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* ─── Répartition détaillée du split ─────────── */}
                 {(() => {
-                  const walletUsed = Math.min(totalCost, wallet.remainingBudget);
-                  const remainderCB = Math.max(0, totalCost - wallet.remainingBudget);
-                  const isCoveredByWallet = remainderCB === 0;
+                  const { walletUsed, cbUsed } = computeSplit();
                   return (
                     <div className="rounded-xl bg-primary/5 border border-primary/20 p-4 space-y-3 text-sm">
-                      <div className="flex items-center justify-between">
-                        <span className="flex items-center gap-2 text-primary font-medium">
-                          <Wallet className="h-4 w-4" />
-                          Cagnotte CSE
-                        </span>
-                        <span className="font-semibold">−{walletUsed}€</span>
-                      </div>
-                      {!isCoveredByWallet && (
+                      {walletUsed > 0 && (
+                        <div className="flex items-center justify-between">
+                          <span className="flex items-center gap-2 text-primary font-medium">
+                            <Wallet className="h-4 w-4" />
+                            Cagnotte CSE
+                          </span>
+                          <span className="font-semibold">−{walletUsed}€</span>
+                        </div>
+                      )}
+                      {cbUsed > 0 && (
                         <div className="flex items-center justify-between">
                           <span className="flex items-center gap-2 text-secondary font-medium">
                             <CreditCard className="h-4 w-4" />
-                            Reste à charge (CB)
+                            Carte bancaire
                           </span>
-                          <span className="font-semibold">−{remainderCB}€</span>
+                          <span className="font-semibold">−{cbUsed}€</span>
                         </div>
                       )}
                       <p className="text-xs text-muted-foreground pt-1 border-t border-primary/10">
-                        {isCoveredByWallet
-                          ? "✅ 100% pris en charge par votre cagnotte, aucun paiement CB requis."
-                          : `⚠️ Votre cagnotte couvre ${walletUsed}€, il reste ${remainderCB}€ à régler par CB.`}
+                        {paymentMethod === 'cb'
+                          ? '💳 Paiement 100% par carte, votre cagnotte reste intacte.'
+                          : cbUsed === 0
+                          ? '✅ 100% pris en charge par votre cagnotte, aucun paiement CB requis.'
+                          : `⚠️ Votre cagnotte couvre ${walletUsed}€, il reste ${cbUsed}€ à régler par CB.`}
                       </p>
                     </div>
                   );
                 })()}
 
-                {/* ─── Formulaire CB si nécessaire (mocké) ────── */}
-                {totalCost > wallet.remainingBudget && (
+                {/* ─── Formulaire CB si CB utilisée ─────────── */}
+                {computeSplit().cbUsed > 0 && (
                   <div className="rounded-xl border border-border p-4 space-y-3">
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-semibold flex items-center gap-2">
@@ -561,9 +609,12 @@ export const EventDetail = () => {
                   ) : (
                     <>
                       <Ticket className="h-4 w-4" />
-                      {totalCost > wallet.remainingBudget
-                        ? `Payer ${totalCost - wallet.remainingBudget}€ par CB`
-                        : 'Confirmer'}
+                      {(() => {
+                        const { cbUsed } = computeSplit();
+                        if (cbUsed === totalCost) return `Payer ${totalCost}€ par CB`;
+                        if (cbUsed > 0) return `Payer ${cbUsed}€ par CB`;
+                        return 'Confirmer';
+                      })()}
                     </>
                   )}
                 </Button>

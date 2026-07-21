@@ -22,6 +22,9 @@ import { useAuth } from '@/components/AuthProvider';
 import { toast } from 'sonner';
 import CreateEventWizard, { type EditableEvent } from '@/components/modals/CreateEventWizard';
 import ConfirmDeleteModal from '@/components/modals/ConfirmDeleteModal';
+import { PeriodFilter, defaultPeriod, type PeriodRange } from '@/components/PeriodFilter';
+import { Link } from 'react-router-dom';
+import { FileText, BarChart3, Package } from 'lucide-react';
 
 /**
  * OrganizerAdminDashboard v2 — Prio 1 + Prio 2 Marchand
@@ -65,6 +68,7 @@ const OrganizerAdminDashboard = () => {
   const [eventToEdit, setEventToEdit] = useState<EditableEvent | null>(null);
   const [eventToDelete, setEventToDelete] = useState<EventRow | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [period, setPeriod] = useState<PeriodRange>(defaultPeriod);
 
   const organizerId = (userProfile as any)?.organizer_id;
 
@@ -163,28 +167,38 @@ const OrganizerAdminDashboard = () => {
     }
   };
 
-  const totalRevenue = events.reduce((s, e) => s + e.sold_tickets * e.our_price, 0);
-  const totalSold = events.reduce((s, e) => s + e.sold_tickets, 0);
-  const upcomingEvents = events.filter(
+  // Filtre par période (sur event_date)
+  const eventsInPeriod = events.filter((e) => {
+    if (!period.from && !period.to) return true;
+    const d = new Date(e.event_date);
+    if (period.from && d < period.from) return false;
+    if (period.to && d > period.to) return false;
+    return true;
+  });
+
+  const totalSold = eventsInPeriod.reduce((s, e) => s + e.sold_tickets, 0);
+  const totalPrice = eventsInPeriod.reduce((s, e) => s + e.sold_tickets * e.our_price, 0); // Prix total (brut)
+  const commissionRate = 0.10; // 10% commission Seatup
+  const netRevenue = Math.round(totalPrice * (1 - commissionRate)); // CA net
+  const upcomingEvents = eventsInPeriod.filter(
     (e) => new Date(e.event_date) > new Date() && e.is_published
   ).length;
-  const totalCapacity = events.reduce((s, e) => s + e.total_tickets, 0);
+  const totalCapacity = eventsInPeriod.reduce((s, e) => s + e.total_tickets, 0);
   const fillRate = totalCapacity > 0 ? Math.round((totalSold / totalCapacity) * 100) : 0;
-  const avgPrice = events.length > 0
-    ? Math.round(events.reduce((s, e) => s + e.our_price, 0) / events.length)
-    : 0;
+  // Prix moyen = revenu total / billets vendus (vrai prix moyen pondéré)
+  const avgPrice = totalSold > 0 ? Math.round(totalPrice / totalSold) : 0;
 
   const filteredEvents = events.filter((e) =>
     e.title.toLowerCase().includes(search.toLowerCase())
   );
 
   const salesTrend = [
-    { mois: 'Jan', ca: Math.round(totalRevenue * 0.10) },
-    { mois: 'Fév', ca: Math.round(totalRevenue * 0.15) },
-    { mois: 'Mar', ca: Math.round(totalRevenue * 0.18) },
-    { mois: 'Avr', ca: Math.round(totalRevenue * 0.20) },
-    { mois: 'Mai', ca: Math.round(totalRevenue * 0.17) },
-    { mois: 'Jun', ca: Math.round(totalRevenue * 0.20) },
+    { mois: 'Jan', ca: Math.round(totalPrice * 0.10) },
+    { mois: 'Fév', ca: Math.round(totalPrice * 0.15) },
+    { mois: 'Mar', ca: Math.round(totalPrice * 0.18) },
+    { mois: 'Avr', ca: Math.round(totalPrice * 0.20) },
+    { mois: 'Mai', ca: Math.round(totalPrice * 0.17) },
+    { mois: 'Jun', ca: Math.round(totalPrice * 0.20) },
   ];
 
   const handleSignOut = async () => {
@@ -252,27 +266,35 @@ const OrganizerAdminDashboard = () => {
       </header>
 
       <div className="container mx-auto px-4 py-8 space-y-8">
-        <div className="flex flex-wrap gap-3">
-          <Button variant="hero" size="lg" onClick={openCreate} className="gap-2">
-            <Plus className="h-4 w-4" />
-            Créer un événement
-          </Button>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-2">
+            <Button variant="hero" size="lg" onClick={openCreate} className="gap-2">
+              <Plus className="h-4 w-4" />
+              Créer un événement
+            </Button>
+            <Link to="/admin/marchand/factures">
+              <Button variant="sport" size="lg" className="gap-2">
+                <FileText className="h-4 w-4" />
+                Factures
+              </Button>
+            </Link>
+            <Link to="/admin/marchand/stats">
+              <Button variant="sport" size="lg" className="gap-2">
+                <BarChart3 className="h-4 w-4" />
+                Statistiques
+              </Button>
+            </Link>
+            <Link to="/admin/marchand/communication">
+              <Button variant="sport" size="lg" className="gap-2">
+                <Package className="h-4 w-4" />
+                Communication
+              </Button>
+            </Link>
+          </div>
+          <PeriodFilter value={period} onChange={setPeriod} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-          <Card className="card-sport">
-            <CardHeader className="pb-2 flex flex-row items-center justify-between">
-              <CardTitle className="text-sm font-medium text-brand">Chiffre d'affaires</CardTitle>
-              <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
-                <Euro className="h-4 w-4 text-white" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-monument text-brand">{totalRevenue.toLocaleString('fr-FR')} €</div>
-              <p className="text-xs text-muted-foreground">Total généré</p>
-            </CardContent>
-          </Card>
-
           <Card className="card-sport">
             <CardHeader className="pb-2 flex flex-row items-center justify-between">
               <CardTitle className="text-sm font-medium text-brand">Billets vendus</CardTitle>
@@ -281,8 +303,17 @@ const OrganizerAdminDashboard = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-monument text-brand">{totalSold.toLocaleString('fr-FR')}</div>
-              <p className="text-xs text-muted-foreground">Cumul depuis lancement</p>
+              {totalSold === 0 ? (
+                <>
+                  <div className="text-2xl font-monument text-muted-foreground">—</div>
+                  <p className="text-xs text-muted-foreground">Aucune vente pour cette période</p>
+                </>
+              ) : (
+                <>
+                  <div className="text-2xl font-monument text-brand">{totalSold.toLocaleString('fr-FR')}</div>
+                  <p className="text-xs text-muted-foreground">{period.label}</p>
+                </>
+              )}
             </CardContent>
           </Card>
 
@@ -295,22 +326,62 @@ const OrganizerAdminDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-monument text-brand">{avgPrice} €</div>
-              <p className="text-xs text-muted-foreground">Par billet</p>
+              <p className="text-xs text-muted-foreground">Par billet vendu</p>
             </CardContent>
           </Card>
 
           <Card className="card-sport">
             <CardHeader className="pb-2 flex flex-row items-center justify-between">
-              <CardTitle className="text-sm font-medium text-brand">Événements actifs</CardTitle>
+              <CardTitle className="text-sm font-medium text-brand">Prix total (brut)</CardTitle>
               <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
-                <Calendar className="h-4 w-4 text-white" />
+                <Euro className="h-4 w-4 text-white" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-monument text-brand">{upcomingEvents}</div>
-              <p className="text-xs text-muted-foreground">
-                À venir · Taux de remplissage : {fillRate}%
-              </p>
+              <div className="text-2xl font-monument text-brand">
+                {totalPrice.toLocaleString('fr-FR')} €
+              </div>
+              <p className="text-xs text-muted-foreground">Avant commissions</p>
+            </CardContent>
+          </Card>
+
+          <Card className="card-sport bg-gradient-primary text-white border-0">
+            <CardHeader className="pb-2 flex flex-row items-center justify-between">
+              <CardTitle className="text-sm font-medium opacity-90">CA net</CardTitle>
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                <Euro className="h-4 w-4 text-white" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-monument">
+                {netRevenue.toLocaleString('fr-FR')} €
+              </div>
+              <p className="text-xs opacity-80">Après commission Seatup ({Math.round(commissionRate * 100)}%)</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Complément : événements actifs + taux de remplissage */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <Card className="card-sport">
+            <CardHeader className="pb-2 flex flex-row items-center justify-between">
+              <CardTitle className="text-sm font-medium text-brand">Événements à venir</CardTitle>
+              <Calendar className="h-4 w-4 text-primary" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-xl font-monument text-brand">{upcomingEvents}</div>
+              <p className="text-xs text-muted-foreground">Publiés et non passés</p>
+            </CardContent>
+          </Card>
+
+          <Card className="card-sport">
+            <CardHeader className="pb-2 flex flex-row items-center justify-between">
+              <CardTitle className="text-sm font-medium text-brand">Taux de remplissage</CardTitle>
+              <TrendingUp className="h-4 w-4 text-primary" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-xl font-monument text-brand">{fillRate}%</div>
+              <p className="text-xs text-muted-foreground">Vendus / capacité totale</p>
             </CardContent>
           </Card>
         </div>
