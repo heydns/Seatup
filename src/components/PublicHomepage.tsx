@@ -286,9 +286,11 @@ export const PublicHomepage = () => {
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Button variant="sport" size="xl">
-              Nous contacter
-            </Button>
+            <Link to="/contact">
+              <Button variant="sport" size="xl">
+                Nous contacter
+              </Button>
+            </Link>
           </div>
           <img 
             src="/lovable-uploads/bade9f5a-0111-4e27-8a89-601d8a7dc669.png" 

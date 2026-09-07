@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { mockEvents } from "@/data/mockData";
 import { EventCard } from "./EventCard";
 import { Header } from "./Header";
+import { Footer } from "./Footer";
 import { useNavigate } from "react-router-dom";
 
 interface Event {
@@ -749,6 +750,7 @@ export const EventsPage = () => {
         )}
       </div>
     </div>
+    <Footer />
     </>
   );
 };

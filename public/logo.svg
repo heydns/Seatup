@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 120" width="460" height="120">
+  <defs>
+    <linearGradient id="seatupBadge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3A7BFF"/>
+      <stop offset="100%" stop-color="#C81D85"/>
+    </linearGradient>
+    <linearGradient id="seatupWord" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3A7BFF"/>
+      <stop offset="100%" stop-color="#C81D85"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Badge S -->
+  <rect x="0" y="10" width="100" height="100" rx="22" fill="url(#seatupBadge)"/>
+  <text x="50" y="84"
+        font-family="'Arial Black','Helvetica Neue',Impact,sans-serif"
+        font-size="72" font-weight="900"
+        fill="white" text-anchor="middle" letter-spacing="-4">S</text>
+  <path d="M78 32 L84 26 L90 32" stroke="white" stroke-width="4"
+        stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.9"/>
+
+  <!-- Wordmark "Seatup" -->
+  <text x="120" y="78"
+        font-family="'Monument Extended','Arial Black','Helvetica Neue',Impact,sans-serif"
+        font-size="60" font-weight="900"
+        fill="url(#seatupWord)" letter-spacing="-2">Seatup</text>
+
+  <!-- Point .co -->
+  <text x="120" y="102"
+        font-family="'Inter','Arial',sans-serif"
+        font-size="14" font-weight="500" letter-spacing="6"
+        fill="#666">VIVEZ LE SPORT</text>
+</svg>

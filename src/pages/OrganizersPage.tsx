@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Filter, MapPin, Users, Star, Building2 } from "lucide-react";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { OrganizerCard } from "@/components/OrganizerCard";
 
 interface Organizer {
@@ -378,6 +379,7 @@ export const OrganizersPage = () => {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 };

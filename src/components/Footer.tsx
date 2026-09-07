@@ -14,10 +14,20 @@ export const Footer = () => {
             </p>
             {/* Social Media Links */}
             <div className="flex space-x-3">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a
+                href="https://www.linkedin.com/in/alexandre-leroy-wdg/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
                 <Linkedin className="h-4 w-4" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a
+                href="#"
+                aria-label="Instagram"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
                 <Instagram className="h-4 w-4" />
               </a>
             </div>
@@ -76,14 +86,20 @@ export const Footer = () => {
           <div className="col-span-1">
             <h4 className="font-monument text-sm font-semibold mb-4">Contact</h4>
             <div className="space-y-3">
-              <div className="flex items-center text-sm text-muted-foreground">
+              <a
+                href="mailto:alexandre@seatup.co"
+                className="flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
                 <Mail className="h-4 w-4 mr-2" />
-                contact@seatup.fr
-              </div>
-              <div className="flex items-center text-sm text-muted-foreground">
+                alexandre@seatup.co
+              </a>
+              <a
+                href="tel:+33787036643"
+                className="flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
                 <Phone className="h-4 w-4 mr-2" />
-                01 23 45 67 89
-              </div>
+                07 87 03 66 43
+              </a>
               <div className="flex items-center text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 mr-2" />
                 Paris, France
@@ -95,7 +111,7 @@ export const Footer = () => {
         {/* Bottom Section */}
         <div className="mt-8 pt-8">
           <p className="text-muted-foreground text-sm text-left">
-            © 2024 Seatup.co Tous droits réservés.
+            © 2026 Seatup.co — Tous droits réservés.
           </p>
         </div>
       </div>
