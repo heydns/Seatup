@@ -4,7 +4,10 @@ import { ArrowRight, Map, Ticket, Star, Trophy } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import LogoTicker from "./LogoTicker";
+// LogoTicker retiré en V1 — un des clubs ne souhaite pas apparaître.
+// Il faudra, en V1.5+, filtrer les clubs sur la liste de ceux ayant donné
+// un accord écrit d'utilisation du nom/logo.
+// import LogoTicker from "./LogoTicker";
 import { AnimatedText } from "./AnimatedText";
 import { Footer } from "./Footer";
 import { supabase } from "@/integrations/supabase/client";
@@ -135,8 +138,8 @@ export const PublicHomepage = () => {
         </div>
       </section>
 
-      {/* Clubs Logos Ticker */}
-      <LogoTicker />
+      {/* Clubs Logos Ticker — retiré en V1 (accord des clubs à récupérer avant réintégration) */}
+      {/* <LogoTicker /> */}
 
       {/* Featured Events - Dice.fm Style */}
       <section className="py-[30px] relative z-10">
