@@ -39,8 +39,11 @@ import BeneficiaryDetailModal, { type Beneficiary } from '@/components/modals/Be
 import ConfirmDeleteModal from '@/components/modals/ConfirmDeleteModal';
 import ExportBeneficiariesModal from '@/components/modals/ExportBeneficiariesModal';
 import SendCommunicationModal from '@/components/modals/SendCommunicationModal';
+import { ImportBeneficiariesModal } from '@/components/modals/ImportBeneficiariesModal';
 import { PeriodFilter, defaultPeriod, type PeriodRange } from '@/components/PeriodFilter';
-import { Download, Mail } from 'lucide-react';
+import { PermissionGate } from '@/hooks/useHasPermission';
+import { Download, Mail, Upload } from 'lucide-react';
+import { SpaceSwitcher } from '@/components/SpaceSwitcher';
 
 /**
  * CSEAdminDashboard v2 — Prio 1 + Prio 2 CSE
@@ -79,6 +82,7 @@ const CSEAdminDashboard = () => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const [addOpen, setAddOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false); // V1 : import en masse CSV
   const [rechargeOpen, setRechargeOpen] = useState(false);
   const [distributeOpen, setDistributeOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -310,10 +314,13 @@ const CSEAdminDashboard = () => {
               Bonjour {userProfile?.first_name}, gérez vos bénéficiaires et votre budget
             </p>
           </div>
-          <Button variant="outline" size="sm" onClick={handleSignOut}>
-            <LogOut className="h-4 w-4 mr-2" />
-            Déconnexion
-          </Button>
+          <div className="flex items-center gap-2">
+            <SpaceSwitcher />
+            <Button variant="outline" size="sm" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4 mr-2" />
+              Déconnexion
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -321,26 +328,50 @@ const CSEAdminDashboard = () => {
         {/* Barre période + actions rapides */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap gap-2">
-            <Button variant="hero" size="lg" onClick={() => setAddOpen(true)} className="gap-2">
-              <Plus className="h-4 w-4" />
-              Ajouter un bénéficiaire
-            </Button>
-            <Button variant="sport" size="lg" onClick={() => setRechargeOpen(true)} className="gap-2">
-              <Wallet className="h-4 w-4" />
-              Recharger la cagnotte
-            </Button>
-            <Button variant="sport" size="lg" onClick={() => setDistributeOpen(true)} className="gap-2">
-              <Share2 className="h-4 w-4" />
-              Distribuer
-            </Button>
-            <Button variant="sport" size="lg" onClick={() => setCommOpen(true)} className="gap-2">
-              <Mail className="h-4 w-4" />
-              Communication
-            </Button>
-            <Button variant="outline" size="lg" onClick={() => setExportOpen(true)} className="gap-2">
-              <Download className="h-4 w-4" />
-              Exporter
-            </Button>
+            {/*
+              V1 — Permissions CSE appliquées via PermissionGate :
+              - Ajouter/Importer bénéficiaires → cse:manage_beneficiaries (low+)
+              - Recharger/Distribuer cagnotte → cse:recharge_wallet / cse:distribute_wallet (high only)
+              - Communication → cse:send_communication (low+)
+              - Export → cse:read (lecteur+)
+              Chaque bouton est masqué si le user n'a pas la permission.
+            */}
+            <PermissionGate permission="cse:manage_beneficiaries">
+              <Button variant="hero" size="lg" onClick={() => setAddOpen(true)} className="gap-2">
+                <Plus className="h-4 w-4" />
+                Ajouter un bénéficiaire
+              </Button>
+            </PermissionGate>
+            <PermissionGate permission="cse:manage_beneficiaries">
+              <Button variant="hero" size="lg" onClick={() => setImportOpen(true)} className="gap-2">
+                <Upload className="h-4 w-4" />
+                Importer (CSV)
+              </Button>
+            </PermissionGate>
+            <PermissionGate permission="cse:recharge_wallet">
+              <Button variant="sport" size="lg" onClick={() => setRechargeOpen(true)} className="gap-2">
+                <Wallet className="h-4 w-4" />
+                Recharger la cagnotte
+              </Button>
+            </PermissionGate>
+            <PermissionGate permission="cse:distribute_wallet">
+              <Button variant="sport" size="lg" onClick={() => setDistributeOpen(true)} className="gap-2">
+                <Share2 className="h-4 w-4" />
+                Distribuer
+              </Button>
+            </PermissionGate>
+            <PermissionGate permission="cse:send_communication">
+              <Button variant="sport" size="lg" onClick={() => setCommOpen(true)} className="gap-2">
+                <Mail className="h-4 w-4" />
+                Communication
+              </Button>
+            </PermissionGate>
+            <PermissionGate permission="cse:read">
+              <Button variant="outline" size="lg" onClick={() => setExportOpen(true)} className="gap-2">
+                <Download className="h-4 w-4" />
+                Exporter
+              </Button>
+            </PermissionGate>
           </div>
           <PeriodFilter value={period} onChange={setPeriod} />
         </div>
@@ -666,6 +697,12 @@ const CSEAdminDashboard = () => {
           <AddBeneficiaryModal
             open={addOpen}
             onOpenChange={setAddOpen}
+            cseCompanyId={cseCompanyId}
+            onSuccess={loadData}
+          />
+          <ImportBeneficiariesModal
+            open={importOpen}
+            onOpenChange={setImportOpen}
             cseCompanyId={cseCompanyId}
             onSuccess={loadData}
           />

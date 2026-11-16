@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Menu, X, User, LogOut, ChevronDown } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
+import { SpaceSwitcher } from "@/components/SpaceSwitcher";
 import { toast } from "sonner";
 
 export const Header = () => {
@@ -66,27 +67,31 @@ export const Header = () => {
               Contact
             </Link>
             {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="hero" className="gap-2">
-                    <User className="h-4 w-4" />
-                    Mon compte
-                    <ChevronDown className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem asChild>
-                    <Link to="/home" className="flex items-center gap-2 w-full">
+              <>
+                {/* Switch d'espaces (uniquement si plusieurs rôles) */}
+                <SpaceSwitcher />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="hero" className="gap-2">
                       <User className="h-4 w-4" />
                       Mon compte
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleSignOut} className="flex items-center gap-2 text-destructive focus:text-destructive">
-                    <LogOut className="h-4 w-4" />
-                    Se déconnecter
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem asChild>
+                      <Link to="/home" className="flex items-center gap-2 w-full">
+                        <User className="h-4 w-4" />
+                        Mon compte
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleSignOut} className="flex items-center gap-2 text-destructive focus:text-destructive">
+                      <LogOut className="h-4 w-4" />
+                      Se déconnecter
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             ) : (
               <Button variant="hero" asChild>
                 <Link to="/auth">Se connecter</Link>

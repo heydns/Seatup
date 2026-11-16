@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,10 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar, Phone, Mail, MapPin, ArrowLeft, Loader2 } from "lucide-react";
+import { Calendar, Phone, Mail, MapPin, ArrowLeft, Loader2, CalendarCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+
+// URL d'embed Calendly configurée via .env.local (VITE_CALENDLY_URL).
+// Si absente, on cache le widget et on garde seulement le form classique.
+const CALENDLY_URL = import.meta.env.VITE_CALENDLY_URL as string | undefined;
 
 /**
  * Contact — envoi vers alexandre@seatup.co via Formsubmit (gratuit, sans backend)
@@ -24,6 +28,18 @@ const FORMSUBMIT_URL = "https://formsubmit.co/alexandre@seatup.co";
 export default function Contact() {
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Charge le script Calendly une seule fois côté client si URL configurée
+  useEffect(() => {
+    if (!CALENDLY_URL) return;
+    const scriptId = "calendly-widget-script";
+    if (document.getElementById(scriptId)) return;
+    const script = document.createElement("script");
+    script.id = scriptId;
+    script.src = "https://assets.calendly.com/assets/external/widget.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -142,6 +158,34 @@ export default function Contact() {
             </div>
           </div>
         </section>
+
+        {/* ─── Widget Calendly (si URL configurée) ────────────────── */}
+        {CALENDLY_URL && (
+          <section className="py-8 md:py-12 bg-gradient-to-b from-white to-gray-50">
+            <div className="container mx-auto px-4">
+              <div className="max-w-5xl mx-auto">
+                <div className="flex items-center justify-center gap-2 mb-6">
+                  <CalendarCheck className="h-6 w-6 text-primary" />
+                  <h2 className="text-xl md:text-2xl font-monument text-center">
+                    Prenez rendez-vous directement
+                  </h2>
+                </div>
+                <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
+                  Choisissez le créneau qui vous convient dans le calendrier ci-dessous.
+                  Vous recevrez une invitation par email immédiatement.
+                </p>
+                <div
+                  className="calendly-inline-widget rounded-xl overflow-hidden shadow-lg bg-white"
+                  data-url={CALENDLY_URL}
+                  style={{ minWidth: "320px", height: "720px" }}
+                />
+                <p className="text-center text-xs text-muted-foreground mt-6">
+                  Vous préférez par email ? Remplissez le formulaire ci-dessous.
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Contact Form and Info */}
         <section className="py-16 bg-white">

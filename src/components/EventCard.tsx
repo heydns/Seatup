@@ -196,11 +196,20 @@ export const EventCard = ({ event }: EventCardProps) => {
         
         {/* Actions */}
         <div className="flex gap-2 pt-2">
-          <Button variant="hero" size="sm" className="flex-1">
+          <Button
+            variant="hero"
+            size="sm"
+            className="flex-1"
+            onClick={(e) => {
+              // Empêche l'event de bubble sur le parent (card cliquable)
+              e.stopPropagation();
+              navigate(`/event/${event.ID_event}`);
+            }}
+          >
             Réserver
           </Button>
           {event.Link && (
-            <Button variant="sport" size="sm" asChild>
+            <Button variant="sport" size="sm" asChild onClick={(e) => e.stopPropagation()}>
               <a href={event.Link} target="_blank" rel="noopener noreferrer">
                 <Globe className="h-4 w-4" />
               </a>

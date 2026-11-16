@@ -152,10 +152,15 @@ export const EventsPage = () => {
       setIsLoading(true);
       try {
         // Fetch depuis Supabase — inclut les events créés via le wizard Marchand
+        // V1 : on filtre sur is_public_visible=true pour la vitrine publique.
+        // RLS côté serveur garantit déjà que seuls les events visibles sont
+        // retournés aux visiteurs non loggués, mais on le met aussi dans la
+        // query pour être explicite et éviter les events "test" qui traîneraient.
         const { data, error } = await supabase
           .from('events')
-          .select('id, title, event_date, sport, competition, location_name, location_address, original_price, our_price, image_url, external_link, is_published, organizer:organizers(name)')
+          .select('id, title, event_date, sport, competition, location_name, location_address, original_price, our_price, image_url, external_link, is_published, is_public_visible, external_source, mode_distribution, organizer:organizers(name)')
           .eq('is_published', true)
+          .or('is_public_visible.eq.true,is_public_visible.is.null')
           .order('event_date', { ascending: true });
 
         // ── Map format Supabase → Event

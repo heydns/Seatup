@@ -373,7 +373,14 @@ export default function CreateEventWizard({
                 <Label>Sport <span className="text-destructive">*</span></Label>
                 <Select value={data.sport} onValueChange={(v) => update('sport', v)}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
+                  {/*
+                    Fix audit bug : sur mobile le SelectContent par défaut
+                    utilise position="item-aligned" et chevauche les champs
+                    Date/Heure en dessous. On force position="popper" pour
+                    qu'il s'affiche proprement sous le trigger, et z-50 pour
+                    passer au-dessus de tout.
+                  */}
+                  <SelectContent position="popper" sideOffset={4} className="z-50 bg-white">
                     {SPORTS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                   </SelectContent>
                 </Select>
@@ -382,7 +389,7 @@ export default function CreateEventWizard({
                 <Label>Compétition</Label>
                 <Select value={data.competition} onValueChange={(v) => update('competition', v)}>
                   <SelectTrigger><SelectValue placeholder="Optionnel" /></SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper" sideOffset={4} className="z-50 bg-white">
                     {(COMPETITIONS[data.sport] ?? []).map((c) => (
                       <SelectItem key={c} value={c}>{c}</SelectItem>
                     ))}
