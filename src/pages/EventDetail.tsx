@@ -17,7 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { ArrowLeft, Calendar, MapPin, Users, Globe, Share2, Heart, Ticket, Wallet, Loader2, Check, CreditCard, Lock, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Users, Globe, Share2, Heart, Ticket, Wallet, Loader2, Check, CreditCard, Lock, ShieldCheck, LogIn } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Header } from '@/components/Header';
@@ -25,16 +25,18 @@ import { toast } from 'sonner';
 import { getEventById, type MockEvent } from '@/data/mockData';
 import { supabase } from '@/integrations/supabase/client';
 import { useReservations } from '@/contexts/ReservationsContext';
+import { useAuth } from '@/components/AuthProvider';
 
 // ─── Détection UUID (Supabase) vs number (mockData) ──────────────────────
 const isUuid = (s: string) =>
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
 
 // Fetch depuis Supabase et map vers le format MockEvent
+// On embarque aussi les champs V1 pour le mode distribution (Tickie/externe)
 const fetchSupabaseEvent = async (uuid: string): Promise<MockEvent | null> => {
   const { data, error } = await supabase
     .from('events')
-    .select('id, title, event_date, sport, competition, location_name, location_address, original_price, our_price, total_tickets, sold_tickets, image_url, external_link, description, conditions_specifiques, organizer:organizers(name)')
+    .select('id, title, event_date, sport, competition, location_name, location_address, original_price, our_price, total_tickets, sold_tickets, image_url, external_link, description, conditions_specifiques, mode_distribution, external_source, external_url, organizer:organizers(name)')
     .eq('id', uuid)
     .maybeSingle();
 
@@ -51,19 +53,56 @@ const fetchSupabaseEvent = async (uuid: string): Promise<MockEvent | null> => {
     Location: e.location_name ?? '',
     Adress: e.location_address ?? '',
     Access: 'Ticketing',
-    Link: e.external_link ?? '',
+    Link: e.external_link ?? e.external_url ?? '',
     Original_Price: e.original_price ? `${e.original_price}€` : '0€',
     Our_Price: e.our_price ? `${e.our_price}€` : '0€',
     totalTickets: e.total_tickets ?? 0,
     soldTickets: e.sold_tickets ?? 0,
     imageUrl: e.image_url,
+    // Champs V1 pour distribution externe
+    mode_distribution: e.mode_distribution ?? 'checkout_seatup',
+    external_source: e.external_source ?? null,
+    external_url: e.external_url ?? null,
   } as any;
+};
+
+// Génère un seatup_ref unique (ex "ABC12DEF") pour tracker les clics sortants
+const generateSeatupRef = () => {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let ref = '';
+  for (let i = 0; i < 8; i++) ref += alphabet[Math.floor(Math.random() * alphabet.length)];
+  return ref;
+};
+
+// Tracke un clic sortant (vers Tickie, etc.) en DB puis redirige
+const trackAndRedirect = async (eventId: string, externalSource: string, externalUrl: string, userId: string | null) => {
+  const seatup_ref = generateSeatupRef();
+  // Ajoute le ref à l'URL pour que le partenaire puisse remonter la conversion
+  const urlWithRef = externalUrl.includes('?')
+    ? `${externalUrl}&seatup_ref=${seatup_ref}`
+    : `${externalUrl}?seatup_ref=${seatup_ref}`;
+
+  // Log asynchrone (ne bloque pas la redirection)
+  supabase.from('outbound_clicks').insert({
+    event_id: eventId,
+    user_id: userId,
+    seatup_ref,
+    external_source: externalSource,
+    external_url: urlWithRef,
+    user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+  }).then(({ error }) => {
+    if (error) console.warn('[outbound_click] track failed:', error);
+  });
+
+  // Redirige dans un nouvel onglet
+  window.open(urlWithRef, '_blank', 'noopener,noreferrer');
 };
 
 export const EventDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { reserve, wallet, topUpWallet } = useReservations();
+  const { user } = useAuth(); // Vitrine publique V1 : fiche event accessible sans login
 
   const [event, setEvent] = useState<MockEvent | null>(null);
   const [isFetching, setIsFetching] = useState(true);
@@ -390,21 +429,93 @@ export const EventDetail = () => {
                   </div>
 
                   <div className="space-y-3">
-                    <Button
-                      variant="hero"
-                      size="lg"
-                      className="w-full gap-2"
-                      onClick={openReservationModal}
-                      disabled={isFull}
-                    >
-                      <Ticket className="h-5 w-5" />
-                      {isFull ? 'Complet' : 'Réserver maintenant'}
-                    </Button>
+                    {/*
+                      V1 — Logique CTA Réserver :
+                      - Mode distribution = 'checkout_external' (Tickie, etc.)
+                        → Toujours un redirect vers la billetterie externe,
+                          loggué ou pas (pas de wallet applicable).
+                      - Mode distribution = 'checkout_seatup' (SeatUp direct)
+                        → Si pas loggué : CTA "Se connecter pour réserver"
+                        → Si loggué : ouvre la modale de réservation
+                    */}
+                    {(() => {
+                      const modeDistribution =
+                        (event as any).mode_distribution ?? 'checkout_seatup';
+                      const externalSource = (event as any).external_source ?? null;
+                      const externalUrl = (event as any).external_url ?? null;
+
+                      // Flow redirect (Tickie) — tout le monde est redirigé
+                      if (modeDistribution === 'checkout_external' && externalUrl) {
+                        return (
+                          <Button
+                            variant="hero"
+                            size="lg"
+                            className="w-full gap-2"
+                            onClick={() =>
+                              trackAndRedirect(
+                                String(event.ID_event),
+                                externalSource ?? 'external',
+                                externalUrl,
+                                user?.id ?? null
+                              )
+                            }
+                            disabled={isFull}
+                          >
+                            <Globe className="h-5 w-5" />
+                            {isFull ? 'Complet' : `Réserver sur ${event.Organization || 'le site du club'}`}
+                          </Button>
+                        );
+                      }
+
+                      // Flow checkout SeatUp normal
+                      if (!user) {
+                        return (
+                          <Button
+                            variant="hero"
+                            size="lg"
+                            className="w-full gap-2"
+                            onClick={() =>
+                              navigate(`/auth?returnTo=${encodeURIComponent(`/event/${id}`)}`)
+                            }
+                            disabled={isFull}
+                          >
+                            <LogIn className="h-5 w-5" />
+                            {isFull ? 'Complet' : 'Se connecter pour réserver'}
+                          </Button>
+                        );
+                      }
+
+                      return (
+                        <Button
+                          variant="hero"
+                          size="lg"
+                          className="w-full gap-2"
+                          onClick={openReservationModal}
+                          disabled={isFull}
+                        >
+                          <Ticket className="h-5 w-5" />
+                          {isFull ? 'Complet' : 'Réserver maintenant'}
+                        </Button>
+                      );
+                    })()}
                     <Button variant="sport" size="lg" className="w-full gap-2">
                       <Share2 className="h-4 w-4" />
                       Partager
                     </Button>
                   </div>
+
+                  {/* Message aux visiteurs non loggués pour expliquer la valeur */}
+                  {!user && (
+                    <div className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/20 text-xs text-muted-foreground">
+                      <p className="font-medium text-primary mb-1">
+                        💼 Vous êtes salarié d'un CSE partenaire ?
+                      </p>
+                      <p>
+                        Connectez-vous pour bénéficier des <strong>tarifs remisés</strong> et
+                        payer avec votre <strong>cagnotte CSE</strong>.
+                      </p>
+                    </div>
+                  )}
 
                   <div className="mt-6 pt-6 border-t border-border text-sm text-muted-foreground">
                     <p className="mb-2">✅ Prix final, pas de frais cachés</p>
@@ -413,18 +524,21 @@ export const EventDetail = () => {
                   </div>
                 </div>
 
-                <div className="card-sport">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                    <Wallet className="h-4 w-4" />
-                    Votre cagnotte
+                {/* Carte wallet visible UNIQUEMENT pour les users loggués */}
+                {user && (
+                  <div className="card-sport">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                      <Wallet className="h-4 w-4" />
+                      Votre cagnotte
+                    </div>
+                    <div className="text-2xl font-monument font-bold text-brand">
+                      {wallet.remainingBudget}€
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      sur {wallet.totalBudget}€ alloués cette année
+                    </p>
                   </div>
-                  <div className="text-2xl font-monument font-bold text-brand">
-                    {wallet.remainingBudget}€
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    sur {wallet.totalBudget}€ alloués cette année
-                  </p>
-                </div>
+                )}
               </div>
             </div>
           </div>

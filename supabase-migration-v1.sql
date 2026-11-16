@@ -234,18 +234,36 @@ CREATE POLICY "Users read their own stripe customer"
   USING (auth.uid() = user_id);
 
 -- Table d'historique des méthodes de paiement (pour UI "mes CB")
+-- NB : la table existe peut-être déjà depuis le MVP (migration Prio 3) avec
+-- un schema différent. On utilise CREATE TABLE IF NOT EXISTS + ALTER pour
+-- garantir la présence de TOUTES les colonnes attendues.
 CREATE TABLE IF NOT EXISTS public.payment_methods (
   id                    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id               UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  stripe_payment_method TEXT NOT NULL UNIQUE,
-  card_brand            TEXT NOT NULL,       -- 'visa', 'mastercard', 'amex', ...
-  card_last4            TEXT NOT NULL,
-  card_exp_month        SMALLINT NOT NULL,
-  card_exp_year         SMALLINT NOT NULL,
-  is_default            BOOLEAN DEFAULT FALSE,
-  created_at            TIMESTAMPTZ DEFAULT NOW(),
-  deleted_at            TIMESTAMPTZ NULL
+  created_at            TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Ajoute les colonnes V1 si manquantes (au cas où la table existe déjà)
+ALTER TABLE public.payment_methods ADD COLUMN IF NOT EXISTS stripe_payment_method TEXT;
+ALTER TABLE public.payment_methods ADD COLUMN IF NOT EXISTS card_brand            TEXT;
+ALTER TABLE public.payment_methods ADD COLUMN IF NOT EXISTS card_last4            TEXT;
+ALTER TABLE public.payment_methods ADD COLUMN IF NOT EXISTS card_exp_month        SMALLINT;
+ALTER TABLE public.payment_methods ADD COLUMN IF NOT EXISTS card_exp_year         SMALLINT;
+ALTER TABLE public.payment_methods ADD COLUMN IF NOT EXISTS is_default            BOOLEAN DEFAULT FALSE;
+ALTER TABLE public.payment_methods ADD COLUMN IF NOT EXISTS deleted_at            TIMESTAMPTZ NULL;
+
+-- Unique sur stripe_payment_method quand défini (pas sur les anciennes lignes mock)
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint
+    WHERE conname = 'payment_methods_stripe_pm_unique'
+  ) THEN
+    CREATE UNIQUE INDEX payment_methods_stripe_pm_unique
+      ON public.payment_methods(stripe_payment_method)
+      WHERE stripe_payment_method IS NOT NULL;
+  END IF;
+END$$;
 
 CREATE INDEX IF NOT EXISTS idx_payment_methods_user ON public.payment_methods(user_id) WHERE deleted_at IS NULL;
 

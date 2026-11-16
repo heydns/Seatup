@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/components/AuthProvider";
+import { UserRolesProvider } from "@/contexts/UserRolesContext";
 import { ReservationsProvider } from "@/contexts/ReservationsContext";
 import { AuthDebug } from "@/components/AuthDebug";
 import { EventsPage } from "@/components/EventsPage";
@@ -13,6 +14,7 @@ import ResetPassword from "@/pages/ResetPassword";
 import MerchantInvoices from "@/pages/MerchantInvoices";
 import MerchantStats from "@/pages/MerchantStats";
 import MerchantCommunication from "@/pages/MerchantCommunication";
+import SeatupAdminDashboard from "@/pages/admin/SeatupAdminDashboard";
 import Dashboard from "@/pages/Dashboard";
 import BeneficiaryHome from "@/pages/BeneficiaryHome";
 import { EventDetail } from "@/pages/EventDetail";
@@ -32,6 +34,7 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
+      <UserRolesProvider>
       <ReservationsProvider>
       <TooltipProvider>
         <Toaster />
@@ -54,6 +57,7 @@ const App = () => (
             <Route path="/admin/marchand/factures" element={<MerchantInvoices />} />
             <Route path="/admin/marchand/stats" element={<MerchantStats />} />
             <Route path="/admin/marchand/communication" element={<MerchantCommunication />} />
+            <Route path="/admin/seatup" element={<SeatupAdminDashboard />} />
             <Route path="/home" element={<BeneficiaryHome />} />
             <Route path="/team" element={<TeamPage />} />
             <Route path="/groups" element={<GroupsPage />} />
@@ -63,6 +67,7 @@ const App = () => (
         </BrowserRouter>
       </TooltipProvider>
       </ReservationsProvider>
+      </UserRolesProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

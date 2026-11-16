@@ -23,6 +23,8 @@ import { toast } from 'sonner';
 import CreateEventWizard, { type EditableEvent } from '@/components/modals/CreateEventWizard';
 import ConfirmDeleteModal from '@/components/modals/ConfirmDeleteModal';
 import { PeriodFilter, defaultPeriod, type PeriodRange } from '@/components/PeriodFilter';
+import { MerchantActivityPanel } from '@/components/MerchantActivityPanel';
+import { SpaceSwitcher } from '@/components/SpaceSwitcher';
 import { Link } from 'react-router-dom';
 import { FileText, BarChart3, Package } from 'lucide-react';
 
@@ -258,10 +260,13 @@ const OrganizerAdminDashboard = () => {
               Bonjour {userProfile?.first_name}, pilotez vos événements et vos ventes
             </p>
           </div>
-          <Button variant="outline" size="sm" onClick={handleSignOut}>
-            <LogOut className="h-4 w-4 mr-2" />
-            Déconnexion
-          </Button>
+          <div className="flex items-center gap-2">
+            <SpaceSwitcher />
+            <Button variant="outline" size="sm" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4 mr-2" />
+              Déconnexion
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -385,6 +390,11 @@ const OrganizerAdminDashboard = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* ─── V1 — Panel d'activité agrégée (Sales Intelligence) ─────────── */}
+        {organizerId && (
+          <MerchantActivityPanel organizerId={organizerId} period={period} />
+        )}
 
         {events.length > 0 && (
           <Card className="card-sport">
