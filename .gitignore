@@ -29,3 +29,4 @@ supabase-keys.txt
 *.njsproj
 *.sln
 *.sw?
+supabase/.temp/

@@ -14,7 +14,9 @@ import ResetPassword from "@/pages/ResetPassword";
 import MerchantInvoices from "@/pages/MerchantInvoices";
 import MerchantStats from "@/pages/MerchantStats";
 import MerchantCommunication from "@/pages/MerchantCommunication";
+import MerchantBuyers from "@/pages/MerchantBuyers";
 import SeatupAdminDashboard from "@/pages/admin/SeatupAdminDashboard";
+import ClubOnboarding from "@/pages/admin/ClubOnboarding";
 import Dashboard from "@/pages/Dashboard";
 import BeneficiaryHome from "@/pages/BeneficiaryHome";
 import { EventDetail } from "@/pages/EventDetail";
@@ -57,7 +59,9 @@ const App = () => (
             <Route path="/admin/marchand/factures" element={<MerchantInvoices />} />
             <Route path="/admin/marchand/stats" element={<MerchantStats />} />
             <Route path="/admin/marchand/communication" element={<MerchantCommunication />} />
+            <Route path="/admin/marchand/acheteurs" element={<MerchantBuyers />} />
             <Route path="/admin/seatup" element={<SeatupAdminDashboard />} />
+            <Route path="/admin/seatup/onboard-club" element={<ClubOnboarding />} />
             <Route path="/home" element={<BeneficiaryHome />} />
             <Route path="/team" element={<TeamPage />} />
             <Route path="/groups" element={<GroupsPage />} />

@@ -289,6 +289,12 @@ const OrganizerAdminDashboard = () => {
                 Statistiques
               </Button>
             </Link>
+            <Link to="/admin/marchand/acheteurs">
+              <Button variant="sport" size="lg" className="gap-2">
+                <Users className="h-4 w-4" />
+                Mes acheteurs
+              </Button>
+            </Link>
             <Link to="/admin/marchand/communication">
               <Button variant="sport" size="lg" className="gap-2">
                 <Package className="h-4 w-4" />
