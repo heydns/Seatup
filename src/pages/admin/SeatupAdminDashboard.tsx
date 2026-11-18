@@ -39,6 +39,7 @@ import {
   TrendingUp,
   Euro,
   ChevronRight,
+  Plus,
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/components/AuthProvider';
@@ -290,12 +291,23 @@ const SeatupAdminDashboard = () => {
       <Header />
       <div className="min-h-screen pt-24 pb-12 bg-gray-50">
         <div className="container mx-auto px-4 space-y-8">
-          {/* ─── Titre ────────────────────────────────────────── */}
-          <div>
-            <h1 className="text-3xl font-monument text-brand mb-2">Back-office SeatUp</h1>
-            <p className="text-muted-foreground">
-              Vue d'ensemble de l'activité sur la plateforme.
-            </p>
+          {/* ─── Titre + action rapide ─────────────────────────── */}
+          <div className="flex items-start justify-between flex-wrap gap-3">
+            <div>
+              <h1 className="text-3xl font-monument text-brand mb-2">Back-office SeatUp</h1>
+              <p className="text-muted-foreground">
+                Vue d'ensemble de l'activité sur la plateforme.
+              </p>
+            </div>
+            <Button
+              variant="hero"
+              size="lg"
+              className="gap-2"
+              onClick={() => navigate('/admin/seatup/onboard-club')}
+            >
+              <Plus className="h-4 w-4" />
+              Intégrer un nouveau club
+            </Button>
           </div>
 
           {/* ─── Stats globales ──────────────────────────────── */}
