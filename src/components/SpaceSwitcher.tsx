@@ -60,8 +60,16 @@ export const SpaceSwitcher = () => {
   const navigate = useNavigate();
   const { roles, activeRole, setActiveRole, canSwitchSpace } = useUserRoles();
 
-  // Si un seul rôle, pas de switcher
-  if (!canSwitchSpace || !activeRole) return null;
+  // Pas de rôle du tout = pas de switcher (user pas authentifié ou pas de role)
+  if (!activeRole) return null;
+
+  // Cas spécial : un bénéficiaire pur (1 seul rôle = beneficiary) → pas de
+  // switcher nécessaire, le header a déjà "Mon compte" qui mène à /home.
+  if (!canSwitchSpace && activeRole.role_type === 'beneficiary') return null;
+
+  // Sinon : on affiche TOUJOURS le switcher, même avec 1 seul rôle. C'est
+  // essentiel pour les admins (seatup_admin, cse_admin, organizer_admin)
+  // qui doivent pouvoir accéder à leur dashboard depuis le header.
 
   const handleSwitch = (role: UserRole) => {
     setActiveRole(role);
